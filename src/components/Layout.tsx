@@ -9,8 +9,9 @@ export function SiteHeader() {
   const { user, profile, isAdmin, signOut } = useAuth()
   const links = [
     ['How It Works', '/#how-it-works'],
+    ['What Is Included', '/#included'],
     ['Examples', '/#examples'],
-    ['Pricing Options', '/#packages'],
+    ['Growth Options', '/#packages'],
     ['FAQ', '/#faq'],
   ]
   return (
@@ -27,7 +28,7 @@ export function SiteHeader() {
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
           {user && <span className="grid size-9 place-items-center rounded-full bg-white/10 text-xs">{getInitials(profile?.full_name)}</span>}
-          <Link to="/apply" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-navy-950 shadow-xl shadow-blue-950/20 hover:bg-gold-500">Apply Free <ArrowRight size={16} /></Link>
+          <Link to="/apply" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-navy-950 shadow-xl shadow-blue-950/20 hover:bg-gold-500">Start My Application <ArrowRight size={16} /></Link>
           {user && <button onClick={signOut} className="text-xs text-slate-300 hover:text-white">Sign out</button>}
         </div>
         <button className="lg:hidden" onClick={() => setOpen(!open)} aria-label="Open menu">{open ? <X /> : <Menu />}</button>
@@ -35,7 +36,7 @@ export function SiteHeader() {
       {open && <div className="border-t border-white/10 bg-navy-950 px-4 py-5 lg:hidden">
         <div className="grid gap-3 text-sm text-slate-200">
           {links.map(([label, href]) => <a key={label} href={href} onClick={() => setOpen(false)}>{label}</a>)}
-          <Link to="/apply" className="rounded-full bg-white px-4 py-3 text-center font-semibold text-navy-950">Apply for My Free Website</Link>
+          <Link to="/apply" className="rounded-full bg-white px-4 py-3 text-center font-semibold text-navy-950">Start My Application</Link>
           <Link to={user ? '/dashboard' : '/auth'}>{user ? 'Dashboard' : 'Sign In'}</Link>
           {isAdmin && <Link to="/admin">Admin</Link>}
         </div>
@@ -75,5 +76,14 @@ export function DashboardLayout({ children, title, subtitle, actions }: { childr
 }
 
 export function Footer() {
-  return <footer className="bg-navy-950 px-4 py-12 text-white"><div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-3"><div><h3 className="text-xl font-semibold">Business Launch Initiative</h3><p className="mt-3 text-sm text-slate-300">Professional website builds for small businesses at no upfront design cost.</p></div><div><p className="font-semibold">Important</p><p className="mt-3 text-sm text-slate-300">Domain registration, hosting, premium integrations, custom functionality, and ongoing support may require separate payment.</p></div><div><p className="font-semibold">Next Step</p><Link to="/apply" className="mt-3 inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-navy-950">Start My Free Website Application</Link></div></div></footer>
+  const policyLinks = [
+    ['Terms', '/terms'],
+    ['Privacy Policy', '/privacy'],
+    ['Program Guidelines', '/program-guidelines'],
+    ['Acceptable Use', '/acceptable-use'],
+    ['Refund or Cancellation Policy', '/refund-cancellation'],
+    ['Accessibility', '/accessibility'],
+    ['Contact', '/contact'],
+  ]
+  return <footer className="bg-navy-950 px-4 py-12 text-white"><div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-4"><div><h3 className="text-xl font-semibold">Business Launch Initiative</h3><p className="mt-3 text-sm text-slate-300">A digital business-launch program helping small businesses launch, look credible, get discovered, and grow online.</p></div><div><p className="font-semibold">Important</p><p className="mt-3 text-sm text-slate-300">Website design and the initial standard build may be included for approved applicants. Domain registration, hosting, premium integrations, custom functionality, and ongoing support may require separate payment.</p></div><div><p className="font-semibold">Policies</p><div className="mt-3 grid gap-2 text-sm">{policyLinks.map(([label, to]) => <Link key={to} to={to} className="text-slate-300 hover:text-white">{label}</Link>)}</div></div><div><p className="font-semibold">Next Step</p><Link to="/apply" className="mt-3 inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-navy-950">Start My Application</Link></div></div></footer>
 }

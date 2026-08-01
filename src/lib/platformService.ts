@@ -135,7 +135,12 @@ export async function submitApplication(draft: ApplicationDraft, userId?: string
     logo_ready: draft.logo_ready === 'Yes',
     photos_ready: draft.photos_ready === 'Yes',
     copywriting_needed: draft.copywriting_needed === 'Yes',
-    service_interests: draft.service_interests || [],
+    service_interests: [draft.build_option_interest, ...(draft.service_interests || [])].filter((item): item is string => Boolean(item)),
+    admin_notes: [
+      draft.current_marketing_challenges ? `Current marketing challenges: ${draft.current_marketing_challenges}` : '',
+      draft.ready_30_days ? `Ready within 30 days: ${draft.ready_30_days}` : '',
+      draft.authorized_decision_maker ? `Authorized decision maker: ${draft.authorized_decision_maker}` : '',
+    ].filter(Boolean).join('\n'),
     submitted_at: new Date().toISOString(),
   }
 

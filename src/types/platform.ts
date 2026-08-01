@@ -242,6 +242,7 @@ export type ApplicationDraft = Record<string, unknown> & {
   requested_features?: string[]
   style_preferences?: string
   color_preferences?: string
+  current_marketing_challenges?: string
   inspiration_urls?: string
   desired_domain?: string
   existing_domain?: string
@@ -253,6 +254,9 @@ export type ApplicationDraft = Record<string, unknown> & {
   copywriting_needed?: string
   need_logo?: string
   need_graphics?: string
+  ready_30_days?: string
+  authorized_decision_maker?: string
+  build_option_interest?: string
   service_interests?: string[]
   agreements?: string[]
   consents?: string[]
