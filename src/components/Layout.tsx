@@ -15,28 +15,28 @@ export function SiteHeader() {
     ['FAQ', '/#faq'],
   ]
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-navy-950/90 text-white backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-amber-200/70 bg-[linear-gradient(135deg,#ffb84d_0%,#ffc857_46%,#ff8a3d_100%)] text-navy-950 shadow-[0_10px_35px_rgba(255,184,77,.28)]">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-3 font-semibold">
-          <span className="grid size-10 place-items-center rounded-2xl gold-gradient text-navy-950"><Building2 size={21} /></span>
-          <span><span className="block text-sm uppercase tracking-[0.28em] text-gold-500">Business Launch</span><span className="text-lg">Initiative</span></span>
+          <span className="grid size-10 place-items-center rounded-2xl bg-navy-950 text-gold-500"><Building2 size={21} /></span>
+          <span><span className="block text-sm uppercase tracking-[0.28em] text-navy-900/75">Business Launch</span><span className="text-lg">Initiative</span></span>
         </Link>
-        <nav className="hidden items-center gap-7 text-sm text-slate-200 lg:flex">
-          {links.map(([label, href]) => <a key={label} href={href} className="hover:text-white">{label}</a>)}
-          {isAdmin && <NavLink to="/admin" className="hover:text-white">Admin</NavLink>}
-          {user ? <NavLink to="/dashboard" className="hover:text-white">Dashboard</NavLink> : <NavLink to="/auth" className="hover:text-white">Sign In</NavLink>}
+        <nav className="hidden items-center gap-7 text-sm font-semibold text-navy-900/80 lg:flex">
+          {links.map(([label, href]) => <a key={label} href={href} className="hover:text-navy-950">{label}</a>)}
+          {isAdmin && <NavLink to="/admin" className="hover:text-navy-950">Admin</NavLink>}
+          {user ? <NavLink to="/dashboard" className="hover:text-navy-950">Dashboard</NavLink> : <NavLink to="/auth" className="hover:text-navy-950">Sign In</NavLink>}
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
-          {user && <span className="grid size-9 place-items-center rounded-full bg-white/10 text-xs">{getInitials(profile?.full_name)}</span>}
-          <Link to="/apply" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-navy-950 shadow-xl shadow-blue-950/20 hover:bg-gold-500">Start My Application <ArrowRight size={16} /></Link>
-          {user && <button onClick={signOut} className="text-xs text-slate-300 hover:text-white">Sign out</button>}
+          {user && <span className="grid size-9 place-items-center rounded-full bg-navy-950/10 text-xs font-bold">{getInitials(profile?.full_name)}</span>}
+          <Link to="/apply" className="inline-flex items-center gap-2 rounded-full bg-navy-950 px-5 py-3 text-sm font-semibold text-white shadow-xl shadow-orange-950/20 hover:bg-navy-900">Start My Application <ArrowRight size={16} /></Link>
+          {user && <button onClick={signOut} className="text-xs font-semibold text-navy-900/75 hover:text-navy-950">Sign out</button>}
         </div>
         <button className="lg:hidden" onClick={() => setOpen(!open)} aria-label="Open menu">{open ? <X /> : <Menu />}</button>
       </div>
-      {open && <div className="border-t border-white/10 bg-navy-950 px-4 py-5 lg:hidden">
-        <div className="grid gap-3 text-sm text-slate-200">
+      {open && <div className="border-t border-amber-200/70 bg-[#ffb84d] px-4 py-5 lg:hidden">
+        <div className="grid gap-3 text-sm font-semibold text-navy-950">
           {links.map(([label, href]) => <a key={label} href={href} onClick={() => setOpen(false)}>{label}</a>)}
-          <Link to="/apply" className="rounded-full bg-white px-4 py-3 text-center font-semibold text-navy-950">Start My Application</Link>
+          <Link to="/apply" className="rounded-full bg-navy-950 px-4 py-3 text-center font-semibold text-white">Start My Application</Link>
           <Link to={user ? '/dashboard' : '/auth'}>{user ? 'Dashboard' : 'Sign In'}</Link>
           {isAdmin && <Link to="/admin">Admin</Link>}
         </div>
