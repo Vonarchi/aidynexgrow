@@ -80,8 +80,8 @@ const platformFeatures = [
 ] as const
 const faq = [
   ['Is the website really free?', 'The standard website design and initial build have no upfront design fee for approved applicants. Domain registration, hosting, premium integrations, custom functionality, maintenance, and ongoing support may require separate payment.'],
-  ['What do I have to pay for?', 'You only pay for optional or required third-party costs such as domain registration, hosting, premium tools, custom software, or add-on services you approve.'],
-  ['Do I have to purchase hosting?', 'No. Hosting is optional, although managed hosting is available if you want us to handle SSL, backups, monitoring, and support.'],
+  ['What do I have to pay for?', 'The website design and initial build are free for approved applicants. Managed hosting with us is required for launch at $29/month, and you may also pay for approved add-ons such as domain registration, premium tools, custom software, or extra services.'],
+  ['Do I have to purchase hosting?', 'Yes. A website needs hosting to exist online, and approved websites launched through this program use our managed hosting at $29 per month. This covers secure hosting, SSL, basic monitoring, and standard launch support.'],
   ['Can I use my existing domain?', 'Yes. We can help connect an existing domain during launch.'],
   ['How long will the website take?', 'Timing depends on application review, content readiness, queue capacity, and the selected launch option. You will receive next-step guidance after review.'],
   ['How many pages are included?', 'The standard website build includes up to five standard pages for approved applicants. Larger scopes may require a premium plan or custom quote.'],
@@ -141,37 +141,23 @@ export function LandingPage() {
   const postHeroExamples = postHeroExampleTitles.map((title) => snapshot.portfolio.find((item) => item.title === title) ?? demoData.portfolio.find((item) => item.title === title)).filter((item): item is PortfolioItem => Boolean(item))
 
   return <PageShell tone="dark"><SiteHeader />
-    <div className="navy-shell animated-gradient-mesh">
-      <div className="border-b border-white/10 bg-white/5 px-4 py-3 text-center text-sm text-white"><span className="font-semibold">Limited weekly build capacity.</span> <span className="text-gold-500">Applications are reviewed in the order they are completed and approved.</span></div>
-      <section className="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_.95fr] lg:px-8 lg:py-28">
-        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6 }} className="self-center">
+    <section className="relative isolate overflow-hidden bg-navy-950 text-white">
+      {ownerPhotos.map((photo, index) => <img key={photo.src} src={photo.src} alt="" aria-hidden="true" className="owner-photo-cycle absolute inset-0 -z-30 h-full w-full object-cover opacity-0" style={{ animationDelay: `${index * 3}s` }} />)}
+      <div className="absolute inset-0 -z-20 bg-gradient-to-br from-navy-950/88 via-navy-950/58 to-violet-500/38" />
+      <div className="navy-shell animated-gradient-mesh absolute inset-0 -z-10 opacity-45 mix-blend-overlay" />
+      <div className="border-b border-white/10 bg-navy-950/25 px-4 py-3 text-center text-sm text-white backdrop-blur-md"><span className="font-semibold">Limited weekly build capacity.</span> <span className="text-gold-500">Applications are reviewed in the order they are completed and approved.</span></div>
+      <div className="mx-auto flex min-h-[760px] max-w-7xl items-center px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6 }} className="max-w-4xl rounded-[2rem] border border-white/15 bg-navy-950/38 p-6 shadow-2xl shadow-navy-950/30 backdrop-blur-sm sm:p-8 lg:p-10">
           <Badge tone="gold">Business Launch Initiative</Badge>
           <KineticHeadline />
           <p className="mt-6 max-w-2xl text-xl leading-8 text-slate-200">Receive a professionally designed, mobile-friendly website with no upfront website design fee. Build credibility, make it easier for customers to find you, and establish a digital home your business can grow from.</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row"><button type="button" onClick={scrollToIncluded} className={gradientButtonClass}>Get My Free Website <ArrowRight size={18} /></button><a href="#examples" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20">See Examples <ArrowRight size={16} /></a></div>
-          <p className="mt-5 max-w-2xl text-sm leading-6 text-slate-300">Website design and initial build included for approved applicants. Hosting, domain registration, premium integrations, maintenance, and advanced services may require separate payment.</p>
+          <p className="mt-5 max-w-2xl text-sm leading-6 text-slate-300">Website design and initial build included for approved applicants. Managed hosting is required for launch at $29/month. Domain registration, premium integrations, maintenance, and advanced services may require separate payment.</p>
           <p className="mt-6 text-sm font-semibold text-gold-500">Professional Website. No Upfront Design Fee.</p>
           <p className="mt-2 text-sm text-slate-300">Built to help your business get discovered, earn trust, and grow.</p>
         </motion.div>
-        <motion.div initial={{ opacity: 0, scale: .96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: .7, delay: .15 }} className="relative min-h-[520px]">
-          <div className="animate-float absolute inset-x-4 top-4 overflow-hidden rounded-[2rem] border border-white/20 bg-white/15 p-3 shadow-2xl backdrop-blur-xl sm:inset-x-10">
-            <div className="relative h-[430px] overflow-hidden rounded-[1.6rem] bg-navy-950">
-              {ownerPhotos.map((photo, index) => <img key={photo.src} src={photo.src} alt={photo.alt} className="owner-photo-cycle absolute inset-0 h-full w-full object-cover opacity-0" style={{ animationDelay: `${index * 3}s` }} />)}
-              <div className="absolute inset-0 bg-gradient-to-t from-navy-950/88 via-navy-950/20 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-7 text-white">
-                <p className="text-sm font-semibold text-gold-500">Built for real owners</p>
-                <h2 className="mt-2 text-3xl font-bold">Less tech stress. More launch momentum.</h2>
-                <p className="mt-3 max-w-md text-sm leading-6 text-slate-200">You bring the business. We build the digital home customers can trust.</p>
-              </div>
-            </div>
-          </div>
-          <div className="absolute bottom-3 left-0 max-w-xs rounded-[1.5rem] border border-white/20 bg-white/95 p-5 text-navy-950 shadow-2xl">
-            <p className="text-sm font-bold text-royal-700">No design skills needed</p>
-            <p className="mt-2 text-sm leading-6 text-slate-700">We guide the structure, pages, and launch path for you.</p>
-          </div>
-        </motion.div>
-      </section>
-    </div>
+      </div>
+    </section>
 
     <section className="bg-cloud-50 px-4 pb-12 pt-8 text-navy-950 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
@@ -194,10 +180,10 @@ export function LandingPage() {
       <div id="included" className="scroll-mt-28" />
       <div className="mb-8 rounded-[1.5rem] border border-orange-100 bg-cloud-50 p-6 shadow-sm">
         <h3 className="text-2xl font-bold text-navy-950">Here&apos;s Exactly What You Get — <span className="animated-gradient-text">Free</span></h3>
-        <p className="mt-3 max-w-4xl text-lg font-medium leading-8 text-slate-700">Your website design and build are 100% free. Optional upgrades like hosting, custom features, and premium integrations are available if you want them later — never required.</p>
+        <p className="mt-3 max-w-4xl text-lg font-medium leading-8 text-slate-700">Your website design and build are 100% free. Hosting is required for any website to exist online, and our managed hosting is $29/month; custom features and premium integrations are optional upgrades later.</p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{included.map(([item, detail]) => <details key={item} className="group rounded-2xl border bg-cloud-50 p-4 text-sm shadow-sm open:bg-white"><summary className="flex cursor-pointer list-none items-start gap-3 font-semibold text-navy-950"><Check className="mt-0.5 shrink-0 text-emerald-500" size={18} />{item}<Info className="ml-auto shrink-0 text-slate-400 transition group-open:text-royal-700" size={16} /></summary><p className="mt-3 pl-8 leading-6 text-slate-600">{detail}</p></details>)}</div>
-      <div className="mt-8 rounded-[1.5rem] bg-navy-950 p-6 leading-7 text-white shadow-xl"><p>The website design and initial standard build are included for approved businesses. Domain registration, hosting, premium integrations, custom functionality, additional revisions, maintenance, ongoing support, and advanced marketing services may require separate payment.</p><div className="mt-6"><Link to="/apply" className={gradientButtonClass}>Apply for My Free Website <ArrowRight size={18} /></Link><p className="mt-3 text-sm font-medium text-slate-300">Takes 2 minutes. No credit card, no obligation.</p></div></div>
+      <div className="mt-8 rounded-[1.5rem] bg-navy-950 p-6 leading-7 text-white shadow-xl"><p>The website design and initial standard build are included for approved businesses. Managed hosting with us is required for launch at $29/month because every live website needs hosting. Domain registration, premium integrations, custom functionality, additional revisions, maintenance, ongoing support, and advanced marketing services may require separate payment.</p><div className="mt-6"><Link to="/apply" className={gradientButtonClass}>Apply for My Free Website <ArrowRight size={18} /></Link><p className="mt-3 text-sm font-medium text-slate-300">Takes 2 minutes. No credit card, no obligation.</p></div></div>
     </Section>
 
     <Section eyebrow="Qualification" title="Who This Program Is Designed For" className="bg-cloud-50"><div className="grid gap-8 lg:grid-cols-2"><div className="rounded-3xl bg-white p-7 shadow-sm"><h3 className="text-xl font-bold text-navy-950">A Strong Fit For</h3><ul className="mt-5 grid gap-3 text-sm text-slate-700">{qualifies.map((item) => <li key={item} className="flex gap-3"><Check className="shrink-0 text-emerald-500" size={18} />{item}</li>)}</ul></div><div className="rounded-3xl bg-navy-950 p-7 text-white"><h3 className="text-xl font-bold">This May Not Be the Right Fit If</h3><ul className="mt-5 grid gap-3 text-sm text-slate-300">{notRightFit.map((item) => <li key={item} className="flex gap-3"><Info className="shrink-0 text-gold-500" size={18} />{item}</li>)}</ul><p className="mt-6 text-gold-500">Premium services and custom software are available when the standard website scope is not enough.</p></div></div></Section>

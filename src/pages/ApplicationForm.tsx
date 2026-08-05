@@ -11,7 +11,7 @@ import { loadDraft, saveDraft, submitApplication, uploadApplicationFiles } from 
 import type { ApplicationDraft } from '../types/platform'
 
 const steps = ['Contact Information', 'Business Information', 'Website Goals', 'Launch Readiness', 'Offer Acknowledgment', 'Review and Submit']
-const requiredAgreements = ['I understand the standard design and initial build have no upfront website design fee for approved applicants.', 'I understand domain registration and hosting are separate.', 'I understand premium tools, advanced features, and custom functionality may cost extra.', 'I agree to provide accurate content, business information, and feedback promptly.', 'I understand the included scope has limits.', 'I understand approval is not guaranteed.']
+const requiredAgreements = ['I understand the standard design and initial build have no upfront website design fee for approved applicants.', 'I understand managed hosting with Business Launch Initiative is required for launch at $29/month because every live website needs hosting.', 'I understand domain registration, premium tools, advanced features, and custom functionality may cost extra.', 'I agree to provide accurate content, business information, and feedback promptly.', 'I understand the included scope has limits.', 'I understand approval is not guaranteed.']
 const consents = ['I agree to receive project updates by email.', 'I agree to receive project updates by text message.', 'I would like to receive information about optional business services.']
 const buildOptions = ['Standard Website Build', 'Priority Website Build', 'Business Growth Plan', 'Custom Software Consultation', 'Not sure yet']
 
