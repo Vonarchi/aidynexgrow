@@ -1,8 +1,8 @@
 @import 'tailwindcss';
 
 :root {
-  color: #102033;
-  background: #f6f8fc;
+  color: #2d2a32;
+  background: #fffbf5;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -17,33 +17,69 @@ a { text-decoration: none; }
 button, input, select, textarea { font: inherit; }
 
 @theme {
-  --color-navy-950: #061428;
-  --color-navy-900: #0a1b33;
-  --color-navy-800: #102a4d;
-  --color-royal-700: #174ae6;
-  --color-royal-600: #2258f4;
-  --color-gold-500: #d5a642;
-  --color-teal-400: #20c8c2;
-  --color-cloud-50: #f6f8fc;
-  --color-cloud-100: #edf2f8;
+  --color-navy-950: #2d2a32;
+  --color-navy-900: #3a3341;
+  --color-navy-800: #4a4154;
+  --color-royal-700: #7b61ff;
+  --color-royal-600: #c44dff;
+  --color-coral-500: #ff6b6b;
+  --color-magenta-500: #c44dff;
+  --color-violet-500: #7b61ff;
+  --color-gold-500: #ffb84d;
+  --color-teal-400: #ff8a5c;
+  --color-cloud-50: #fffbf5;
+  --color-cloud-100: #fff3e4;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.5rem;
+  --shadow-primary-glow: 0 18px 45px rgba(196, 77, 255, .28), 0 8px 22px rgba(255, 107, 107, .22);
 }
 
 .glass-card {
-  background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.82));
-  border: 1px solid rgba(148, 163, 184, .22);
-  box-shadow: 0 24px 70px rgba(10, 27, 51, .12);
+  background: linear-gradient(180deg, rgba(255, 251, 245, .96), rgba(255, 243, 228, .84));
+  border: 1px solid rgba(255, 184, 77, .24);
+  box-shadow: 0 24px 70px rgba(196, 77, 255, .14);
   backdrop-filter: blur(18px);
 }
 
 .navy-shell {
   background:
-    radial-gradient(circle at 15% 10%, rgba(34, 88, 244, .34), transparent 28rem),
-    radial-gradient(circle at 85% 15%, rgba(32, 200, 194, .2), transparent 24rem),
-    linear-gradient(135deg, #061428 0%, #0a1b33 48%, #102a4d 100%);
+    radial-gradient(circle at 15% 10%, rgba(255, 184, 77, .32), transparent 26rem),
+    radial-gradient(circle at 85% 15%, rgba(255, 107, 107, .38), transparent 26rem),
+    linear-gradient(135deg, #ff6b6b 0%, #c44dff 52%, #7b61ff 100%);
+}
+
+.animated-gradient-mesh {
+  background-size: 140% 140%;
+  animation: gradient-breathe 10s ease-in-out infinite;
+}
+
+.animated-gradient-text {
+  background: linear-gradient(90deg, #ffb84d, #ff6b6b, #c44dff, #7b61ff, #ff6b6b);
+  background-size: 300% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: gradient-text-cycle 4s ease-in-out infinite;
 }
 
 .gold-gradient {
-  background: linear-gradient(135deg, #f4d58d 0%, #d5a642 42%, #9f7220 100%);
+  background: linear-gradient(135deg, #ffcf7a 0%, #ffb84d 45%, #ff8a5c 100%);
+}
+
+.primary-gradient {
+  background: linear-gradient(135deg, #ff6b6b 0%, #c44dff 52%, #7b61ff 100%);
+}
+
+.primary-glow {
+  box-shadow: var(--shadow-primary-glow);
+}
+
+.cta-pulse-glow {
+  animation: cta-pulse-glow 2.5s ease-in-out infinite;
+}
+
+.owner-photo-cycle {
+  animation: owner-photo-cycle 12s ease-in-out infinite;
 }
 
 .text-balance { text-wrap: balance; }
@@ -54,8 +90,44 @@ button, input, select, textarea { font: inherit; }
   50% { transform: translateY(-14px); }
 }
 
+@keyframes gradient-breathe {
+  0%, 100% { background-position: 0% 45%; }
+  50% { background-position: 100% 55%; }
+}
+
+@keyframes gradient-text-cycle {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes cta-pulse-glow {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 18px 45px rgba(196, 77, 255, .28), 0 8px 22px rgba(255, 107, 107, .22);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 22px 56px rgba(196, 77, 255, .34), 0 10px 28px rgba(255, 107, 107, .28);
+  }
+}
+
+@keyframes owner-photo-cycle {
+  0%, 18% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  25%, 93% {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .skeleton {
-  background: linear-gradient(90deg, #e5e7eb 25%, #f4f7fb 37%, #e5e7eb 63%);
+  background: linear-gradient(90deg, #fff3e4 25%, #fffbf5 37%, #fff3e4 63%);
   background-size: 400% 100%;
   animation: shimmer 1.4s ease infinite;
 }

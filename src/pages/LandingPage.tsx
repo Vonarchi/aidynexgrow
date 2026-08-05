@@ -7,7 +7,7 @@ import { Badge, CTAButton, FeatureCard, Section } from '../components/UI'
 import { demoData } from '../data/demoData'
 import { getMockSitePath, mockSites } from '../data/mockSites'
 import { getPlatformSnapshot } from '../lib/platformService'
-import type { PlatformSnapshot } from '../types/platform'
+import type { PlatformSnapshot, PortfolioItem } from '../types/platform'
 
 const included = [
   ['Professionally designed homepage', 'A polished first impression built around your business, offer, and next step.'],
@@ -99,6 +99,36 @@ const faq = [
   ['Can an existing website be redesigned?', 'Yes. Existing websites can be reviewed during the application process, but redesign scope and migration needs may affect the launch path.'],
 ]
 
+const ownerPhotos = [
+  { src: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=80', alt: 'Business owner reviewing website launch notes' },
+  { src: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80', alt: 'Small business team smiling in a workspace' },
+  { src: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80', alt: 'Entrepreneur working in a warm office' },
+  { src: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80', alt: 'Business owners collaborating at a table' },
+]
+const postHeroExampleTitles = ['Summit Legal Group', 'Ember Table Kitchen', 'Luxe Bloom Studio']
+const gradientButtonClass = 'primary-gradient primary-glow cta-pulse-glow inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-base font-extrabold text-white transition duration-200 hover:scale-[1.03] hover:brightness-110'
+
+function KineticHeadline() {
+  const words = ['Your', 'Business', 'Deserves', 'More', 'Than', 'a']
+  return <h1 className="mt-6 max-w-4xl text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl text-balance">
+    {words.map((word, index) => <motion.span key={word} className="mr-[0.18em] inline-block" initial={{ opacity: 0, y: 30, scale: .9 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: index * .08, duration: .55, ease: 'easeOut' }}>{word}</motion.span>)}
+    <motion.span className="animated-gradient-text inline-block" initial={{ opacity: 0, y: 30, scale: .9 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: words.length * .08, duration: .55, ease: 'easeOut' }}>Social Media Page.</motion.span>
+  </h1>
+}
+
+function WebsiteExampleCard({ item, getUrl, compact = false }: { item: PortfolioItem; getUrl: (title: string, fallbackUrl: string) => string; compact?: boolean }) {
+  return <article className="overflow-hidden rounded-[1.25rem] border border-orange-100/80 bg-white shadow-[0_18px_45px_rgba(45,42,50,.08)] transition duration-200 hover:-translate-y-2 hover:shadow-[0_28px_70px_rgba(196,77,255,.18)]">
+    <img src={item.image_url} alt={`${item.title} website example`} className={compact ? 'h-44 w-full object-cover' : 'h-52 w-full object-cover'} />
+    <div className={compact ? 'p-5' : 'p-6'}>
+      <Badge tone={item.description.toLowerCase().includes('demo data') || item.website_url.includes('/demo-sites/') ? 'gold' : 'green'}>{item.description.toLowerCase().includes('demo data') || item.website_url.includes('/demo-sites/') ? 'Concept Website' : 'Client Website'}</Badge>
+      <h3 className="mt-4 text-xl font-bold text-navy-950">{item.title}</h3>
+      <p className="mt-2 text-sm font-semibold text-slate-700">{item.industry}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{item.description.replace('DEMO DATA: ', '')}</p>
+      {!compact && <Link to={getUrl(item.title, item.website_url)} className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy-950 px-4 py-2 text-sm font-semibold text-white">View Demo <ArrowRight size={15} /></Link>}
+    </div>
+  </article>
+}
+
 export function LandingPage() {
   const [snapshot, setSnapshot] = useState<PlatformSnapshot>(demoData)
   const [selectedCategory, setSelectedCategory] = useState('View All')
@@ -107,27 +137,51 @@ export function LandingPage() {
   const approvedTestimonials = snapshot.testimonials.filter((item) => item.approved && !item.quote.toLowerCase().includes('demo testimonial'))
   const getPortfolioDemoUrl = (title: string, fallbackUrl: string) => fallbackUrl && fallbackUrl !== '#' ? fallbackUrl : getMockSitePath(mockSites.find((site) => site.name === title)?.slug ?? mockSites[0].slug)
   const getExampleLabel = (description: string, websiteUrl: string) => description.toLowerCase().includes('demo data') || websiteUrl.includes('/demo-sites/') ? 'Concept Website' : 'Client Website'
+  const scrollToIncluded = () => document.getElementById('what-is-included')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  const postHeroExamples = postHeroExampleTitles.map((title) => snapshot.portfolio.find((item) => item.title === title) ?? demoData.portfolio.find((item) => item.title === title)).filter((item): item is PortfolioItem => Boolean(item))
 
   return <PageShell tone="dark"><SiteHeader />
-    <div className="navy-shell">
+    <div className="navy-shell animated-gradient-mesh">
       <div className="border-b border-white/10 bg-white/5 px-4 py-3 text-center text-sm text-white"><span className="font-semibold">Limited weekly build capacity.</span> <span className="text-gold-500">Applications are reviewed in the order they are completed and approved.</span></div>
       <section className="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_.95fr] lg:px-8 lg:py-28">
         <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6 }} className="self-center">
           <Badge tone="gold">Business Launch Initiative</Badge>
-          <h1 className="mt-6 max-w-4xl text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl text-balance">Your Business Deserves More Than a Social Media Page.</h1>
+          <KineticHeadline />
           <p className="mt-6 max-w-2xl text-xl leading-8 text-slate-200">Receive a professionally designed, mobile-friendly website with no upfront website design fee. Build credibility, make it easier for customers to find you, and establish a digital home your business can grow from.</p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row"><CTAButton to="/apply" variant="secondary">Start My Application</CTAButton><a href="#examples" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-bold text-white hover:bg-white/10">View Website Examples <ArrowRight size={16} /></a></div>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row"><button type="button" onClick={scrollToIncluded} className={gradientButtonClass}>Get My Free Website <ArrowRight size={18} /></button><a href="#examples" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20">See Examples <ArrowRight size={16} /></a></div>
           <p className="mt-5 max-w-2xl text-sm leading-6 text-slate-300">Website design and initial build included for approved applicants. Hosting, domain registration, premium integrations, maintenance, and advanced services may require separate payment.</p>
           <p className="mt-6 text-sm font-semibold text-gold-500">Professional Website. No Upfront Design Fee.</p>
           <p className="mt-2 text-sm text-slate-300">Built to help your business get discovered, earn trust, and grow.</p>
         </motion.div>
         <motion.div initial={{ opacity: 0, scale: .96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: .7, delay: .15 }} className="relative min-h-[520px]">
-          <div className="absolute inset-x-8 top-6 rounded-[2rem] border border-white/15 bg-white/10 p-3 shadow-2xl backdrop-blur-xl animate-float"><div className="rounded-[1.5rem] bg-white p-4 text-navy-950"><div className="mb-4 flex gap-2"><span className="size-3 rounded-full bg-red-400" /><span className="size-3 rounded-full bg-yellow-400" /><span className="size-3 rounded-full bg-green-400" /></div><div className="grid gap-4 md:grid-cols-2"><div className="rounded-2xl bg-navy-950 p-5 text-white"><p className="text-xs text-gold-500">Website Preview</p><h3 className="mt-8 text-2xl font-bold">Professional Online Presence</h3><p className="mt-3 text-sm text-slate-300">Mobile-friendly pages, clear service positioning, lead capture, maps, and launch-ready structure.</p></div><div className="grid gap-3"><div className="rounded-2xl bg-cloud-100 p-4"><p className="text-xs font-semibold text-slate-600">Lead Capture Included</p><p className="mt-2 text-sm text-slate-700">Contact and inquiry paths are planned into the standard build.</p></div><div className="rounded-2xl bg-blue-50 p-4"><p className="text-xs font-semibold text-royal-700">Build Status Available</p><p className="mt-2 text-sm text-slate-700">Approved applicants can track progress through the client portal.</p></div></div></div></div></div>
-          <div className="absolute bottom-10 left-0 w-52 rounded-[2rem] border border-white/15 bg-white p-3 shadow-2xl"><div className="rounded-[1.5rem] bg-navy-950 p-4 text-white"><p className="text-xs text-gold-500">Mobile Ready</p><div className="mt-5 space-y-3"><div className="h-20 rounded-2xl bg-white/10" /><div className="h-3 rounded bg-white/20" /><div className="h-3 w-2/3 rounded bg-white/20" /><button className="mt-3 w-full rounded-full bg-gold-500 py-2 text-xs font-bold text-navy-950">Start Application</button></div></div></div>
-          <div className="absolute bottom-0 right-0 max-w-xs rounded-3xl border border-white/15 bg-white/10 p-5 text-white backdrop-blur-xl"><p className="text-sm font-semibold text-gold-500">Launch Foundation</p><p className="mt-2 text-2xl font-bold">Credibility first</p><p className="mt-2 text-xs leading-5 text-slate-300">A professional website gives customers one trusted place to learn, contact, and take the next step.</p></div>
+          <div className="animate-float absolute inset-x-4 top-4 overflow-hidden rounded-[2rem] border border-white/20 bg-white/15 p-3 shadow-2xl backdrop-blur-xl sm:inset-x-10">
+            <div className="relative h-[430px] overflow-hidden rounded-[1.6rem] bg-navy-950">
+              {ownerPhotos.map((photo, index) => <img key={photo.src} src={photo.src} alt={photo.alt} className="owner-photo-cycle absolute inset-0 h-full w-full object-cover opacity-0" style={{ animationDelay: `${index * 3}s` }} />)}
+              <div className="absolute inset-0 bg-gradient-to-t from-navy-950/88 via-navy-950/20 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-7 text-white">
+                <p className="text-sm font-semibold text-gold-500">Built for real owners</p>
+                <h2 className="mt-2 text-3xl font-bold">Less tech stress. More launch momentum.</h2>
+                <p className="mt-3 max-w-md text-sm leading-6 text-slate-200">You bring the business. We build the digital home customers can trust.</p>
+              </div>
+            </div>
+          </div>
+          <div className="absolute bottom-3 left-0 max-w-xs rounded-[1.5rem] border border-white/20 bg-white/95 p-5 text-navy-950 shadow-2xl">
+            <p className="text-sm font-bold text-royal-700">No design skills needed</p>
+            <p className="mt-2 text-sm leading-6 text-slate-700">We guide the structure, pages, and launch path for you.</p>
+          </div>
         </motion.div>
       </section>
     </div>
+
+    <section className="bg-cloud-50 px-4 pb-12 pt-8 text-navy-950 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-5 md:grid-cols-3">{postHeroExamples.map((item) => <WebsiteExampleCard key={item.id} item={item} getUrl={getPortfolioDemoUrl} compact />)}</div>
+        <div className="mt-9 text-center">
+          <p className="mb-4 text-lg font-semibold text-navy-900">No design skills needed. We build it for you.</p>
+          <button type="button" onClick={scrollToIncluded} className={gradientButtonClass}>Get My Free Website <ArrowRight size={18} /></button>
+        </div>
+      </div>
+    </section>
 
     <div className="bg-white px-4 py-5 text-navy-950"><div className="mx-auto grid max-w-7xl gap-3 text-sm font-semibold sm:grid-cols-5">{trustItems.map(([item, Icon]) => <div key={item} className="flex items-center justify-center gap-2 rounded-full bg-cloud-100 px-4 py-3 text-center"><Icon size={16} className="text-royal-700" />{item}</div>)}</div></div>
 
@@ -136,9 +190,14 @@ export function LandingPage() {
     </Section>
 
     <Section eyebrow="Included Scope" title="What Is Included" className="bg-white">
+      <div id="what-is-included" className="scroll-mt-28" />
       <div id="included" className="scroll-mt-28" />
+      <div className="mb-8 rounded-[1.5rem] border border-orange-100 bg-cloud-50 p-6 shadow-sm">
+        <h3 className="text-2xl font-bold text-navy-950">Here&apos;s Exactly What You Get — <span className="animated-gradient-text">Free</span></h3>
+        <p className="mt-3 max-w-4xl text-lg font-medium leading-8 text-slate-700">Your website design and build are 100% free. Optional upgrades like hosting, custom features, and premium integrations are available if you want them later — never required.</p>
+      </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{included.map(([item, detail]) => <details key={item} className="group rounded-2xl border bg-cloud-50 p-4 text-sm shadow-sm open:bg-white"><summary className="flex cursor-pointer list-none items-start gap-3 font-semibold text-navy-950"><Check className="mt-0.5 shrink-0 text-emerald-500" size={18} />{item}<Info className="ml-auto shrink-0 text-slate-400 transition group-open:text-royal-700" size={16} /></summary><p className="mt-3 pl-8 leading-6 text-slate-600">{detail}</p></details>)}</div>
-      <div className="mt-8 rounded-3xl border border-amber-200 bg-amber-50 p-6 leading-7 text-amber-950">The website design and initial standard build are included for approved businesses. Domain registration, hosting, premium integrations, custom functionality, additional revisions, maintenance, ongoing support, and advanced marketing services may require separate payment.</div>
+      <div className="mt-8 rounded-[1.5rem] bg-navy-950 p-6 leading-7 text-white shadow-xl"><p>The website design and initial standard build are included for approved businesses. Domain registration, hosting, premium integrations, custom functionality, additional revisions, maintenance, ongoing support, and advanced marketing services may require separate payment.</p><div className="mt-6"><Link to="/apply" className={gradientButtonClass}>Apply for My Free Website <ArrowRight size={18} /></Link><p className="mt-3 text-sm font-medium text-slate-300">Takes 2 minutes. No credit card, no obligation.</p></div></div>
     </Section>
 
     <Section eyebrow="Qualification" title="Who This Program Is Designed For" className="bg-cloud-50"><div className="grid gap-8 lg:grid-cols-2"><div className="rounded-3xl bg-white p-7 shadow-sm"><h3 className="text-xl font-bold text-navy-950">A Strong Fit For</h3><ul className="mt-5 grid gap-3 text-sm text-slate-700">{qualifies.map((item) => <li key={item} className="flex gap-3"><Check className="shrink-0 text-emerald-500" size={18} />{item}</li>)}</ul></div><div className="rounded-3xl bg-navy-950 p-7 text-white"><h3 className="text-xl font-bold">This May Not Be the Right Fit If</h3><ul className="mt-5 grid gap-3 text-sm text-slate-300">{notRightFit.map((item) => <li key={item} className="flex gap-3"><Info className="shrink-0 text-gold-500" size={18} />{item}</li>)}</ul><p className="mt-6 text-gold-500">Premium services and custom software are available when the standard website scope is not enough.</p></div></div></Section>
