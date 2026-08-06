@@ -7,7 +7,6 @@ import { ApplicationForm } from './pages/ApplicationForm'
 import { AuthPage } from './pages/AuthPage'
 import { CustomerDashboard } from './pages/CustomerDashboard'
 import { LandingPage } from './pages/LandingPage'
-import { MockSitePage } from './pages/MockSitePage'
 import { PolicyPage } from './pages/PolicyPage'
 import { PremiumLeadPage } from './pages/PremiumLeadPage'
 
@@ -26,7 +25,6 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/apply" element={<ApplicationForm />} />
         <Route path="/auth" element={<AuthPage />} />
-        <Route path="/demo-sites/:slug/:page?" element={<MockSitePage />} />
         <Route path="/software-consultation" element={<PremiumLeadPage />} />
         <Route path="/terms" element={<PolicyPage pageKey="terms" />} />
         <Route path="/privacy" element={<PolicyPage pageKey="privacy" />} />

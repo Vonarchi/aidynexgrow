@@ -5,7 +5,6 @@ import { ArrowRight, Check, CheckCircle2, ClipboardCheck, Globe2, Info, Laptop, 
 import { Footer, PageShell, SiteHeader } from '../components/Layout'
 import { Badge, CTAButton, FeatureCard, Section } from '../components/UI'
 import { demoData } from '../data/demoData'
-import { getMockSitePath, mockSites } from '../data/mockSites'
 import { getPlatformSnapshot } from '../lib/platformService'
 import type { PlatformSnapshot, PortfolioItem } from '../types/platform'
 
@@ -100,15 +99,19 @@ const faq = [
 ]
 
 const ownerPhotos = [
-  { src: '/hero-carousel/cyber-robot-team-1.png', alt: 'Cyberpunk robot team walking through an industrial corridor' },
-  { src: '/hero-carousel/cyber-robot-team-2.png', alt: 'Black robotic quadruped with a human figure in the background' },
-  { src: '/hero-carousel/robotic-fabrication.png', alt: 'Automated robotic fabrication system working on a circuit board' },
-  { src: '/hero-carousel/black-gold-interior.png', alt: 'Black and gold modern interior with inspirational wall art' },
-  { src: '/hero-carousel/future-city-storm.png', alt: 'Near-future city skyline under a dramatic storm' },
-  { src: '/hero-carousel/sports-exhibit.png', alt: 'Futuristic red sports technology exhibit' },
+  { src: '/hero-carousel/luxury-cityscape.png', alt: 'Futuristic luxury cityscape reflected on water' },
+  { src: '/hero-carousel/self-driving-mercedes-1.png', alt: 'Self-driving electric vehicle beside a robot assistant' },
+  { src: '/hero-carousel/surveillance-eye.png', alt: 'Close-up monochrome eye with a surveillance-like reflection' },
+  { src: '/hero-carousel/self-driving-mercedes-2.png', alt: 'Robot assistant beside a self-driving Mercedes vehicle' },
+  { src: '/hero-carousel/righteousness-wall.png', alt: 'Rainy city wall mural with bold gold and white words' },
+  { src: '/hero-carousel/abstract-wall-art.png', alt: 'Luxury living room with abstract blue and gold wall art' },
+  { src: '/hero-carousel/iridescent-car.png', alt: 'Close-up of a car with blue and green iridescent wrap' },
+  { src: '/hero-carousel/modern-coffee-station.png', alt: 'Modern black and wood coffee station interior' },
+  { src: '/hero-carousel/youtube-pays-portrait.png', alt: 'Portrait painted with bold YouTube Pays lettering' },
 ]
-const postHeroExampleTitles = ['Summit Legal Group', 'Ember Table Kitchen', 'Luxe Bloom Studio']
+const postHeroExampleTitles = ['ArcTemp HVAC', 'CubChatter', 'Certifia']
 const gradientButtonClass = 'primary-gradient primary-glow cta-pulse-glow inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-base font-extrabold text-white transition duration-200 hover:scale-[1.03] hover:brightness-110'
+const isConceptPortfolioItem = (item: PortfolioItem) => item.description.toLowerCase().includes('demo data') || item.website_url.includes('/demo-sites/')
 
 function KineticHeadline() {
   const words = ['Your', 'Business', 'Deserves', 'More', 'Than', 'a']
@@ -122,11 +125,11 @@ function WebsiteExampleCard({ item, getUrl, compact = false }: { item: Portfolio
   return <article className="overflow-hidden rounded-[1.25rem] border border-orange-100/80 bg-white shadow-[0_18px_45px_rgba(45,42,50,.08)] transition duration-200 hover:-translate-y-2 hover:shadow-[0_28px_70px_rgba(196,77,255,.18)]">
     <img src={item.image_url} alt={`${item.title} website example`} className={compact ? 'h-44 w-full object-cover' : 'h-52 w-full object-cover'} />
     <div className={compact ? 'p-5' : 'p-6'}>
-      <Badge tone={item.description.toLowerCase().includes('demo data') || item.website_url.includes('/demo-sites/') ? 'gold' : 'green'}>{item.description.toLowerCase().includes('demo data') || item.website_url.includes('/demo-sites/') ? 'Concept Website' : 'Client Website'}</Badge>
+      <Badge tone="green">Client Website</Badge>
       <h3 className="mt-4 text-xl font-bold text-navy-950">{item.title}</h3>
       <p className="mt-2 text-sm font-semibold text-slate-700">{item.industry}</p>
       <p className="mt-2 text-sm leading-6 text-slate-600">{item.description.replace('DEMO DATA: ', '')}</p>
-      {!compact && <Link to={getUrl(item.title, item.website_url)} className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy-950 px-4 py-2 text-sm font-semibold text-white">View Demo <ArrowRight size={15} /></Link>}
+      {!compact && <Link to={getUrl(item.title, item.website_url)} className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy-950 px-4 py-2 text-sm font-semibold text-white">View Website <ArrowRight size={15} /></Link>}
     </div>
   </article>
 }
@@ -135,21 +138,21 @@ export function LandingPage() {
   const [snapshot, setSnapshot] = useState<PlatformSnapshot>(demoData)
   const [selectedCategory, setSelectedCategory] = useState('View All')
   useEffect(() => { getPlatformSnapshot().then(setSnapshot).catch(() => setSnapshot(demoData)) }, [])
-  const visiblePortfolio = selectedCategory === 'View All' ? snapshot.portfolio : snapshot.portfolio.filter((item) => item.industry.toLowerCase() === selectedCategory.toLowerCase())
+  const realPortfolio = snapshot.portfolio.filter((item) => !isConceptPortfolioItem(item))
+  const visiblePortfolio = selectedCategory === 'View All' ? realPortfolio : realPortfolio.filter((item) => item.industry.toLowerCase() === selectedCategory.toLowerCase())
   const approvedTestimonials = snapshot.testimonials.filter((item) => item.approved && !item.quote.toLowerCase().includes('demo testimonial'))
-  const getPortfolioDemoUrl = (title: string, fallbackUrl: string) => fallbackUrl && fallbackUrl !== '#' ? fallbackUrl : getMockSitePath(mockSites.find((site) => site.name === title)?.slug ?? mockSites[0].slug)
-  const getExampleLabel = (description: string, websiteUrl: string) => description.toLowerCase().includes('demo data') || websiteUrl.includes('/demo-sites/') ? 'Concept Website' : 'Client Website'
+  const getPortfolioUrl = (fallbackUrl: string) => fallbackUrl && fallbackUrl !== '#' ? fallbackUrl : '/#examples'
   const scrollToIncluded = () => document.getElementById('what-is-included')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  const postHeroExamples = postHeroExampleTitles.map((title) => snapshot.portfolio.find((item) => item.title === title) ?? demoData.portfolio.find((item) => item.title === title)).filter((item): item is PortfolioItem => Boolean(item))
+  const postHeroExamples = postHeroExampleTitles.map((title) => realPortfolio.find((item) => item.title === title) ?? demoData.portfolio.find((item) => item.title === title)).filter((item): item is PortfolioItem => Boolean(item))
 
   return <PageShell tone="dark"><SiteHeader />
     <section className="relative isolate overflow-hidden bg-navy-950 text-white">
       {ownerPhotos.map((photo, index) => <img key={photo.src} src={photo.src} alt="" aria-hidden="true" className="owner-photo-cycle absolute inset-0 -z-30 h-full w-full object-cover opacity-0" style={{ animationDelay: `${index * 3}s` }} />)}
-      <div className="absolute inset-0 -z-20 bg-gradient-to-br from-navy-950/88 via-navy-950/58 to-violet-500/38" />
-      <div className="navy-shell animated-gradient-mesh absolute inset-0 -z-10 opacity-45 mix-blend-overlay" />
+      <div className="absolute inset-0 -z-20 bg-gradient-to-br from-navy-950/68 via-navy-950/34 to-violet-500/20" />
+      <div className="navy-shell animated-gradient-mesh absolute inset-0 -z-10 opacity-25 mix-blend-overlay" />
       <div className="border-b border-white/10 bg-navy-950/25 px-4 py-3 text-center text-sm text-white backdrop-blur-md"><span className="font-semibold">Limited weekly build capacity.</span> <span className="text-gold-500">Applications are reviewed in the order they are completed and approved.</span></div>
       <div className="mx-auto flex min-h-[760px] max-w-7xl items-center px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
-        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6 }} className="max-w-4xl rounded-[2rem] border border-white/15 bg-navy-950/38 p-6 shadow-2xl shadow-navy-950/30 backdrop-blur-sm sm:p-8 lg:p-10">
+        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6 }} className="max-w-4xl rounded-[2rem] border border-white/15 bg-navy-950/30 p-6 shadow-2xl shadow-navy-950/25 backdrop-blur-[2px] sm:p-8 lg:p-10">
           <Badge tone="gold">Business Launch Initiative</Badge>
           <KineticHeadline />
           <p className="mt-6 max-w-2xl text-xl leading-8 text-slate-200">Receive a professionally designed, mobile-friendly website with no upfront website design fee. Build credibility, make it easier for customers to find you, and establish a digital home your business can grow from.</p>
@@ -163,7 +166,7 @@ export function LandingPage() {
 
     <section className="bg-cloud-50 px-4 pb-12 pt-8 text-navy-950 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-5 md:grid-cols-3">{postHeroExamples.map((item) => <WebsiteExampleCard key={item.id} item={item} getUrl={getPortfolioDemoUrl} compact />)}</div>
+        <div className="grid gap-5 md:grid-cols-3">{postHeroExamples.map((item) => <WebsiteExampleCard key={item.id} item={item} getUrl={(_, fallbackUrl) => getPortfolioUrl(fallbackUrl)} compact />)}</div>
         <div className="mt-9 text-center">
           <p className="mb-4 text-lg font-semibold text-navy-900">No design skills needed. We build it for you.</p>
           <button type="button" onClick={scrollToIncluded} className={gradientButtonClass}>Get My Free Website <ArrowRight size={18} /></button>
@@ -190,7 +193,7 @@ export function LandingPage() {
 
     <Section eyebrow="Qualification" title="Who This Program Is Designed For" className="bg-cloud-50"><div className="grid gap-8 lg:grid-cols-2"><div className="rounded-3xl bg-white p-7 shadow-sm"><h3 className="text-xl font-bold text-navy-950">A Strong Fit For</h3><ul className="mt-5 grid gap-3 text-sm text-slate-700">{qualifies.map((item) => <li key={item} className="flex gap-3"><Check className="shrink-0 text-emerald-500" size={18} />{item}</li>)}</ul></div><div className="rounded-3xl bg-navy-950 p-7 text-white"><h3 className="text-xl font-bold">This May Not Be the Right Fit If</h3><ul className="mt-5 grid gap-3 text-sm text-slate-300">{notRightFit.map((item) => <li key={item} className="flex gap-3"><Info className="shrink-0 text-gold-500" size={18} />{item}</li>)}</ul><p className="mt-6 text-gold-500">Premium services and custom software are available when the standard website scope is not enough.</p></div></div></Section>
 
-    <Section eyebrow="Website Examples" title="Launch Concepts by Industry" className="bg-white"><div id="examples" className="mb-6 flex flex-wrap gap-2">{categories.map((cat) => <button key={cat} onClick={() => setSelectedCategory(cat)} className={`rounded-full px-3 py-2 text-xs font-semibold ${selectedCategory === cat ? 'bg-navy-950 text-white' : 'bg-blue-50 text-royal-700'}`}>{cat}</button>)}</div><div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{visiblePortfolio.map((item) => <article key={item.id} className="overflow-hidden rounded-3xl border bg-white shadow-sm"><img src={item.image_url} alt={`${item.title} website example`} className="h-52 w-full object-cover" /><div className="p-6"><Badge tone={getExampleLabel(item.description, item.website_url) === 'Client Website' ? 'green' : 'gold'}>{getExampleLabel(item.description, item.website_url)}</Badge><h3 className="mt-4 text-xl font-bold text-navy-950">{item.title}</h3><p className="mt-2 text-sm font-semibold text-slate-700">{item.industry}</p><p className="mt-2 text-sm leading-6 text-slate-600">{item.description.replace('DEMO DATA: ', '')}</p><Link to={getPortfolioDemoUrl(item.title, item.website_url)} className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy-950 px-4 py-2 text-sm font-semibold text-white">View Demo <ArrowRight size={15} /></Link></div></article>)}{visiblePortfolio.length === 0 && <div className="rounded-3xl border border-dashed bg-cloud-50 p-8 text-slate-600 lg:col-span-3">More website examples for this category can be added as new approved examples become available.</div>}</div></Section>
+    <Section eyebrow="Website Examples" title="Real Website Examples by Industry" className="bg-white"><div id="examples" className="mb-6 flex flex-wrap gap-2">{categories.map((cat) => <button key={cat} onClick={() => setSelectedCategory(cat)} className={`rounded-full px-3 py-2 text-xs font-semibold ${selectedCategory === cat ? 'bg-navy-950 text-white' : 'bg-blue-50 text-royal-700'}`}>{cat}</button>)}</div><div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{visiblePortfolio.map((item) => <article key={item.id} className="overflow-hidden rounded-3xl border bg-white shadow-sm"><img src={item.image_url} alt={`${item.title} website example`} className="h-52 w-full object-cover" /><div className="p-6"><Badge tone="green">Client Website</Badge><h3 className="mt-4 text-xl font-bold text-navy-950">{item.title}</h3><p className="mt-2 text-sm font-semibold text-slate-700">{item.industry}</p><p className="mt-2 text-sm leading-6 text-slate-600">{item.description.replace('DEMO DATA: ', '')}</p><Link to={getPortfolioUrl(item.website_url)} className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy-950 px-4 py-2 text-sm font-semibold text-white">View Website <ArrowRight size={15} /></Link></div></article>)}{visiblePortfolio.length === 0 && <div className="rounded-3xl border border-dashed bg-cloud-50 p-8 text-slate-600 lg:col-span-3">More website examples for this category can be added as new approved examples become available.</div>}</div></Section>
 
     <Section eyebrow="Launch Paths" title="Choose Your Business Launch Path" className="bg-cloud-50"><div id="packages" className="grid gap-5 lg:grid-cols-4">{offers.map((offer) => <div key={offer.title} className="flex rounded-3xl border bg-white p-6 shadow-sm"><div className="flex w-full flex-col"><Badge tone={offer.title === 'Custom Software' ? 'gold' : 'blue'}>{offer.label}</Badge><h3 className="mt-4 text-xl font-bold uppercase tracking-wide text-navy-950">{offer.title}</h3><ul className="mt-5 grid gap-3 text-sm text-slate-700">{offer.features.map((item) => <li key={item} className="flex gap-2"><Check className="mt-0.5 shrink-0 text-emerald-500" size={16} />{item}</li>)}</ul><Link to={offer.to} className="mt-auto inline-flex rounded-full bg-navy-950 px-4 py-3 text-center text-sm font-semibold text-white">{offer.cta}</Link></div></div>)}</div><p className="mt-8 rounded-3xl border border-slate-200 bg-white p-5 text-sm leading-6 text-slate-700">Advanced services, recurring hosting, third-party tools, and custom functionality are separate from the standard website build and should be reviewed before approval.</p></Section>
 

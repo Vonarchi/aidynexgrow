@@ -425,12 +425,6 @@ insert into public.service_catalog(name, category, description, benefits, price_
   ('Mobile Application','Custom Software','DEMO DATA: iOS and Android app planning, design, and build.',array['Mobile workflows','Push notifications','Native feel'],'quote',null,null,true,false);
 
 insert into public.portfolio_items(title, industry, description, image_url, website_url, featured, published) values
-  ('Summit Legal Group','Professional services','DEMO DATA: Conversion-focused small business website with mobile-first layout and lead capture.','https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80','/demo-sites/summit-legal-group/home',true,true),
-  ('Ember Table Kitchen','Restaurants','DEMO DATA: Restaurant website with menu, location, and inquiry funnel.','https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=900&q=80','/demo-sites/ember-table-kitchen/home',true,true),
-  ('Luxe Bloom Studio','Beauty and wellness','DEMO DATA: Salon website with gallery, services, and appointment CTA.','https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80','/demo-sites/luxe-bloom-studio/home',true,true),
-  ('Ironclad Roofing','Contractors','DEMO DATA: Contractor website with project gallery and quote request.','https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=900&q=80','/demo-sites/ironclad-roofing/home',false,true),
-  ('Harbor Hope Center','Nonprofits','DEMO DATA: Nonprofit website with donation and volunteer CTAs.','https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=900&q=80','/demo-sites/harbor-hope-center/home',false,true),
-  ('BrightPath Coaching','Coaches','DEMO DATA: Coaching website with booking and testimonials.','https://images.unsplash.com/photo-1551836022-deb4988cc6c0?auto=format&fit=crop&w=900&q=80','/demo-sites/brightpath-coaching/home',false,true),
   ('ArcTemp HVAC','Contractors','Engineered HVAC website for residential and commercial heating, cooling, emergency repair, and maintenance services.','https://arctemphvac.com/assets/hero-bg-C6bAi7fK.jpg','https://arctemphvac.com/',true,true),
   ('CubChatter','Education','Photo flashcard learning app for toddlers and preschoolers with parent and admin areas.','https://image.thum.io/get/width/1200/crop/700/https://cubchatter.com/','https://cubchatter.com/',true,true),
   ('Certifia','Healthcare','Nurse exam prep platform for NCLEX, HESI, and NP practice with quizzes, rationales, and progress tracking.','https://image.thum.io/get/width/1200/crop/700/https://certifia.co/','https://certifia.co/',true,true),
@@ -438,12 +432,6 @@ insert into public.portfolio_items(title, industry, description, image_url, webs
   ('ContentCracker','Professional services','Marketing command center experience with account access and campaign workspace positioning.','https://image.thum.io/get/width/1200/crop/700/https://contentcracker.io/','https://contentcracker.io/',false,true),
   ('Books Up Network','Education','Community education platform focused on knowledge, creativity, empowerment, resources, and digital innovation.','https://image.thum.io/get/width/1200/crop/700/https://booksupnetwork.com/','https://booksupnetwork.com/',false,true),
   ('YouTubePays','Education','Creator monetization resource with earnings calculators, platform education, course offers, and creator tools.','https://image.thum.io/get/width/1200/crop/700/https://youtubepays.com/','https://youtubepays.com/',false,true);
-
-insert into public.testimonials(client_name, business_name, industry, quote, outcome, image_url, approved, featured) values
-  ('Maya Thompson','Luxe Bloom Studio','Beauty and Wellness','DEMO TESTIMONIAL: The site helped us look established before our grand opening.','23 inquiry requests in the first month','https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=500&q=80',true,true),
-  ('Marcus Reed','Ironclad Roofing','Contractors','DEMO TESTIMONIAL: Customers finally had one place to see our work and request quotes.','Quote form became their top lead source','https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=500&q=80',true,true),
-  ('Nia Brooks','Harbor Hope Center','Nonprofits','DEMO TESTIMONIAL: The website made it easier for donors and volunteers to understand our mission.','Volunteer submissions increased','https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=500&q=80',true,true),
-  ('Evan Carter','BrightPath Coaching','Coaches','DEMO TESTIMONIAL: I stopped sending people to scattered social profiles.','Bookings consolidated into one funnel','https://images.unsplash.com/photo-1551836022-deb4988cc6c0?auto=format&fit=crop&w=500&q=80',true,false);
 
 insert into storage.buckets (id, name, public) values ('project-files', 'project-files', false) on conflict (id) do nothing;
 

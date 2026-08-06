@@ -157,16 +157,6 @@ export const demoData: PlatformSnapshot = {
     created_at: now,
   })),
   portfolio: [
-    ...categories.slice(0, 6).map((industry, i) => ({
-      id: `portfolio-${i + 1}`,
-      title: ['Summit Legal Group', 'Ember Table Kitchen', 'Luxe Bloom Studio', 'Ironclad Roofing', 'Harbor Hope Center', 'BrightPath Coaching'][i],
-      industry,
-      description: 'DEMO DATA: Conversion-focused small business website with mobile-first layout and lead capture.',
-      image_url: `https://images.unsplash.com/photo-${['1497366754035-f200968a6e72','1555396273-367ea4eb4db5','1522335789203-aabd1fc54bc9','1504917595217-d4dc5ebe6122','1559027615-cd4628902d4a','1551836022-deb4988cc6c0'][i]}?auto=format&fit=crop&w=900&q=80`,
-      website_url: `/demo-sites/${['summit-legal-group','ember-table-kitchen','luxe-bloom-studio','ironclad-roofing','harbor-hope-center','brightpath-coaching'][i]}/home`,
-      featured: i < 3,
-      published: true,
-    })),
     { id: 'portfolio-arctemp-hvac', title: 'ArcTemp HVAC', industry: 'Contractors', description: 'Engineered HVAC website for residential and commercial heating, cooling, emergency repair, and maintenance services.', image_url: 'https://arctemphvac.com/assets/hero-bg-C6bAi7fK.jpg', website_url: 'https://arctemphvac.com/', featured: true, published: true },
     { id: 'portfolio-cubchatter', title: 'CubChatter', industry: 'Education', description: 'Photo flashcard learning app for toddlers and preschoolers with parent and admin areas.', image_url: 'https://image.thum.io/get/width/1200/crop/700/https://cubchatter.com/', website_url: 'https://cubchatter.com/', featured: true, published: true },
     { id: 'portfolio-certifia', title: 'Certifia', industry: 'Healthcare', description: 'Nurse exam prep platform for NCLEX, HESI, and NP practice with quizzes, rationales, and progress tracking.', image_url: 'https://image.thum.io/get/width/1200/crop/700/https://certifia.co/', website_url: 'https://certifia.co/', featured: true, published: true },
@@ -175,12 +165,7 @@ export const demoData: PlatformSnapshot = {
     { id: 'portfolio-books-up-network', title: 'Books Up Network', industry: 'Education', description: 'Community education platform focused on knowledge, creativity, empowerment, resources, and digital innovation.', image_url: 'https://image.thum.io/get/width/1200/crop/700/https://booksupnetwork.com/', website_url: 'https://booksupnetwork.com/', featured: false, published: true },
     { id: 'portfolio-youtube-pays', title: 'YouTubePays', industry: 'Education', description: 'Creator monetization resource with earnings calculators, platform education, course offers, and creator tools.', image_url: 'https://image.thum.io/get/width/1200/crop/700/https://youtubepays.com/', website_url: 'https://youtubepays.com/', featured: false, published: true },
   ],
-  testimonials: [
-    { id: 'test-1', client_name: 'Maya Thompson', business_name: 'Luxe Bloom Studio', industry: 'Beauty and Wellness', quote: 'DEMO TESTIMONIAL: The site helped us look established before our grand opening.', outcome: '23 inquiry requests in the first month', image_url: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=500&q=80', approved: true, featured: true },
-    { id: 'test-2', client_name: 'Marcus Reed', business_name: 'Ironclad Roofing', industry: 'Contractors', quote: 'DEMO TESTIMONIAL: Customers finally had one place to see our work and request quotes.', outcome: 'Quote form became their top lead source', image_url: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=500&q=80', approved: true, featured: true },
-    { id: 'test-3', client_name: 'Nia Brooks', business_name: 'Harbor Hope Center', industry: 'Nonprofits', quote: 'DEMO TESTIMONIAL: The website made it easier for donors and volunteers to understand our mission.', outcome: 'Volunteer submissions increased', image_url: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=500&q=80', approved: true, featured: true },
-    { id: 'test-4', client_name: 'Evan Carter', business_name: 'BrightPath Coaching', industry: 'Coaches', quote: 'DEMO TESTIMONIAL: I stopped sending people to scattered social profiles.', outcome: 'Bookings consolidated into one funnel', image_url: 'https://images.unsplash.com/photo-1551836022-deb4988cc6c0?auto=format&fit=crop&w=500&q=80', approved: true, featured: false },
-  ],
+  testimonials: [],
   metrics: [
     { id: 'metric-spots', label: 'weekly_spots_remaining', value: '12', sort_order: 1 },
     { id: 'metric-delivered', label: 'websites_delivered', value: '37', sort_order: 2 },
