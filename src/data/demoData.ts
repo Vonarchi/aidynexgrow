@@ -41,7 +41,7 @@ const projectTasks: Omit<ProjectTask, 'id' | 'project_id'>[] = [
 ].map(([task_name, category], index) => ({ task_name, category, completed: index < 8, client_visible: index !== 0, sort_order: index + 1 }))
 
 const services: ServiceCatalogItem[] = [
-  { id: 'svc-hosting', name: 'Managed Hosting', category: 'Hosting', description: 'Required hosting for launched websites, including SSL, backups, uptime monitoring, and launch support.', benefits: ['Required for launch', 'SSL included', 'Daily backups', 'Standard support'], price_type: 'monthly', monthly_price: 29, active: true, featured: true },
+  { id: 'svc-hosting', name: 'Managed Hosting', category: 'Hosting', description: 'Required hosting for launched websites, including SSL, backups, uptime monitoring, and launch support.', benefits: ['Required for launch', 'SSL included', 'Daily backups', 'Standard support'], price_type: 'monthly', monthly_price: 34, active: true, featured: true },
   { id: 'svc-care', name: 'Business Care', category: 'Maintenance', description: 'Hosting plus monthly updates, security monitoring, and minor content changes.', benefits: ['Priority support', 'Monthly changes', 'Security checks'], price_type: 'monthly', monthly_price: 149, active: true, featured: true },
   { id: 'svc-growth', name: 'Business Growth', category: 'Growth', description: 'Ongoing conversion improvements, SEO monitoring, analytics, and automation support.', benefits: ['Strategy review', 'SEO monitoring', 'Automation guidance'], price_type: 'monthly', monthly_price: 399, active: true, featured: true },
   { id: 'svc-pages', name: 'Additional Pages', category: 'Website Upgrade', description: 'Add extra service pages, landing pages, menus, galleries, or location pages.', benefits: ['Expanded content', 'SEO-friendly sections', 'Clearer offers'], price_type: 'fixed', starting_price: 150, active: true, featured: false },
@@ -196,7 +196,7 @@ export const featureOptions = ['Contact form', 'Quote request', 'Appointment boo
 export const advancedFeatures = ['Basic ecommerce', 'Live chat', 'AI chatbot', 'Customer portal', 'Employee portal', 'Membership', 'Custom dashboard']
 export const serviceInterestOptions = ['Website hosting', 'Monthly website maintenance', 'SEO', 'Google Business setup', 'Logo design', 'Branding', 'Social media graphics', 'Online booking', 'Ecommerce', 'AI chatbot', 'Email automation', 'CRM', 'Web application', 'Mobile application', 'Customer portal', 'Employee portal', 'Business automation']
 export const maintenancePlans = [
-  { name: 'Launch Hosting', description: 'Required website hosting with SSL, backups, basic monitoring, and standard support.', price: '$29/mo' },
+  { name: 'Launch Hosting', description: 'Required website hosting with SSL, backups, basic monitoring, and standard support.', price: '$34/mo' },
   { name: 'Business Care', description: 'Hosting, monthly updates, security monitoring, backups, minor content changes, and priority support.', price: '$149/mo' },
   { name: 'Business Growth', description: 'Hosting, maintenance, analytics, SEO monitoring, conversion improvements, monthly strategy review, and automation support.', price: '$399/mo' },
 ]

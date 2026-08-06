@@ -415,7 +415,7 @@ insert into public.site_metrics(label, value, sort_order) values
 on conflict (label) do update set value = excluded.value, sort_order = excluded.sort_order;
 
 insert into public.service_catalog(name, category, description, benefits, price_type, starting_price, monthly_price, active, featured) values
-  ('Managed Hosting','Hosting','DEMO DATA: Required hosting for launched websites, including SSL, backups, uptime monitoring, and launch support.',array['Required for launch','SSL included','Daily backups','Standard support'],'monthly',null,29,true,true),
+  ('Managed Hosting','Hosting','DEMO DATA: Required hosting for launched websites, including SSL, backups, uptime monitoring, and launch support.',array['Required for launch','SSL included','Daily backups','Standard support'],'monthly',null,34,true,true),
   ('Business Care','Maintenance','DEMO DATA: Hosting plus monthly updates, security monitoring, and minor content changes.',array['Priority support','Monthly changes','Security checks'],'monthly',null,149,true,true),
   ('Business Growth','Growth','DEMO DATA: Conversion improvements, SEO monitoring, analytics, and automation support.',array['Strategy review','SEO monitoring','Automation guidance'],'monthly',null,399,true,true),
   ('Additional Pages','Website Upgrade','DEMO DATA: Add extra service pages, landing pages, menus, galleries, or location pages.',array['Expanded content','SEO-friendly sections','Clearer offers'],'fixed',150,null,true,false),

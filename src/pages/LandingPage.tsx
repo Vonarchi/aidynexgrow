@@ -80,8 +80,8 @@ const platformFeatures = [
 ] as const
 const faq = [
   ['Is the website really free?', 'The standard website design and initial build have no upfront design fee for approved applicants. Domain registration, hosting, premium integrations, custom functionality, maintenance, and ongoing support may require separate payment.'],
-  ['What do I have to pay for?', 'The website design and initial build are free for approved applicants. Managed hosting with us is required for launch at $29/month, and you may also pay for approved add-ons such as domain registration, premium tools, custom software, or extra services.'],
-  ['Do I have to purchase hosting?', 'Yes. A website needs hosting to exist online, and approved websites launched through this program use our managed hosting at $29 per month. This covers secure hosting, SSL, basic monitoring, and standard launch support.'],
+  ['What do I have to pay for?', 'The website design and initial build are free for approved applicants. Managed hosting with us is required for launch at $34/month, and you may also pay for approved add-ons such as domain registration, premium tools, custom software, or extra services.'],
+  ['Do I have to purchase hosting?', 'Yes. A website needs hosting to exist online, and approved websites launched through this program use our managed hosting at $34 per month. This covers secure hosting, SSL, basic monitoring, and standard launch support.'],
   ['Can I use my existing domain?', 'Yes. We can help connect an existing domain during launch.'],
   ['How long will the website take?', 'Timing depends on application review, content readiness, queue capacity, and the selected launch option. You will receive next-step guidance after review.'],
   ['How many pages are included?', 'The standard website build includes up to five standard pages for approved applicants. Larger scopes may require a premium plan or custom quote.'],
@@ -100,10 +100,12 @@ const faq = [
 ]
 
 const ownerPhotos = [
-  { src: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=80', alt: 'Business owner reviewing website launch notes' },
-  { src: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80', alt: 'Small business team smiling in a workspace' },
-  { src: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80', alt: 'Entrepreneur working in a warm office' },
-  { src: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80', alt: 'Business owners collaborating at a table' },
+  { src: '/hero-carousel/cyber-robot-team-1.png', alt: 'Cyberpunk robot team walking through an industrial corridor' },
+  { src: '/hero-carousel/cyber-robot-team-2.png', alt: 'Black robotic quadruped with a human figure in the background' },
+  { src: '/hero-carousel/robotic-fabrication.png', alt: 'Automated robotic fabrication system working on a circuit board' },
+  { src: '/hero-carousel/black-gold-interior.png', alt: 'Black and gold modern interior with inspirational wall art' },
+  { src: '/hero-carousel/future-city-storm.png', alt: 'Near-future city skyline under a dramatic storm' },
+  { src: '/hero-carousel/sports-exhibit.png', alt: 'Futuristic red sports technology exhibit' },
 ]
 const postHeroExampleTitles = ['Summit Legal Group', 'Ember Table Kitchen', 'Luxe Bloom Studio']
 const gradientButtonClass = 'primary-gradient primary-glow cta-pulse-glow inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-base font-extrabold text-white transition duration-200 hover:scale-[1.03] hover:brightness-110'
@@ -152,7 +154,7 @@ export function LandingPage() {
           <KineticHeadline />
           <p className="mt-6 max-w-2xl text-xl leading-8 text-slate-200">Receive a professionally designed, mobile-friendly website with no upfront website design fee. Build credibility, make it easier for customers to find you, and establish a digital home your business can grow from.</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row"><button type="button" onClick={scrollToIncluded} className={gradientButtonClass}>Get My Free Website <ArrowRight size={18} /></button><a href="#examples" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20">See Examples <ArrowRight size={16} /></a></div>
-          <p className="mt-5 max-w-2xl text-sm leading-6 text-slate-300">Website design and initial build included for approved applicants. Managed hosting is required for launch at $29/month. Domain registration, premium integrations, maintenance, and advanced services may require separate payment.</p>
+          <p className="mt-5 max-w-2xl text-sm leading-6 text-slate-300">Website design and initial build included for approved applicants. Managed hosting is required for launch at $34/month. Domain registration, premium integrations, maintenance, and advanced services may require separate payment.</p>
           <p className="mt-6 text-sm font-semibold text-gold-500">Professional Website. No Upfront Design Fee.</p>
           <p className="mt-2 text-sm text-slate-300">Built to help your business get discovered, earn trust, and grow.</p>
         </motion.div>
@@ -180,10 +182,10 @@ export function LandingPage() {
       <div id="included" className="scroll-mt-28" />
       <div className="mb-8 rounded-[1.5rem] border border-orange-100 bg-cloud-50 p-6 shadow-sm">
         <h3 className="text-2xl font-bold text-navy-950">Here&apos;s Exactly What You Get — <span className="animated-gradient-text">Free</span></h3>
-        <p className="mt-3 max-w-4xl text-lg font-medium leading-8 text-slate-700">Your website design and build are 100% free. Hosting is required for any website to exist online, and our managed hosting is $29/month; custom features and premium integrations are optional upgrades later.</p>
+        <p className="mt-3 max-w-4xl text-lg font-medium leading-8 text-slate-700">Your website design and build are 100% free. Hosting is required for any website to exist online, and our managed hosting is $34/month; custom features and premium integrations are optional upgrades later.</p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{included.map(([item, detail]) => <details key={item} className="group rounded-2xl border bg-cloud-50 p-4 text-sm shadow-sm open:bg-white"><summary className="flex cursor-pointer list-none items-start gap-3 font-semibold text-navy-950"><Check className="mt-0.5 shrink-0 text-emerald-500" size={18} />{item}<Info className="ml-auto shrink-0 text-slate-400 transition group-open:text-royal-700" size={16} /></summary><p className="mt-3 pl-8 leading-6 text-slate-600">{detail}</p></details>)}</div>
-      <div className="mt-8 rounded-[1.5rem] bg-navy-950 p-6 leading-7 text-white shadow-xl"><p>The website design and initial standard build are included for approved businesses. Managed hosting with us is required for launch at $29/month because every live website needs hosting. Domain registration, premium integrations, custom functionality, additional revisions, maintenance, ongoing support, and advanced marketing services may require separate payment.</p><div className="mt-6"><Link to="/apply" className={gradientButtonClass}>Apply for My Free Website <ArrowRight size={18} /></Link><p className="mt-3 text-sm font-medium text-slate-300">Takes 2 minutes. No credit card, no obligation.</p></div></div>
+      <div className="mt-8 rounded-[1.5rem] bg-navy-950 p-6 leading-7 text-white shadow-xl"><p>The website design and initial standard build are included for approved businesses. Managed hosting with us is required for launch at $34/month because every live website needs hosting. Domain registration, premium integrations, custom functionality, additional revisions, maintenance, ongoing support, and advanced marketing services may require separate payment.</p><div className="mt-6"><Link to="/apply" className={gradientButtonClass}>Apply for My Free Website <ArrowRight size={18} /></Link><p className="mt-3 text-sm font-medium text-slate-300">Takes 2 minutes. No credit card, no obligation.</p></div></div>
     </Section>
 
     <Section eyebrow="Qualification" title="Who This Program Is Designed For" className="bg-cloud-50"><div className="grid gap-8 lg:grid-cols-2"><div className="rounded-3xl bg-white p-7 shadow-sm"><h3 className="text-xl font-bold text-navy-950">A Strong Fit For</h3><ul className="mt-5 grid gap-3 text-sm text-slate-700">{qualifies.map((item) => <li key={item} className="flex gap-3"><Check className="shrink-0 text-emerald-500" size={18} />{item}</li>)}</ul></div><div className="rounded-3xl bg-navy-950 p-7 text-white"><h3 className="text-xl font-bold">This May Not Be the Right Fit If</h3><ul className="mt-5 grid gap-3 text-sm text-slate-300">{notRightFit.map((item) => <li key={item} className="flex gap-3"><Info className="shrink-0 text-gold-500" size={18} />{item}</li>)}</ul><p className="mt-6 text-gold-500">Premium services and custom software are available when the standard website scope is not enough.</p></div></div></Section>
