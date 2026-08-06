@@ -98,26 +98,29 @@ const faq = [
   ['Can an existing website be redesigned?', 'Yes. Existing websites can be reviewed during the application process, but redesign scope and migration needs may affect the launch path.'],
 ]
 
-const ownerPhotos = [
-  { src: '/hero-carousel/luxury-cityscape.png', alt: 'Futuristic luxury cityscape reflected on water' },
-  { src: '/hero-carousel/self-driving-mercedes-1.png', alt: 'Self-driving electric vehicle beside a robot assistant' },
-  { src: '/hero-carousel/surveillance-eye.png', alt: 'Close-up monochrome eye with a surveillance-like reflection' },
-  { src: '/hero-carousel/self-driving-mercedes-2.png', alt: 'Robot assistant beside a self-driving Mercedes vehicle' },
-  { src: '/hero-carousel/righteousness-wall.png', alt: 'Rainy city wall mural with bold gold and white words' },
-  { src: '/hero-carousel/abstract-wall-art.png', alt: 'Luxury living room with abstract blue and gold wall art' },
-  { src: '/hero-carousel/iridescent-car.png', alt: 'Close-up of a car with blue and green iridescent wrap' },
-  { src: '/hero-carousel/modern-coffee-station.png', alt: 'Modern black and wood coffee station interior' },
-  { src: '/hero-carousel/youtube-pays-portrait.png', alt: 'Portrait painted with bold YouTube Pays lettering' },
+const heroSequence = [
+  { src: '/hero-cinematic/eye-surveillance.png', className: 'cinematic-eye-frame' },
+  { src: '/hero-cinematic/flooded-futuristic-city.png', className: 'cinematic-flood-frame' },
+  { src: '/hero-cinematic/robot-delivering-groceries.png', className: 'cinematic-grocery-robot-frame' },
+  { src: '/hero-cinematic/autonomous-mercedes.png', className: 'cinematic-mercedes-frame' },
+  { src: '/hero-cinematic/cyber-robot.png', className: 'cinematic-cyber-frame' },
+  { src: '/hero-cinematic/iridescent-supra.png', className: 'cinematic-supra-frame' },
+  { src: '/hero-cinematic/friends-laughing.png', className: 'cinematic-friends-frame' },
+  { src: '/hero-cinematic/living-room.png', className: 'cinematic-living-frame' },
+  { src: '/hero-cinematic/righteousness-wall.png', className: 'cinematic-wall-frame' },
 ]
 const postHeroExampleTitles = ['ArcTemp HVAC', 'CubChatter', 'Certifia']
 const gradientButtonClass = 'primary-gradient primary-glow cta-pulse-glow inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-base font-extrabold text-white transition duration-200 hover:scale-[1.03] hover:brightness-110'
 const isConceptPortfolioItem = (item: PortfolioItem) => item.description.toLowerCase().includes('demo data') || item.website_url.includes('/demo-sites/')
 
 function KineticHeadline() {
-  const words = ['Your', 'Business', 'Deserves', 'More', 'Than', 'a']
+  const words = ['Creating', 'Tomorrow.']
   return <h1 className="mt-6 max-w-4xl text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl text-balance">
-    {words.map((word, index) => <motion.span key={word} className="mr-[0.18em] inline-block" initial={{ opacity: 0, y: 30, scale: .9 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: index * .08, duration: .55, ease: 'easeOut' }}>{word}</motion.span>)}
-    <motion.span className="animated-gradient-text inline-block" initial={{ opacity: 0, y: 30, scale: .9 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: words.length * .08, duration: .55, ease: 'easeOut' }}>Social Media Page.</motion.span>
+    <motion.span className="animated-gradient-text block text-5xl font-black uppercase tracking-[0.18em] sm:text-7xl lg:text-8xl" initial={{ opacity: 0, y: 30, scale: .92 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: .65, ease: 'easeOut' }}>VONARCHI</motion.span>
+    <span className="mt-5 block">
+      {words.map((word, index) => <motion.span key={word} className="mr-[0.18em] inline-block" initial={{ opacity: 0, y: 30, scale: .9 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: .2 + index * .1, duration: .55, ease: 'easeOut' }}>{word}</motion.span>)}
+      <motion.span className="inline-block text-gold-500" initial={{ opacity: 0, y: 30, scale: .9 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: .45, duration: .55, ease: 'easeOut' }}>Today.</motion.span>
+    </span>
   </h1>
 }
 
@@ -147,12 +150,18 @@ export function LandingPage() {
 
   return <PageShell tone="dark"><SiteHeader />
     <section className="relative isolate overflow-hidden bg-navy-950 text-white">
-      {ownerPhotos.map((photo, index) => <img key={photo.src} src={photo.src} alt="" aria-hidden="true" className="owner-photo-cycle absolute inset-0 -z-30 h-full w-full object-cover opacity-0" style={{ animationDelay: `${index * 3}s` }} />)}
-      <div className="absolute inset-0 -z-20 bg-gradient-to-br from-navy-950/68 via-navy-950/34 to-violet-500/20" />
-      <div className="navy-shell animated-gradient-mesh absolute inset-0 -z-10 opacity-25 mix-blend-overlay" />
+      {heroSequence.map((frame) => <img key={frame.src} src={frame.src} alt="" aria-hidden="true" className={`cinematic-frame ${frame.className} absolute inset-0 -z-30 h-full w-full object-cover opacity-0`} />)}
+      <div className="absolute inset-0 -z-20 bg-gradient-to-br from-navy-950/62 via-navy-950/28 to-violet-500/18" />
+      <div className="navy-shell animated-gradient-mesh absolute inset-0 -z-20 opacity-20 mix-blend-overlay" />
+      <div className="cinematic-rain absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
+      <div className="cinematic-lightning absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
+      <div className="cinematic-light-streak absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
+      <div className="cinematic-lens-flare absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
+      <div className="cinematic-white-flash absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
+      <div className="cinematic-black-flash absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
       <div className="border-b border-white/10 bg-navy-950/25 px-4 py-3 text-center text-sm text-white backdrop-blur-md"><span className="font-semibold">Limited weekly build capacity.</span> <span className="text-gold-500">Applications are reviewed in the order they are completed and approved.</span></div>
       <div className="mx-auto flex min-h-[760px] max-w-7xl items-center px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
-        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6 }} className="max-w-4xl rounded-[2rem] border border-white/15 bg-navy-950/30 p-6 shadow-2xl shadow-navy-950/25 backdrop-blur-[2px] sm:p-8 lg:p-10">
+        <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 7.2, duration: .9, ease: 'easeOut' }} className="max-w-4xl rounded-[2rem] border border-white/15 bg-navy-950/28 p-6 shadow-2xl shadow-navy-950/25 backdrop-blur-[2px] sm:p-8 lg:p-10">
           <Badge tone="gold">Business Launch Initiative</Badge>
           <KineticHeadline />
           <p className="mt-6 max-w-2xl text-xl leading-8 text-slate-200">Receive a professionally designed, mobile-friendly website with no upfront website design fee. Build credibility, make it easier for customers to find you, and establish a digital home your business can grow from.</p>
