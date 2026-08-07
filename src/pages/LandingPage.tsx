@@ -103,10 +103,17 @@ const heroSequence = [
   { src: '/hero-cinematic/flooded-futuristic-city.png', className: 'cinematic-flood-frame', position: 'object-[52%_50%]' },
   { src: '/hero-cinematic/robot-delivering-groceries.png', className: 'cinematic-grocery-robot-frame', position: 'object-[45%_50%] sm:object-center' },
   { src: '/hero-cinematic/autonomous-mercedes.png', className: 'cinematic-mercedes-frame', position: 'object-[54%_50%]' },
+  { src: '/hero-cinematic/mercedes-delivery-pod.png', className: 'cinematic-delivery-pod-frame', position: 'object-[54%_50%]' },
   { src: '/hero-cinematic/cyber-robot.png', className: 'cinematic-cyber-frame', position: 'object-[52%_50%]' },
+  { src: '/hero-cinematic/cyber-dog-black.png', className: 'cinematic-cyber-dog-frame', position: 'object-[42%_50%] sm:object-center' },
+  { src: '/hero-cinematic/cyber-dog-rider.png', className: 'cinematic-cyber-rider-frame', position: 'object-[48%_50%] sm:object-center' },
   { src: '/hero-cinematic/iridescent-supra.png', className: 'cinematic-supra-frame', position: 'object-[58%_50%] sm:object-center' },
+  { src: '/hero-cinematic/iridescent-supra-wide.png', className: 'cinematic-supra-wide-frame', position: 'object-[52%_50%]' },
   { src: '/hero-cinematic/friends-laughing.png', className: 'cinematic-friends-frame', position: 'object-[58%_50%] sm:object-center' },
   { src: '/hero-cinematic/living-room.png', className: 'cinematic-living-frame', position: 'object-[50%_50%]' },
+  { src: '/hero-cinematic/sports-expo-red.png', className: 'cinematic-expo-frame', position: 'object-[50%_50%]' },
+  { src: '/hero-cinematic/youtube-pays-portrait-a.png', className: 'cinematic-youtube-a-frame', position: 'object-[50%_42%]' },
+  { src: '/hero-cinematic/youtube-pays-portrait-b.png', className: 'cinematic-youtube-b-frame', position: 'object-[50%_42%]' },
   { src: '/hero-cinematic/righteousness-wall.png', className: 'cinematic-wall-frame', position: 'object-[28%_50%] sm:object-center' },
 ]
 const postHeroExampleTitles = ['ArcTemp HVAC', 'CubChatter', 'Certifia']
@@ -116,7 +123,7 @@ const isConceptPortfolioItem = (item: PortfolioItem) => item.description.toLower
 function KineticHeadline() {
   const words = ['Creating', 'Tomorrow.']
   return <h1 className="mt-6 max-w-4xl text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl text-balance">
-    <motion.span className="animated-gradient-text block text-5xl font-black uppercase tracking-[0.18em] sm:text-7xl lg:text-8xl" initial={{ opacity: 0, y: 30, scale: .92 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: .65, ease: 'easeOut' }}>VONARCHI</motion.span>
+    <motion.span className="animated-gradient-text block text-5xl font-black uppercase tracking-[0.18em] sm:text-7xl lg:text-8xl" initial={{ opacity: 0, y: 30, scale: .92 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: .65, ease: 'easeOut' }}>YOUR BUSINESS DESERVES MORE</motion.span>
     <span className="mt-5 block">
       {words.map((word, index) => <motion.span key={word} className="mr-[0.18em] inline-block" initial={{ opacity: 0, y: 30, scale: .9 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: .2 + index * .1, duration: .55, ease: 'easeOut' }}>{word}</motion.span>)}
       <motion.span className="inline-block text-gold-500" initial={{ opacity: 0, y: 30, scale: .9 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: .45, duration: .55, ease: 'easeOut' }}>Today.</motion.span>
@@ -161,7 +168,7 @@ export function LandingPage() {
       <div className="cinematic-black-flash absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
       <div className="border-b border-white/10 bg-navy-950/25 px-4 py-3 text-center text-sm text-white backdrop-blur-md"><span className="font-semibold">Limited weekly build capacity.</span> <span className="text-gold-500">Applications are reviewed in the order they are completed and approved.</span></div>
       <div className="mx-auto flex min-h-[840px] max-w-7xl items-end px-4 pb-14 pt-28 sm:min-h-[780px] sm:items-center sm:px-6 sm:py-20 lg:min-h-[820px] lg:px-8 lg:py-28">
-        <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 12.3, duration: .9, ease: 'easeOut' }} className="max-w-4xl rounded-[2rem] border border-white/15 bg-navy-950/28 p-5 shadow-2xl shadow-navy-950/25 backdrop-blur-[2px] sm:p-8 lg:p-10">
+        <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 16.8, duration: .9, ease: 'easeOut' }} className="max-w-4xl rounded-[2rem] border border-white/15 bg-navy-950/28 p-5 shadow-2xl shadow-navy-950/25 backdrop-blur-[2px] sm:p-8 lg:p-10">
           <Badge tone="gold">Business Launch Initiative</Badge>
           <KineticHeadline />
           <p className="mt-6 max-w-2xl text-xl leading-8 text-slate-200">Receive a professionally designed, mobile-friendly website with no upfront website design fee. Build credibility, make it easier for customers to find you, and establish a digital home your business can grow from.</p>
