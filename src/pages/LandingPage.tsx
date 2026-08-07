@@ -99,15 +99,15 @@ const faq = [
 ]
 
 const heroSequence = [
-  { src: '/hero-cinematic/eye-surveillance.png', className: 'cinematic-eye-frame' },
-  { src: '/hero-cinematic/flooded-futuristic-city.png', className: 'cinematic-flood-frame' },
-  { src: '/hero-cinematic/robot-delivering-groceries.png', className: 'cinematic-grocery-robot-frame' },
-  { src: '/hero-cinematic/autonomous-mercedes.png', className: 'cinematic-mercedes-frame' },
-  { src: '/hero-cinematic/cyber-robot.png', className: 'cinematic-cyber-frame' },
-  { src: '/hero-cinematic/iridescent-supra.png', className: 'cinematic-supra-frame' },
-  { src: '/hero-cinematic/friends-laughing.png', className: 'cinematic-friends-frame' },
-  { src: '/hero-cinematic/living-room.png', className: 'cinematic-living-frame' },
-  { src: '/hero-cinematic/righteousness-wall.png', className: 'cinematic-wall-frame' },
+  { src: '/hero-cinematic/eye-surveillance.png', className: 'cinematic-eye-frame', position: 'object-[52%_50%]' },
+  { src: '/hero-cinematic/flooded-futuristic-city.png', className: 'cinematic-flood-frame', position: 'object-[52%_50%]' },
+  { src: '/hero-cinematic/robot-delivering-groceries.png', className: 'cinematic-grocery-robot-frame', position: 'object-[45%_50%] sm:object-center' },
+  { src: '/hero-cinematic/autonomous-mercedes.png', className: 'cinematic-mercedes-frame', position: 'object-[54%_50%]' },
+  { src: '/hero-cinematic/cyber-robot.png', className: 'cinematic-cyber-frame', position: 'object-[52%_50%]' },
+  { src: '/hero-cinematic/iridescent-supra.png', className: 'cinematic-supra-frame', position: 'object-[58%_50%] sm:object-center' },
+  { src: '/hero-cinematic/friends-laughing.png', className: 'cinematic-friends-frame', position: 'object-[58%_50%] sm:object-center' },
+  { src: '/hero-cinematic/living-room.png', className: 'cinematic-living-frame', position: 'object-[50%_50%]' },
+  { src: '/hero-cinematic/righteousness-wall.png', className: 'cinematic-wall-frame', position: 'object-[28%_50%] sm:object-center' },
 ]
 const postHeroExampleTitles = ['ArcTemp HVAC', 'CubChatter', 'Certifia']
 const gradientButtonClass = 'primary-gradient primary-glow cta-pulse-glow inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-base font-extrabold text-white transition duration-200 hover:scale-[1.03] hover:brightness-110'
@@ -150,7 +150,7 @@ export function LandingPage() {
 
   return <PageShell tone="dark"><SiteHeader />
     <section className="relative isolate overflow-hidden bg-navy-950 text-white">
-      {heroSequence.map((frame) => <img key={frame.src} src={frame.src} alt="" aria-hidden="true" className={`cinematic-frame ${frame.className} absolute inset-0 -z-30 h-full w-full object-cover opacity-0`} />)}
+      {heroSequence.map((frame) => <img key={frame.src} src={frame.src} alt="" aria-hidden="true" className={`cinematic-frame ${frame.className} ${frame.position} absolute inset-0 -z-30 h-full w-full object-cover opacity-0`} />)}
       <div className="absolute inset-0 -z-20 bg-gradient-to-br from-navy-950/62 via-navy-950/28 to-violet-500/18" />
       <div className="navy-shell animated-gradient-mesh absolute inset-0 -z-20 opacity-20 mix-blend-overlay" />
       <div className="cinematic-rain absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
@@ -160,8 +160,8 @@ export function LandingPage() {
       <div className="cinematic-white-flash absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
       <div className="cinematic-black-flash absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
       <div className="border-b border-white/10 bg-navy-950/25 px-4 py-3 text-center text-sm text-white backdrop-blur-md"><span className="font-semibold">Limited weekly build capacity.</span> <span className="text-gold-500">Applications are reviewed in the order they are completed and approved.</span></div>
-      <div className="mx-auto flex min-h-[760px] max-w-7xl items-center px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
-        <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 7.2, duration: .9, ease: 'easeOut' }} className="max-w-4xl rounded-[2rem] border border-white/15 bg-navy-950/28 p-6 shadow-2xl shadow-navy-950/25 backdrop-blur-[2px] sm:p-8 lg:p-10">
+      <div className="mx-auto flex min-h-[840px] max-w-7xl items-end px-4 pb-14 pt-28 sm:min-h-[780px] sm:items-center sm:px-6 sm:py-20 lg:min-h-[820px] lg:px-8 lg:py-28">
+        <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 12.3, duration: .9, ease: 'easeOut' }} className="max-w-4xl rounded-[2rem] border border-white/15 bg-navy-950/28 p-5 shadow-2xl shadow-navy-950/25 backdrop-blur-[2px] sm:p-8 lg:p-10">
           <Badge tone="gold">Business Launch Initiative</Badge>
           <KineticHeadline />
           <p className="mt-6 max-w-2xl text-xl leading-8 text-slate-200">Receive a professionally designed, mobile-friendly website with no upfront website design fee. Build credibility, make it easier for customers to find you, and establish a digital home your business can grow from.</p>
