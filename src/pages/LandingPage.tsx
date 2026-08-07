@@ -21,54 +21,62 @@ const included = [
   ['One standard revision round', 'A focused round of changes is included so the final site reflects your approved content and goals.'],
   ['Website launch assistance', 'Support for final checks, launch coordination, and next-step guidance.'],
 ] as const
-const qualifies = ['Legitimate businesses, organizations, ministries, professionals, and entrepreneurs', 'Businesses that can provide accurate contact and service information', 'Applicants prepared to submit content and feedback promptly', 'Businesses willing to maintain an approved hosting arrangement for a launched website', 'Owners ready to launch within the stated production window']
+const qualifies = ['Legitimate businesses, organizations, ministries, professionals, and entrepreneurs', 'Businesses that can provide accurate contact and service information', 'Applicants prepared to submit content and feedback promptly', 'Businesses willing to maintain the Business Launch Membership or an approved upgraded plan for a launched website', 'Owners ready to launch within the stated production window']
 const notRightFit = ['You need advanced custom software under the standard website offer', 'You need unlimited revisions', 'You cannot provide required business information', 'You are not prepared to respond during onboarding', 'You expect paid third-party services to be included at no cost']
 const categories = ['View All', 'Professional Services', 'Restaurants', 'Beauty and Wellness', 'Contractors', 'Transportation', 'Nonprofits', 'Entertainment', 'Churches', 'Coaches', 'Real Estate', 'Retail', 'Education', 'Healthcare']
 const trustItems = [
   ['Professional Designs', Sparkles],
   ['Mobile Responsive', Smartphone],
   ['Lead Capture Ready', MessageSquare],
-  ['Secure Hosting Options', ShieldCheck],
+  ['Secure Launch Membership', ShieldCheck],
   ['No Upfront Design Fee', CheckCircle2],
 ] as const
 const process = [
-  ['Apply', 'Tell us about your business, your goals, and the type of website you need.'],
-  ['Get Approved', 'We review your application, confirm eligibility, and explain the available launch options.'],
+  ['Apply', 'Tell us about your business, goals, current digital presence, and the type of launch support you need.'],
+  ['Get Your Assessment', 'Our team reviews your application and identifies opportunities to help your business grow online.'],
   ['Complete Onboarding', 'Upload your logo, photos, services, contact details, and business information through a guided onboarding process.'],
-  ['Review and Launch', 'Review your website, submit the included revision, select your hosting option, and approve it for launch.'],
+  ['Review and Launch', 'Review your website, confirm your Business Launch Membership or upgraded plan, and approve it for launch.'],
 ] as const
 const offers = [
   {
-    title: 'Standard Website Build',
+    title: 'Launch',
     label: 'No Upfront Design Fee',
-    features: ['Up to five standard pages', 'Standard professional layout', 'Mobile-responsive design', 'Contact form', 'One revision round', 'Standard production queue', 'Client provides final content and assets'],
-    cta: 'Apply for Standard Build',
+    price: '$34/month',
+    description: 'Perfect for startups and small businesses looking to establish a professional online presence.',
+    features: ['No upfront website design fee', 'Up to 5 professionally designed pages', 'Mobile-responsive design', 'Contact and lead form', 'Google Maps integration', 'SSL security', 'Basic SEO setup', 'One revision round', 'Standard production queue', 'Client portal', 'Business Launch Membership', 'Managed hosting', 'Daily backups', 'Website security monitoring'],
+    cta: 'Start My Application',
     to: '/apply',
   },
   {
-    title: 'Priority Website Build',
-    label: 'Enhanced Launch Support',
-    features: ['Faster production scheduling', 'Expanded customization', 'Additional revision rounds', 'Copy assistance', 'Premium layout options', 'Priority queue', 'Enhanced onboarding support'],
-    cta: 'Explore Priority Build',
+    title: 'Accelerate',
+    label: 'Most Popular',
+    price: '$99/month',
+    description: 'For businesses that want a faster, more customized launch path with stronger creative support.',
+    features: ['Everything in Launch', 'Priority build queue', 'Launch in 3-5 business days target', 'Premium template library', 'Expanded customization', 'Copywriting assistance', 'Additional revisions', 'Enhanced onboarding', 'AI-generated business copy', 'Premium animations', 'Better support'],
+    cta: 'Upgrade My Launch',
     to: '/apply',
   },
   {
-    title: 'Business Growth Plan',
-    label: 'Ongoing Services',
-    features: ['Website', 'Managed hosting', 'Maintenance', 'Analytics', 'Enhanced SEO setup', 'Appointment booking', 'AI chatbot option', 'Email automation', 'CRM integration', 'Priority support'],
-    cta: 'View Growth Options',
+    title: 'Scale',
+    label: 'Growth System',
+    price: '$249/month',
+    description: 'Your outsourced digital marketing department for ongoing improvement, automation, and lead capture.',
+    features: ['Everything in Accelerate', 'Monthly website updates', 'Managed hosting', 'Maintenance', 'Performance monitoring', 'Advanced SEO', 'Google Business Profile optimization', 'CRM integration', 'AI chatbot', 'Appointment booking', 'Email automation', 'Analytics dashboard', 'Monthly business review', 'Priority support'],
+    cta: 'Choose Scale Plan',
     to: '#growth-services',
   },
   {
-    title: 'Custom Software',
-    label: 'Custom Quote',
-    features: ['Customer portals', 'Employee dashboards', 'Scheduling systems', 'Marketplace platforms', 'Restaurant ordering', 'Membership platforms', 'Mobile applications', 'AI-powered business tools'],
-    cta: 'Request a Consultation',
+    title: 'Enterprise',
+    label: 'Custom Proposal',
+    price: 'Starting at $3,000+',
+    description: 'Custom software and automation for businesses that need systems beyond a standard website.',
+    features: ['Customer portals', 'Employee dashboards', 'Mobile apps', 'Scheduling software', 'Restaurant ordering', 'Membership systems', 'AI automation', 'Internal dashboards', 'Business management systems'],
+    cta: 'Schedule Strategy Session',
     to: '/software-consultation',
   },
 ] as const
 const platformFeatures = [
-  ['Managed Hosting', 'Launch on a secure hosting arrangement with SSL and ongoing platform support.'],
+  ['Business Launch Membership', 'Managed hosting, SSL, backups, client portal access, technical maintenance, security monitoring, and platform updates.'],
   ['Website Maintenance', 'Keep content, plugins, security, and routine updates from becoming a distraction.'],
   ['Appointment Booking', 'Add scheduling paths that reduce back-and-forth and help customers take action.'],
   ['Lead Management', 'Route inquiries into a more organized follow-up process as your business grows.'],
@@ -78,20 +86,20 @@ const platformFeatures = [
   ['Custom Business Software', 'Plan portals, dashboards, ordering systems, mobile apps, and operational tools.'],
 ] as const
 const faq = [
-  ['Is the website really free?', 'The standard website design and initial build have no upfront design fee for approved applicants. Domain registration, hosting, premium integrations, custom functionality, maintenance, and ongoing support may require separate payment.'],
-  ['What do I have to pay for?', 'The website design and initial build are free for approved applicants. Managed hosting with us is required for launch at $34/month, and you may also pay for approved add-ons such as domain registration, premium tools, custom software, or extra services.'],
-  ['Do I have to purchase hosting?', 'Yes. A website needs hosting to exist online, and approved websites launched through this program use our managed hosting at $34 per month. This covers secure hosting, SSL, basic monitoring, and standard launch support.'],
+  ['Is the website really free?', 'The website design and initial standard build have no upfront design fee for approved applicants. A Business Launch Membership is required for launch because every live website needs hosting, security, backups, and technical maintenance.'],
+  ['What do I have to pay for?', 'The Launch plan uses a $34/month Business Launch Membership that includes managed hosting, SSL, backups, security monitoring, client portal access, technical maintenance, and platform updates. Accelerate, Scale, and Enterprise options add more support and growth features.'],
+  ['Do I have to purchase hosting?', 'Approved websites launched through this program use the Business Launch Membership at $34/month. Hosting is included as one of the membership benefits, along with SSL, backups, monitoring, maintenance, and platform support.'],
   ['Can I use my existing domain?', 'Yes. We can help connect an existing domain during launch.'],
   ['How long will the website take?', 'Timing depends on application review, content readiness, queue capacity, and the selected launch option. You will receive next-step guidance after review.'],
   ['How many pages are included?', 'The standard website build includes up to five standard pages for approved applicants. Larger scopes may require a premium plan or custom quote.'],
-  ['What information do I need to provide?', 'Be prepared to provide accurate contact information, services, business details, logo files, photos, desired pages, and any existing domain or hosting information.'],
+  ['What information do I need to provide?', 'Be prepared to provide accurate contact information, services, business details, logo files, photos, desired pages, and any existing domain information.'],
   ['How many revisions are included?', 'Standard website builds include one standard revision round. Additional revisions may require an upgraded plan or separate approval.'],
   ['Can you write my content?', 'Basic guidance is included. Custom copywriting is available as an optional paid service.'],
   ['Can you build an online store?', 'Basic ecommerce may be possible as an upgrade. Large stores and marketplaces are custom paid projects.'],
-  ['What happens after the website launches?', 'You can keep managing it yourself or request hosting, maintenance, SEO, analytics, automation, and growth services.'],
-  ['Can I upgrade later?', 'Yes. You can add hosting, maintenance, SEO, booking, automation, custom pages, web applications, or mobile apps later.'],
+  ['What happens after the website launches?', 'You can stay on Launch or upgrade into Accelerate or Scale for updates, SEO, analytics, booking, automation, CRM, email follow-up, and growth support.'],
+  ['Can I upgrade later?', 'Yes. You can move from Launch to Accelerate, Scale, or Enterprise as your business needs more support, automation, custom features, or software.'],
   ['Do you build web applications?', 'Yes. Customer portals, dashboards, marketplaces, booking systems, AI tools, and mobile apps are quoted separately.'],
-  ['Who owns the completed website?', 'Ownership and access details are handled in the project terms and depend on selected hosting, tools, and third-party services.'],
+  ['Who owns the completed website?', 'Ownership and access details are handled in the project terms and depend on selected membership, tools, and third-party services.'],
   ['Are all applications approved?', 'No. Applications are reviewed for fit, readiness, capacity, and scope. Approval is not guaranteed.'],
   ['Do you guarantee leads or search rankings?', 'No. The site is built to improve credibility, clarity, and discoverability, but leads, revenue, approvals, completion dates, and search placement are not guaranteed.'],
   ['What happens if I do not submit my content?', 'Projects waiting on content can be paused or skipped temporarily so ready projects can keep moving.'],
@@ -185,7 +193,7 @@ export function LandingPage() {
           <KineticHeadline />
           <p className="mt-6 max-w-2xl text-xl leading-8 text-slate-200">Receive a professionally designed, mobile-friendly website with no upfront website design fee. Build credibility, make it easier for customers to find you, and establish a digital home your business can grow from.</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row"><button type="button" onClick={scrollToIncluded} className={gradientButtonClass}>Get My Free Website <ArrowRight size={18} /></button><a href="#examples" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20">See Examples <ArrowRight size={16} /></a></div>
-          <p className="mt-5 max-w-2xl text-sm leading-6 text-slate-300">Website design and initial build included for approved applicants. Managed hosting is required for launch at $34/month. Domain registration, premium integrations, maintenance, and advanced services may require separate payment.</p>
+          <p className="mt-5 max-w-2xl text-sm leading-6 text-slate-300">Website design and initial build included for approved applicants. The Business Launch Membership is required for launch at $34/month and includes managed hosting, SSL, backups, security monitoring, client portal access, technical maintenance, and platform updates.</p>
           <p className="mt-6 text-sm font-semibold text-gold-500">Professional Website. No Upfront Design Fee.</p>
           <p className="mt-2 text-sm text-slate-300">Built to help your business get discovered, earn trust, and grow.</p>
         </motion.div>
@@ -214,17 +222,48 @@ export function LandingPage() {
       <div id="included" className="scroll-mt-28" />
       <div className="flavor-card reveal-lift mb-8 rounded-[1.5rem] border border-orange-100 bg-cloud-50 p-6 shadow-sm">
         <h3 className="text-2xl font-bold text-navy-950">Here&apos;s Exactly What You Get — <span className="animated-gradient-text">Free</span></h3>
-        <p className="mt-3 max-w-4xl text-lg font-medium leading-8 text-slate-700">Your website design and build are 100% free. Hosting is required for any website to exist online, and our managed hosting is $34/month; custom features and premium integrations are optional upgrades later.</p>
+        <p className="mt-3 max-w-4xl text-lg font-medium leading-8 text-slate-700">Your website design and build are 100% free. The Business Launch Membership is required for launch at $34/month because every live website needs hosting, SSL, backups, security, and technical maintenance; custom features and premium integrations are optional upgrades later.</p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{included.map(([item, detail]) => <details key={item} className="flavor-card reveal-lift group rounded-2xl border bg-cloud-50 p-4 text-sm shadow-sm open:bg-white"><summary className="flex cursor-pointer list-none items-start gap-3 font-semibold text-navy-950"><Check className="mt-0.5 shrink-0 text-emerald-500" size={18} />{item}<Info className="ml-auto shrink-0 text-slate-400 transition group-open:text-royal-700" size={16} /></summary><p className="mt-3 pl-8 leading-6 text-slate-600">{detail}</p></details>)}</div>
-      <div className="flavor-card reveal-lift mt-8 rounded-[1.5rem] bg-navy-950 p-6 leading-7 text-white shadow-xl"><p>The website design and initial standard build are included for approved businesses. Managed hosting with us is required for launch at $34/month because every live website needs hosting. Domain registration, premium integrations, custom functionality, additional revisions, maintenance, ongoing support, and advanced marketing services may require separate payment.</p><div className="mt-6"><Link to="/apply" className={gradientButtonClass}>Apply for My Free Website <ArrowRight size={18} /></Link><p className="mt-3 text-sm font-medium text-slate-300">Takes 2 minutes. No credit card, no obligation.</p></div></div>
+      <div className="flavor-card reveal-lift mt-8 rounded-[1.5rem] bg-navy-950 p-6 leading-7 text-white shadow-xl"><p>The website design and initial standard build are included for approved businesses. The Business Launch Membership is required for launch at $34/month and includes managed hosting, security, backups, client portal access, technical maintenance, SSL, and platform updates. Domain registration, premium integrations, custom functionality, additional revisions, and advanced marketing services may require separate payment.</p><div className="mt-6"><Link to="/apply" className={gradientButtonClass}>Apply for My Free Website <ArrowRight size={18} /></Link><p className="mt-3 text-sm font-medium text-slate-300">Takes 2 minutes. No credit card, no obligation.</p></div></div>
+    </Section>
+
+    <Section eyebrow="Free Business Growth Assessment" title="Every Application Gets a Growth Score" className="flavor-section bg-cloud-50">
+      <div className="grid gap-6 lg:grid-cols-[.9fr_1.1fr]">
+        <div className="flavor-card reveal-lift rounded-3xl bg-navy-950 p-7 text-white shadow-xl">
+          <Badge tone="gold">Adynex Business Growth Report</Badge>
+          <h3 className="mt-5 text-3xl font-black">We review more than your website.</h3>
+          <p className="mt-4 leading-7 text-slate-300">Our team reviews your application and identifies opportunities to help your business grow online: website readiness, Google Business, SEO, lead capture, booking, reputation, automation, and suggested launch path.</p>
+          <p className="mt-5 rounded-2xl bg-white/10 p-4 text-sm leading-6 text-slate-200">Instead of selling hosting, the assessment shows where your business is losing trust, leads, and follow-up opportunities.</p>
+        </div>
+        <div className="flavor-card reveal-lift rounded-3xl border bg-white p-7 shadow-sm">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.22em] text-royal-700">Sample Score</p>
+              <h3 className="mt-2 text-2xl font-black text-navy-950">ABC HVAC</h3>
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-slate-500">Overall Score</p>
+              <p className="text-4xl font-black text-navy-950">68/100</p>
+            </div>
+          </div>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            {['Website: Missing', 'SEO: 22%', 'Reviews: 68%', 'Speed: 0%', 'Automation: 5%', 'Booking: Missing'].map((item) => <div key={item} className="rounded-2xl bg-cloud-50 p-4 text-sm font-semibold text-navy-950">{item}</div>)}
+          </div>
+          <div className="mt-6 rounded-2xl bg-emerald-50 p-5">
+            <h4 className="font-bold text-navy-950">AI Recommendation</h4>
+            <p className="mt-2 text-sm leading-6 text-slate-700">We recommend the Scale plan because this business would benefit from appointment scheduling, CRM integration, AI chatbot support, and automated customer follow-up.</p>
+            <p className="mt-3 text-sm font-bold text-emerald-700">Estimated monthly lead opportunity: +15-40</p>
+          </div>
+        </div>
+      </div>
     </Section>
 
     <Section eyebrow="Qualification" title="Who This Program Is Designed For" className="flavor-section bg-cloud-50"><div className="grid gap-8 lg:grid-cols-2"><div className="flavor-card reveal-lift rounded-3xl bg-white p-7 shadow-sm"><h3 className="text-xl font-bold text-navy-950">A Strong Fit For</h3><ul className="mt-5 grid gap-3 text-sm text-slate-700">{qualifies.map((item) => <li key={item} className="flex gap-3"><Check className="shrink-0 text-emerald-500" size={18} />{item}</li>)}</ul></div><div className="flavor-card reveal-lift rounded-3xl bg-navy-950 p-7 text-white"><h3 className="text-xl font-bold">This May Not Be the Right Fit If</h3><ul className="mt-5 grid gap-3 text-sm text-slate-300">{notRightFit.map((item) => <li key={item} className="flex gap-3"><Info className="shrink-0 text-gold-500" size={18} />{item}</li>)}</ul><p className="mt-6 text-gold-500">Premium services and custom software are available when the standard website scope is not enough.</p></div></div></Section>
 
     <Section eyebrow="Website Examples" title="Real Website Examples by Industry" className="flavor-section bg-white"><div id="examples" className="mb-6 flex flex-wrap gap-2">{categories.map((cat) => <button key={cat} onClick={() => setSelectedCategory(cat)} className={`rounded-full px-3 py-2 text-xs font-semibold transition hover:-translate-y-0.5 hover:shadow-lg ${selectedCategory === cat ? 'bg-navy-950 text-white' : 'bg-blue-50 text-royal-700'}`}>{cat}</button>)}</div><div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{visiblePortfolio.map((item) => <article key={item.id} className="flavor-card reveal-lift overflow-hidden rounded-3xl border bg-white shadow-sm"><img src={item.image_url} alt={`${item.title} website example`} className="h-52 w-full object-cover transition duration-300 hover:scale-105" /><div className="p-6"><Badge tone="green">Client Website</Badge><h3 className="mt-4 text-xl font-bold text-navy-950">{item.title}</h3><p className="mt-2 text-sm font-semibold text-slate-700">{item.industry}</p><p className="mt-2 text-sm leading-6 text-slate-600">{item.description.replace('DEMO DATA: ', '')}</p><button type="button" onClick={() => setPreviewItem(item)} className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy-950 px-4 py-2 text-sm font-semibold text-white">Explore Here <ArrowRight size={15} /></button></div></article>)}{visiblePortfolio.length === 0 && <div className="flavor-card reveal-lift rounded-3xl border border-dashed bg-cloud-50 p-8 text-slate-600 lg:col-span-3">More website examples for this category can be added as new approved examples become available.</div>}</div></Section>
 
-    <Section eyebrow="Launch Paths" title="Choose Your Business Launch Path" className="flavor-section bg-cloud-50"><div id="packages" className="grid gap-5 lg:grid-cols-4">{offers.map((offer) => <div key={offer.title} className="flavor-card reveal-lift flex rounded-3xl border bg-white p-6 shadow-sm"><div className="flex w-full flex-col"><Badge tone={offer.title === 'Custom Software' ? 'gold' : 'blue'}>{offer.label}</Badge><h3 className="mt-4 text-xl font-bold uppercase tracking-wide text-navy-950">{offer.title}</h3><ul className="mt-5 grid gap-3 text-sm text-slate-700">{offer.features.map((item) => <li key={item} className="flex gap-2"><Check className="mt-0.5 shrink-0 text-emerald-500" size={16} />{item}</li>)}</ul><Link to={offer.to} className="mt-auto inline-flex rounded-full bg-navy-950 px-4 py-3 text-center text-sm font-semibold text-white">{offer.cta}</Link></div></div>)}</div><p className="flavor-card reveal-lift mt-8 rounded-3xl border border-slate-200 bg-white p-5 text-sm leading-6 text-slate-700">Advanced services, recurring hosting, third-party tools, and custom functionality are separate from the standard website build and should be reviewed before approval.</p></Section>
+    <Section eyebrow="Launch Paths" title="Choose Your Business Launch Path" className="flavor-section bg-cloud-50"><div id="packages" className="grid gap-5 lg:grid-cols-4">{offers.map((offer) => <div key={offer.title} className="flavor-card reveal-lift flex rounded-3xl border bg-white p-6 shadow-sm"><div className="flex w-full flex-col"><Badge tone={offer.title === 'Enterprise' ? 'gold' : offer.title === 'Scale' ? 'green' : 'blue'}>{offer.label}</Badge><h3 className="mt-4 text-2xl font-black uppercase tracking-wide text-navy-950">{offer.title}</h3><p className="mt-3 text-3xl font-black text-navy-950">{offer.price}</p><p className="mt-3 text-sm leading-6 text-slate-600">{offer.description}</p><ul className="mt-5 grid gap-3 text-sm text-slate-700">{offer.features.map((item) => <li key={item} className="flex gap-2"><Check className="mt-0.5 shrink-0 text-emerald-500" size={16} />{item}</li>)}</ul><Link to={offer.to} className="mt-auto inline-flex rounded-full bg-navy-950 px-4 py-3 text-center text-sm font-semibold text-white">{offer.cta}</Link></div></div>)}</div><p className="flavor-card reveal-lift mt-8 rounded-3xl border border-slate-200 bg-white p-5 text-sm leading-6 text-slate-700">Every application includes a free Business Growth Assessment. Our team reviews your readiness, digital presence, lead capture gaps, and automation opportunities before recommending the best launch path.</p></Section>
 
     <Section eyebrow="Business Launch Platform" title="More Than a Website" className="flavor-section bg-white"><div id="growth-services" className="grid gap-8 lg:grid-cols-[.8fr_1.2fr]"><div className="flavor-card reveal-lift rounded-3xl bg-navy-950 p-8 text-white"><Laptop className="mb-5 text-gold-500" size={42} /><p className="text-lg leading-8 text-slate-200">Your website is the foundation. As your business grows, the Business Launch Initiative can help you add the tools needed to attract leads, manage customers, automate communication, accept appointments, and operate more efficiently.</p><Link to="/software-consultation" className="mt-7 inline-flex rounded-full bg-white px-5 py-3 text-sm font-bold text-navy-950">Explore Growth Services</Link></div><div className="grid gap-4 sm:grid-cols-2">{platformFeatures.map(([title, body]) => <div key={title} className="flavor-card reveal-lift rounded-3xl border bg-cloud-50 p-5"><Wrench className="mb-4 text-royal-700" size={22} /><h3 className="font-bold text-navy-950">{title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{body}</p></div>)}</div></div></Section>
 
