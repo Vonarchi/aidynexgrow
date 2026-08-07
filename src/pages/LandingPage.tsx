@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowRight, Check, CheckCircle2, ClipboardCheck, Globe2, Info, Laptop, MessageSquare, Search, ShieldCheck, Smartphone, Sparkles, Wrench } from 'lucide-react'
+import { ArrowRight, Check, CheckCircle2, ClipboardCheck, ExternalLink, Globe2, Info, Laptop, MessageSquare, Search, ShieldCheck, Smartphone, Sparkles, Wrench, X } from 'lucide-react'
 import { Footer, PageShell, SiteHeader } from '../components/Layout'
 import { Badge, CTAButton, FeatureCard, Section } from '../components/UI'
 import { demoData } from '../data/demoData'
@@ -23,7 +23,7 @@ const included = [
 ] as const
 const qualifies = ['Legitimate businesses, organizations, ministries, professionals, and entrepreneurs', 'Businesses that can provide accurate contact and service information', 'Applicants prepared to submit content and feedback promptly', 'Businesses willing to maintain an approved hosting arrangement for a launched website', 'Owners ready to launch within the stated production window']
 const notRightFit = ['You need advanced custom software under the standard website offer', 'You need unlimited revisions', 'You cannot provide required business information', 'You are not prepared to respond during onboarding', 'You expect paid third-party services to be included at no cost']
-const categories = ['View All', 'Professional Services', 'Restaurants', 'Beauty and Wellness', 'Contractors', 'Transportation', 'Nonprofits', 'Churches', 'Coaches', 'Real Estate', 'Retail', 'Education', 'Healthcare']
+const categories = ['View All', 'Professional Services', 'Restaurants', 'Beauty and Wellness', 'Contractors', 'Transportation', 'Nonprofits', 'Entertainment', 'Churches', 'Coaches', 'Real Estate', 'Retail', 'Education', 'Healthcare']
 const trustItems = [
   ['Professional Designs', Sparkles],
   ['Mobile Responsive', Smartphone],
@@ -131,7 +131,7 @@ function KineticHeadline() {
   </h1>
 }
 
-function WebsiteExampleCard({ item, getUrl, compact = false }: { item: PortfolioItem; getUrl: (title: string, fallbackUrl: string) => string; compact?: boolean }) {
+function WebsiteExampleCard({ item, onPreview, compact = false }: { item: PortfolioItem; onPreview: (item: PortfolioItem) => void; compact?: boolean }) {
   return <article className="flavor-card reveal-lift overflow-hidden rounded-[1.25rem] border border-orange-100/80 bg-white shadow-[0_18px_45px_rgba(45,42,50,.08)]">
     <img src={item.image_url} alt={`${item.title} website example`} className={compact ? 'h-44 w-full object-cover' : 'h-52 w-full object-cover'} />
     <div className={compact ? 'p-5' : 'p-6'}>
@@ -139,7 +139,7 @@ function WebsiteExampleCard({ item, getUrl, compact = false }: { item: Portfolio
       <h3 className="mt-4 text-xl font-bold text-navy-950">{item.title}</h3>
       <p className="mt-2 text-sm font-semibold text-slate-700">{item.industry}</p>
       <p className="mt-2 text-sm leading-6 text-slate-600">{item.description.replace('DEMO DATA: ', '')}</p>
-      {!compact && <Link to={getUrl(item.title, item.website_url)} className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy-950 px-4 py-2 text-sm font-semibold text-white">View Website <ArrowRight size={15} /></Link>}
+      <button type="button" onClick={() => onPreview(item)} className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy-950 px-4 py-2 text-sm font-semibold text-white">Explore Here <ArrowRight size={15} /></button>
     </div>
   </article>
 }
@@ -147,7 +147,19 @@ function WebsiteExampleCard({ item, getUrl, compact = false }: { item: Portfolio
 export function LandingPage() {
   const [snapshot, setSnapshot] = useState<PlatformSnapshot>(demoData)
   const [selectedCategory, setSelectedCategory] = useState('View All')
+  const [previewItem, setPreviewItem] = useState<PortfolioItem | null>(null)
   useEffect(() => { getPlatformSnapshot().then(setSnapshot).catch(() => setSnapshot(demoData)) }, [])
+  useEffect(() => {
+    if (!previewItem) return
+    const originalOverflow = document.body.style.overflow
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') setPreviewItem(null) }
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', closeOnEscape)
+    return () => {
+      document.body.style.overflow = originalOverflow
+      window.removeEventListener('keydown', closeOnEscape)
+    }
+  }, [previewItem])
   const realPortfolio = snapshot.portfolio.filter((item) => !isConceptPortfolioItem(item))
   const visiblePortfolio = selectedCategory === 'View All' ? realPortfolio : realPortfolio.filter((item) => item.industry.toLowerCase() === selectedCategory.toLowerCase())
   const approvedTestimonials = snapshot.testimonials.filter((item) => item.approved && !item.quote.toLowerCase().includes('demo testimonial'))
@@ -183,7 +195,7 @@ export function LandingPage() {
     <div className="cinematic-divider" aria-hidden="true" />
     <section className="flavor-section bg-cloud-50 px-4 pb-12 pt-8 text-navy-950 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-5 md:grid-cols-3">{postHeroExamples.map((item) => <WebsiteExampleCard key={item.id} item={item} getUrl={(_, fallbackUrl) => getPortfolioUrl(fallbackUrl)} compact />)}</div>
+        <div className="grid gap-5 md:grid-cols-3">{postHeroExamples.map((item) => <WebsiteExampleCard key={item.id} item={item} onPreview={setPreviewItem} compact />)}</div>
         <div className="mt-9 text-center">
           <p className="mb-4 text-lg font-semibold text-navy-900">No design skills needed. We build it for you.</p>
           <button type="button" onClick={scrollToIncluded} className={gradientButtonClass}>Get My Free Website <ArrowRight size={18} /></button>
@@ -210,11 +222,19 @@ export function LandingPage() {
 
     <Section eyebrow="Qualification" title="Who This Program Is Designed For" className="flavor-section bg-cloud-50"><div className="grid gap-8 lg:grid-cols-2"><div className="flavor-card reveal-lift rounded-3xl bg-white p-7 shadow-sm"><h3 className="text-xl font-bold text-navy-950">A Strong Fit For</h3><ul className="mt-5 grid gap-3 text-sm text-slate-700">{qualifies.map((item) => <li key={item} className="flex gap-3"><Check className="shrink-0 text-emerald-500" size={18} />{item}</li>)}</ul></div><div className="flavor-card reveal-lift rounded-3xl bg-navy-950 p-7 text-white"><h3 className="text-xl font-bold">This May Not Be the Right Fit If</h3><ul className="mt-5 grid gap-3 text-sm text-slate-300">{notRightFit.map((item) => <li key={item} className="flex gap-3"><Info className="shrink-0 text-gold-500" size={18} />{item}</li>)}</ul><p className="mt-6 text-gold-500">Premium services and custom software are available when the standard website scope is not enough.</p></div></div></Section>
 
-    <Section eyebrow="Website Examples" title="Real Website Examples by Industry" className="flavor-section bg-white"><div id="examples" className="mb-6 flex flex-wrap gap-2">{categories.map((cat) => <button key={cat} onClick={() => setSelectedCategory(cat)} className={`rounded-full px-3 py-2 text-xs font-semibold transition hover:-translate-y-0.5 hover:shadow-lg ${selectedCategory === cat ? 'bg-navy-950 text-white' : 'bg-blue-50 text-royal-700'}`}>{cat}</button>)}</div><div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{visiblePortfolio.map((item) => <article key={item.id} className="flavor-card reveal-lift overflow-hidden rounded-3xl border bg-white shadow-sm"><img src={item.image_url} alt={`${item.title} website example`} className="h-52 w-full object-cover transition duration-300 hover:scale-105" /><div className="p-6"><Badge tone="green">Client Website</Badge><h3 className="mt-4 text-xl font-bold text-navy-950">{item.title}</h3><p className="mt-2 text-sm font-semibold text-slate-700">{item.industry}</p><p className="mt-2 text-sm leading-6 text-slate-600">{item.description.replace('DEMO DATA: ', '')}</p><Link to={getPortfolioUrl(item.website_url)} className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy-950 px-4 py-2 text-sm font-semibold text-white">View Website <ArrowRight size={15} /></Link></div></article>)}{visiblePortfolio.length === 0 && <div className="flavor-card reveal-lift rounded-3xl border border-dashed bg-cloud-50 p-8 text-slate-600 lg:col-span-3">More website examples for this category can be added as new approved examples become available.</div>}</div></Section>
+    <Section eyebrow="Website Examples" title="Real Website Examples by Industry" className="flavor-section bg-white"><div id="examples" className="mb-6 flex flex-wrap gap-2">{categories.map((cat) => <button key={cat} onClick={() => setSelectedCategory(cat)} className={`rounded-full px-3 py-2 text-xs font-semibold transition hover:-translate-y-0.5 hover:shadow-lg ${selectedCategory === cat ? 'bg-navy-950 text-white' : 'bg-blue-50 text-royal-700'}`}>{cat}</button>)}</div><div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{visiblePortfolio.map((item) => <article key={item.id} className="flavor-card reveal-lift overflow-hidden rounded-3xl border bg-white shadow-sm"><img src={item.image_url} alt={`${item.title} website example`} className="h-52 w-full object-cover transition duration-300 hover:scale-105" /><div className="p-6"><Badge tone="green">Client Website</Badge><h3 className="mt-4 text-xl font-bold text-navy-950">{item.title}</h3><p className="mt-2 text-sm font-semibold text-slate-700">{item.industry}</p><p className="mt-2 text-sm leading-6 text-slate-600">{item.description.replace('DEMO DATA: ', '')}</p><button type="button" onClick={() => setPreviewItem(item)} className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy-950 px-4 py-2 text-sm font-semibold text-white">Explore Here <ArrowRight size={15} /></button></div></article>)}{visiblePortfolio.length === 0 && <div className="flavor-card reveal-lift rounded-3xl border border-dashed bg-cloud-50 p-8 text-slate-600 lg:col-span-3">More website examples for this category can be added as new approved examples become available.</div>}</div></Section>
 
     <Section eyebrow="Launch Paths" title="Choose Your Business Launch Path" className="flavor-section bg-cloud-50"><div id="packages" className="grid gap-5 lg:grid-cols-4">{offers.map((offer) => <div key={offer.title} className="flavor-card reveal-lift flex rounded-3xl border bg-white p-6 shadow-sm"><div className="flex w-full flex-col"><Badge tone={offer.title === 'Custom Software' ? 'gold' : 'blue'}>{offer.label}</Badge><h3 className="mt-4 text-xl font-bold uppercase tracking-wide text-navy-950">{offer.title}</h3><ul className="mt-5 grid gap-3 text-sm text-slate-700">{offer.features.map((item) => <li key={item} className="flex gap-2"><Check className="mt-0.5 shrink-0 text-emerald-500" size={16} />{item}</li>)}</ul><Link to={offer.to} className="mt-auto inline-flex rounded-full bg-navy-950 px-4 py-3 text-center text-sm font-semibold text-white">{offer.cta}</Link></div></div>)}</div><p className="flavor-card reveal-lift mt-8 rounded-3xl border border-slate-200 bg-white p-5 text-sm leading-6 text-slate-700">Advanced services, recurring hosting, third-party tools, and custom functionality are separate from the standard website build and should be reviewed before approval.</p></Section>
 
     <Section eyebrow="Business Launch Platform" title="More Than a Website" className="flavor-section bg-white"><div id="growth-services" className="grid gap-8 lg:grid-cols-[.8fr_1.2fr]"><div className="flavor-card reveal-lift rounded-3xl bg-navy-950 p-8 text-white"><Laptop className="mb-5 text-gold-500" size={42} /><p className="text-lg leading-8 text-slate-200">Your website is the foundation. As your business grows, the Business Launch Initiative can help you add the tools needed to attract leads, manage customers, automate communication, accept appointments, and operate more efficiently.</p><Link to="/software-consultation" className="mt-7 inline-flex rounded-full bg-white px-5 py-3 text-sm font-bold text-navy-950">Explore Growth Services</Link></div><div className="grid gap-4 sm:grid-cols-2">{platformFeatures.map(([title, body]) => <div key={title} className="flavor-card reveal-lift rounded-3xl border bg-cloud-50 p-5"><Wrench className="mb-4 text-royal-700" size={22} /><h3 className="font-bold text-navy-950">{title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{body}</p></div>)}</div></div></Section>
+
+    <section className="flavor-section bg-cloud-50 px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <a href="https://adynexsystems.com" target="_blank" rel="noreferrer" className="flavor-card reveal-lift block overflow-hidden rounded-[2rem] border border-blue-900/20 bg-navy-950 shadow-2xl shadow-blue-950/20">
+          <img src="/adynex-systems-banner.png" alt="Adynex Systems banner linking to web design, software development, automation, and AI solutions" className="w-full object-cover" />
+        </a>
+      </div>
+    </section>
 
     <Section eyebrow="Program Status" title="Applications Are Currently Open" className="flavor-section" dark><div className="grid gap-5 md:grid-cols-3"><div className="flavor-card reveal-lift rounded-3xl border border-white/10 bg-white/5 p-6"><ClipboardCheck className="mb-4 text-gold-500" /><h3 className="text-xl font-bold text-white">Applications currently open</h3><p className="mt-2 text-sm leading-6 text-slate-300">Applicants can submit business information for review.</p></div><div className="flavor-card reveal-lift rounded-3xl border border-white/10 bg-white/5 p-6"><Search className="mb-4 text-gold-500" /><h3 className="text-xl font-bold text-white">Applications reviewed for fit</h3><p className="mt-2 text-sm leading-6 text-slate-300">Eligibility, readiness, capacity, and scope are reviewed before approval.</p></div><div className="flavor-card reveal-lift rounded-3xl border border-white/10 bg-white/5 p-6"><ShieldCheck className="mb-4 text-gold-500" /><h3 className="text-xl font-bold text-white">Limited weekly production capacity</h3><p className="mt-2 text-sm leading-6 text-slate-300">Approved projects are scheduled based on onboarding readiness and available production capacity.</p></div></div></Section>
 
@@ -224,6 +244,26 @@ export function LandingPage() {
 
     <div className="cinematic-divider" aria-hidden="true" />
     <section className="flavor-section navy-shell px-4 py-20 text-center text-white"><Globe2 className="mx-auto mb-5 text-gold-500" size={42} /><h2 className="shimmer-heading mx-auto max-w-3xl text-4xl font-bold tracking-tight">Ready to Start Your Business Launch?</h2><p className="mx-auto mt-7 max-w-2xl text-slate-300">Complete the application and our team will review your business information, readiness, and available launch options.</p><div className="mt-8"><CTAButton to="/apply" variant="secondary">Start My Application</CTAButton></div></section>
+    {previewItem && <div className="fixed inset-0 z-[100] bg-navy-950/82 p-3 backdrop-blur-md sm:p-5" role="dialog" aria-modal="true" aria-label={`${previewItem.title} website preview`}>
+      <div className="mx-auto flex h-full max-w-7xl flex-col overflow-hidden rounded-[1.75rem] border border-white/15 bg-cloud-50 shadow-2xl shadow-navy-950/50">
+        <div className="flex flex-col gap-3 border-b border-orange-100 bg-white/95 p-4 text-navy-950 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-royal-700">On-site preview</p>
+            <h3 className="text-xl font-black">{previewItem.title}</h3>
+            <p className="text-sm text-slate-600">Explore this client website without leaving Business Launch Initiative.</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <a href={getPortfolioUrl(previewItem.website_url)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-bold text-navy-950">Open Live Site <ExternalLink size={15} /></a>
+            <button type="button" onClick={() => setPreviewItem(null)} className="inline-flex items-center gap-2 rounded-full bg-navy-950 px-4 py-2 text-sm font-bold text-white">Close <X size={15} /></button>
+          </div>
+        </div>
+        <div className="relative min-h-0 flex-1 bg-navy-950">
+          <iframe title={`${previewItem.title} live website preview`} src={getPortfolioUrl(previewItem.website_url)} className="h-full w-full bg-white" loading="lazy" sandbox="allow-forms allow-popups allow-same-origin allow-scripts" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-navy-950/18 to-transparent" />
+        </div>
+        <p className="border-t border-orange-100 bg-white px-4 py-3 text-xs leading-5 text-slate-500">Some live sites may block embedded previews for security. If the preview area stays blank, use Open Live Site to view it in a new tab.</p>
+      </div>
+    </div>}
     <Footer />
   </PageShell>
 }
