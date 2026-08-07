@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aidynexgrow.vercel.app/sitemap.xml
+Sitemap: https://www.adynexsystems.com/sitemap.xml

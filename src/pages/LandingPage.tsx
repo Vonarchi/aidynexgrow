@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowRight, Check, CheckCircle2, ClipboardCheck, ExternalLink, Globe2, Info, Laptop, MessageSquare, Search, ShieldCheck, Smartphone, Sparkles, Wrench, X } from 'lucide-react'
+import { ArrowRight, Check, CheckCircle2, ClipboardCheck, Globe2, Info, Laptop, MessageSquare, Search, ShieldCheck, Smartphone, Sparkles, Wrench, X } from 'lucide-react'
 import { Footer, PageShell, SiteHeader } from '../components/Layout'
 import { Badge, CTAButton, FeatureCard, Section } from '../components/UI'
 import { demoData } from '../data/demoData'
@@ -253,7 +253,6 @@ export function LandingPage() {
             <p className="text-sm text-slate-600">Explore this client website without leaving Business Launch Initiative.</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <a href={getPortfolioUrl(previewItem.website_url)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-bold text-navy-950">Open Live Site <ExternalLink size={15} /></a>
             <button type="button" onClick={() => setPreviewItem(null)} className="inline-flex items-center gap-2 rounded-full bg-navy-950 px-4 py-2 text-sm font-bold text-white">Close <X size={15} /></button>
           </div>
         </div>
@@ -261,7 +260,7 @@ export function LandingPage() {
           <iframe title={`${previewItem.title} live website preview`} src={getPortfolioUrl(previewItem.website_url)} className="h-full w-full bg-white" loading="lazy" sandbox="allow-forms allow-popups allow-same-origin allow-scripts" />
           <div className="pointer-events-none absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-navy-950/18 to-transparent" />
         </div>
-        <p className="border-t border-orange-100 bg-white px-4 py-3 text-xs leading-5 text-slate-500">Some live sites may block embedded previews for security. If the preview area stays blank, use Open Live Site to view it in a new tab.</p>
+        <p className="border-t border-orange-100 bg-white px-4 py-3 text-xs leading-5 text-slate-500">Preview opens inside Business Launch Initiative so visitors can explore examples without leaving this platform.</p>
       </div>
     </div>}
     <Footer />
