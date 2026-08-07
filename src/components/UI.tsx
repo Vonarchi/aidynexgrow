@@ -5,7 +5,7 @@ import { cn, formatCurrency } from '../lib/utils'
 import type { ServiceCatalogItem } from '../types/platform'
 
 export function Section({ eyebrow, title, children, className = '', dark = false }: { eyebrow?: string; title: string; children: ReactNode; className?: string; dark?: boolean }) {
-  return <section className={cn('px-4 py-20 sm:px-6 lg:px-8', dark ? 'bg-navy-950 text-white' : 'bg-cloud-50 text-slate-900', className)}><div className="mx-auto max-w-7xl"><div className="mb-10 max-w-3xl">{eyebrow && <p className={cn('mb-3 text-xs font-bold uppercase tracking-[0.28em]', dark ? 'text-gold-500' : 'text-royal-700')}>{eyebrow}</p>}<h2 className="text-3xl font-bold tracking-tight sm:text-5xl">{title}</h2></div>{children}</div></section>
+  return <section className={cn('px-4 py-20 sm:px-6 lg:px-8', dark ? 'bg-navy-950 text-white' : 'bg-cloud-50 text-slate-900', className)}><div className="mx-auto max-w-7xl"><div className="mb-10 max-w-3xl">{eyebrow && <p className={cn('mb-3 text-xs font-bold uppercase tracking-[0.28em]', dark ? 'text-gold-500' : 'text-royal-700')}>{eyebrow}</p>}<h2 className="shimmer-heading text-3xl font-bold tracking-tight sm:text-5xl">{title}</h2></div>{children}</div></section>
 }
 
 export function CTAButton({ to, children, variant = 'primary' }: { to: string; children: ReactNode; variant?: 'primary' | 'secondary' | 'ghost' }) {
@@ -18,7 +18,7 @@ export function StatCard({ label, value, note }: { label: string; value: string;
 }
 
 export function FeatureCard({ title, body, icon }: { title: string; body?: string; icon?: ReactNode }) {
-  return <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"><div className="mb-4 grid size-11 place-items-center rounded-2xl bg-blue-50 text-royal-700">{icon || <Check size={20} />}</div><h3 className="font-bold text-navy-950">{title}</h3>{body && <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>}</div>
+  return <div className="flavor-card reveal-lift rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"><div className="mb-4 grid size-11 place-items-center rounded-2xl bg-blue-50 text-royal-700">{icon || <Check size={20} />}</div><h3 className="font-bold text-navy-950">{title}</h3>{body && <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>}</div>
 }
 
 export function Badge({ children, tone = 'blue' }: { children: ReactNode; tone?: 'blue' | 'gold' | 'green' | 'slate' }) {
