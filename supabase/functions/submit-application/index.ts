@@ -58,8 +58,11 @@ async function findOrCreateApplicant(supabaseAdmin: ReturnType<typeof createClie
 
 async function sendEmail({ to, subject, html, textBody }: { to: string; subject: string; html: string; textBody: string }) {
   const resendApiKey = Deno.env.get('RESEND_API_KEY')
-  const fromEmail = Deno.env.get('RESEND_FROM_EMAIL')
-  if (!resendApiKey || !fromEmail) return { skipped: true }
+  const fromEmail = Deno.env.get('RESEND_FROM_EMAIL') || Deno.env.get('VITE_RESEND_FROM_EMAIL')
+  if (!resendApiKey || !fromEmail) {
+    console.warn('Skipping email because RESEND_API_KEY or RESEND_FROM_EMAIL is missing.')
+    return { skipped: true }
+  }
 
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -182,7 +185,7 @@ Deno.serve(async (request) => {
       textBody: `Hi ${profile.full_name},\n\nWe received your Business Launch Initiative application for ${business.business_name}.\n\nReference number: ${applicationNumber}\n\nOur team will review your application and prepare your Business Growth Assessment.`,
     })
 
-    const adminEmail = Deno.env.get('ADMIN_NOTIFICATION_EMAIL')
+    const adminEmail = Deno.env.get('ADMIN_NOTIFICATION_EMAIL') || Deno.env.get('VITE_ADMIN_NOTIFICATION_EMAIL')
     if (adminEmail) {
       await sendEmail({
         to: adminEmail,
