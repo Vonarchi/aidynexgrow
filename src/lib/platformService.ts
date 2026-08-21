@@ -70,7 +70,7 @@ export function clearDraft() {
 
 export async function uploadApplicationFiles(files: FileList | null, userId: string) {
   if (!files?.length) return []
-  if (!isSupabaseConfigured || !supabase) {
+  if (!isSupabaseConfigured || !supabase || userId === 'local-demo-user') {
     return Array.from(files).map((file) => ({ name: file.name, url: URL.createObjectURL(file), type: file.type }))
   }
   const client = supabase
@@ -144,7 +144,21 @@ export async function submitApplication(draft: ApplicationDraft, userId?: string
     submitted_at: new Date().toISOString(),
   }
 
-  if (isSupabaseConfigured && supabase && userId) {
+  if (isSupabaseConfigured && supabase) {
+    const { data, error } = await supabase.functions.invoke('submit-application', { body: { draft } })
+    if (!error && data?.application) {
+      clearDraft()
+      return {
+        application: data.application as Application,
+        queuePosition: Number(data.queuePosition ?? 42),
+        estimatedReviewTime: String(data.estimatedReviewTime ?? '1-2 business days'),
+      }
+    }
+
+    if (!userId) {
+      throw new Error(error?.message || data?.error || 'Application could not be submitted. Please try again or contact support.')
+    }
+
     await supabase.from('profiles').upsert(profile)
     const { error: bizError } = await supabase.from('businesses').insert(business)
     if (bizError) throw bizError
