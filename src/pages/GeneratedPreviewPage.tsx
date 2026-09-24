@@ -10,23 +10,24 @@ import type { GeneratedSiteContext } from '../types/generatedSite'
 export function GeneratedPreviewPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const initialBusinessName = useMemo(() => searchParams.get('businessName')?.trim() ?? '', [searchParams])
-  const [businessName, setBusinessName] = useState(initialBusinessName)
+  const initialWebsiteUrl = useMemo(() => searchParams.get('websiteUrl')?.trim() ?? '', [searchParams])
+  const [businessName, setBusinessName] = useState(initialBusinessName || initialWebsiteUrl)
   const [site, setSite] = useState<GeneratedSiteContext | null>(null)
-  const [isGenerating, setIsGenerating] = useState(Boolean(initialBusinessName))
+  const [isGenerating, setIsGenerating] = useState(Boolean(initialBusinessName || initialWebsiteUrl))
   const [error, setError] = useState('')
   const previewRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    if (!initialBusinessName) return
+    if (!initialBusinessName && !initialWebsiteUrl) return
     let cancelled = false
     setIsGenerating(true)
     setError('')
-    generateAgenticSiteContext({ businessName: initialBusinessName })
+    generateAgenticSiteContext({ businessName: initialBusinessName || initialWebsiteUrl, websiteUrl: initialWebsiteUrl || undefined })
       .then((context) => { if (!cancelled) setSite(context) })
       .catch(() => { if (!cancelled) setError('We could not generate this preview. Try another business name.') })
       .finally(() => { if (!cancelled) setIsGenerating(false) })
     return () => { cancelled = true }
-  }, [initialBusinessName])
+  }, [initialBusinessName, initialWebsiteUrl])
 
   useEffect(() => {
     if (!site || isGenerating) return
@@ -49,13 +50,13 @@ export function GeneratedPreviewPage() {
           <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-amber-700"><WandSparkles size={14} /> Pre-Payment Generated Preview</div>
           <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
-              <h1 className="text-4xl font-black tracking-tight text-navy-950 sm:text-5xl">Review your generated preview before you apply.</h1>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">This page is available before payment. Use it to review the generated copy direction, layout frame, services, and suggested launch path. The final live website is built after application review and onboarding.</p>
+              <h1 className="text-4xl font-black tracking-tight text-navy-950 sm:text-5xl">Review your generated upgrade preview before you apply.</h1>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">Paste a URL and the agent will use what it can glean from the current site to generate an upgrade preview. No payment is required to review it.</p>
             </div>
             {site && <Link to={`/apply?plan=launch&source=generated-preview&businessName=${encodeURIComponent(site.businessName)}`} className="primary-gradient primary-glow inline-flex items-center justify-center gap-2 rounded-full px-6 py-4 text-sm font-black text-white">Continue Application <ArrowRight size={16} /></Link>}
           </div>
           <form onSubmit={submitPreview} className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <input value={businessName} onChange={(event) => setBusinessName(event.target.value)} placeholder="Enter business name" className="min-w-0 flex-1 rounded-full border border-slate-200 bg-cloud-50 px-5 py-4 text-sm font-semibold outline-none transition focus:border-royal-600 focus:ring-4 focus:ring-blue-100" />
+            <input value={businessName} onChange={(event) => setBusinessName(event.target.value)} placeholder="Enter website URL or business name" className="min-w-0 flex-1 rounded-full border border-slate-200 bg-cloud-50 px-5 py-4 text-sm font-semibold outline-none transition focus:border-royal-600 focus:ring-4 focus:ring-blue-100" />
             <button type="submit" disabled={!businessName.trim() || isGenerating} className="inline-flex items-center justify-center gap-2 rounded-full bg-navy-950 px-6 py-4 text-sm font-black text-white disabled:cursor-not-allowed disabled:opacity-60">{isGenerating ? 'Generating...' : 'Generate Preview'} {isGenerating ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}</button>
           </form>
         </div>
@@ -73,8 +74,8 @@ export function GeneratedPreviewPage() {
         {!isGenerating && site && <div ref={previewRef} className="scroll-mt-28"><SitePreviewFrame site={site} showFullPreviewLink={false} /></div>}
 
         {!isGenerating && !site && !error && <div className="flavor-card reveal-lift rounded-[2rem] border border-dashed border-orange-200 bg-white p-8 text-center shadow-sm">
-          <h2 className="text-2xl font-black text-navy-950">Enter a business name to generate a preview.</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-600">No payment is required to view the generated preview.</p>
+          <h2 className="text-2xl font-black text-navy-950">Enter a website URL or business name to generate a preview.</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-600">If you provide a URL, the agent will analyze the existing site and generate an upgrade direction.</p>
         </div>}
       </div>
     </section>

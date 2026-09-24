@@ -5,7 +5,7 @@ import { generateAgenticSiteContext } from '../../lib/agentOnboarding'
 import type { AgentStep, GeneratedSiteContext } from '../../types/generatedSite'
 
 const initialSteps: AgentStep[] = [
-  { id: 'research', label: 'Research Agent', message: 'Waiting for a business name...', status: 'pending' },
+  { id: 'research', label: 'Research Agent', message: 'Waiting for a business name or website URL...', status: 'pending' },
   { id: 'seo', label: 'SEO Agent', message: 'Ready to generate localized copy...', status: 'pending' },
   { id: 'visual', label: 'Visual Agent', message: 'Ready to assemble a responsive preview...', status: 'pending' },
 ]
@@ -64,13 +64,13 @@ export function AgenticHeroInput({ onGenerated }: { onGenerated: (context: Gener
   return <div className="grid gap-5 lg:grid-cols-[1fr_.9fr]">
     <div className="flavor-card reveal-lift rounded-[2rem] border border-orange-100 bg-white p-6 shadow-sm sm:p-8">
       <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-amber-700"><WandSparkles size={14} /> AI Preview Builder</div>
-      <h3 className="text-3xl font-black tracking-tight text-navy-950 sm:text-4xl">Start with your business name.</h3>
-      <p className="mt-3 text-sm leading-6 text-slate-600">Search for a business, then let the onboarding agents assemble a first website preview before the full application.</p>
-      <label className="mt-6 block text-sm font-bold text-navy-950">Business name or Google Business profile</label>
+      <h3 className="text-3xl font-black tracking-tight text-navy-950 sm:text-4xl">Start with your website or business name.</h3>
+      <p className="mt-3 text-sm leading-6 text-slate-600">Paste an existing website URL for an upgrade preview, or enter a business name to generate a fresh launch preview.</p>
+      <label className="mt-6 block text-sm font-bold text-navy-950">Website URL, business name, or Google Business profile</label>
       <div className="mt-2 flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <input value={businessName} onChange={(event) => setBusinessName(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') void runAgents() }} placeholder="Example: Johnson Family HVAC" className="w-full rounded-full border border-slate-200 bg-cloud-50 py-4 pl-12 pr-4 text-sm font-semibold outline-none transition focus:border-royal-600 focus:ring-4 focus:ring-blue-100" />
+          <input value={businessName} onChange={(event) => setBusinessName(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') void runAgents() }} placeholder="Example: contentcracker.io or Johnson Family HVAC" className="w-full rounded-full border border-slate-200 bg-cloud-50 py-4 pl-12 pr-4 text-sm font-semibold outline-none transition focus:border-royal-600 focus:ring-4 focus:ring-blue-100" />
         </div>
         <button type="button" onClick={runAgents} disabled={!businessName.trim() || isGenerating} className="primary-gradient primary-glow inline-flex items-center justify-center gap-2 rounded-full px-6 py-4 text-sm font-black text-white transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60">{isGenerating ? 'Building...' : 'Generate Preview'} <ArrowRight size={16} /></button>
       </div>

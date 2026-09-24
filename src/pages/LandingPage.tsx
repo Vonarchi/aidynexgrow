@@ -33,8 +33,8 @@ const trustItems = [
   ['No Upfront Design Fee', CheckCircle2],
 ] as const
 const conversionSteps = [
-  ['1. Enter Business', 'Start with one simple business-name field.'],
-  ['2. Preview', 'Review a generated website preview before payment.'],
+  ['1. Enter URL', 'Paste an existing website or enter a business name.'],
+  ['2. Preview', 'Review a generated upgrade preview before payment.'],
   ['3. Apply', 'Continue only when you are ready for review and onboarding.'],
 ] as const
 const process = [
@@ -180,6 +180,11 @@ export function LandingPage() {
   const approvedTestimonials = snapshot.testimonials.filter((item) => item.approved && !item.quote.toLowerCase().includes('demo testimonial'))
   const getPortfolioUrl = (fallbackUrl: string) => fallbackUrl && fallbackUrl !== '#' ? fallbackUrl : '/#examples'
   const scrollToAgenticPreview = () => document.getElementById('agentic-onboarding')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  const openGeneratedPreview = (site: { businessName: string; websiteUrl?: string }) => {
+    const params = new URLSearchParams({ businessName: site.businessName })
+    if (site.websiteUrl) params.set('websiteUrl', site.websiteUrl)
+    navigate(`/preview?${params.toString()}`)
+  }
   const postHeroExamples = postHeroExampleTitles.map((title) => realPortfolio.find((item) => item.title === title) ?? demoData.portfolio.find((item) => item.title === title)).filter((item): item is PortfolioItem => Boolean(item))
 
   return <PageShell tone="dark"><SiteHeader />
@@ -198,8 +203,8 @@ export function LandingPage() {
         <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 16.8, duration: .9, ease: 'easeOut' }} className="max-w-4xl rounded-[2rem] border border-white/15 bg-navy-950/28 p-5 shadow-2xl shadow-navy-950/25 backdrop-blur-[2px] sm:p-8 lg:p-10">
           <Badge tone="gold">Business Launch Initiative</Badge>
           <KineticHeadline />
-          <p className="mt-6 max-w-2xl text-xl leading-8 text-slate-200">Generate your website preview first. If it looks like the right direction, continue to the application and launch review.</p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row"><button type="button" onClick={scrollToAgenticPreview} className={gradientButtonClass}>Generate My Preview <ArrowRight size={18} /></button><Link to="/apply" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20">Start Application <ArrowRight size={16} /></Link></div>
+          <p className="mt-6 max-w-2xl text-xl leading-8 text-slate-200">Paste your current website URL and generate an upgrade preview first. If it looks like the right direction, continue to the application and launch review.</p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row"><button type="button" onClick={scrollToAgenticPreview} className={gradientButtonClass}>Generate My Upgrade Preview <ArrowRight size={18} /></button><Link to="/apply" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20">Start Application <ArrowRight size={16} /></Link></div>
           <p className="mt-5 max-w-2xl text-sm leading-6 text-slate-300">Website design and initial build included for approved applicants. The Business Launch Membership is required for launch at $34/month and includes managed hosting, SSL, backups, security monitoring, client portal access, technical maintenance, and platform updates.</p>
           <p className="mt-6 text-sm font-semibold text-gold-500">Professional Website. No Upfront Design Fee.</p>
           <p className="mt-2 text-sm text-slate-300">Built to help your business get discovered, earn trust, and grow.</p>
@@ -212,7 +217,7 @@ export function LandingPage() {
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-5 md:grid-cols-3">{postHeroExamples.map((item) => <WebsiteExampleCard key={item.id} item={item} onPreview={setPreviewItem} compact />)}</div>
         <div className="mt-9 text-center">
-          <p className="mb-4 text-lg font-semibold text-navy-900">No design skills needed. See the preview first, then apply when you are ready.</p>
+          <p className="mb-4 text-lg font-semibold text-navy-900">No design skills needed. Paste your URL, see the preview, then apply when you are ready.</p>
           <button type="button" onClick={scrollToAgenticPreview} className={gradientButtonClass}>Get My Website Preview <ArrowRight size={18} /></button>
         </div>
       </div>
@@ -229,7 +234,7 @@ export function LandingPage() {
             <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>
           </div>)}
         </div>
-        <AgenticHeroInput onGenerated={(site) => navigate(`/preview?businessName=${encodeURIComponent(site.businessName)}`)} />
+        <AgenticHeroInput onGenerated={openGeneratedPreview} />
         <div className="flavor-card reveal-lift rounded-[2rem] border border-dashed border-orange-200 bg-white p-8 text-center shadow-sm">
           <p className="text-sm font-black uppercase tracking-[0.18em] text-amber-700">What happens next</p>
           <h3 className="mt-3 text-2xl font-black text-navy-950">Your preview opens before the application.</h3>

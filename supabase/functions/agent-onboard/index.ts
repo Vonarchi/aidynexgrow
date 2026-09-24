@@ -6,6 +6,8 @@ const corsHeaders = {
 
 type GeneratedSiteContext = {
   placeId?: string
+  websiteUrl?: string
+  sourceSummary?: string
   businessName: string
   category: string
   city: string
@@ -33,10 +35,16 @@ type GeneratedSiteContext = {
 type OnboardRequest = {
   placeId?: string
   businessName?: string
+  websiteUrl?: string
 }
 
 type PlaceProfile = {
   placeId?: string
+  websiteUrl?: string
+  sourceSummary?: string
+  sourceTitle?: string
+  sourceDescription?: string
+  sourceHeadings?: string[]
   businessName: string
   category: string
   city: string
@@ -69,10 +77,59 @@ function inferCategory(name: string) {
   return 'Local Business'
 }
 
+function normalizeWebsiteUrl(value?: string) {
+  const candidate = text(value)
+  if (!candidate || candidate.includes(' ')) return undefined
+  if (!candidate.includes('.') && !candidate.startsWith('http')) return undefined
+  try {
+    const url = new URL(candidate.startsWith('http') ? candidate : `https://${candidate}`)
+    return url.href
+  } catch {
+    return undefined
+  }
+}
+
+function businessNameFromUrl(url?: string) {
+  if (!url) return ''
+  try {
+    return new URL(url).hostname.replace(/^www\./, '')
+  } catch {
+    return ''
+  }
+}
+
+function decodeHtml(value: string) {
+  return value
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+}
+
+function cleanHtmlText(value: string) {
+  return decodeHtml(value.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim())
+}
+
+function extractMeta(html: string, name: string) {
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const pattern = new RegExp(`<meta[^>]+(?:name|property)=["']${escaped}["'][^>]+content=["']([^"']+)["'][^>]*>|<meta[^>]+content=["']([^"']+)["'][^>]+(?:name|property)=["']${escaped}["'][^>]*>`, 'i')
+  const match = html.match(pattern)
+  return cleanHtmlText(match?.[1] || match?.[2] || '')
+}
+
+function extractTagText(html: string, tag: string, limit = 5) {
+  const matches = [...html.matchAll(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi'))]
+  return matches.map((match) => cleanHtmlText(match[1])).filter(Boolean).slice(0, limit)
+}
+
 function fallbackProfile(input: OnboardRequest): PlaceProfile {
-  const businessName = text(input.businessName, 'Your Business')
+  const websiteUrl = input.websiteUrl ?? normalizeWebsiteUrl(input.businessName)
+  const submittedName = text(input.businessName)
+  const businessName = websiteUrl && normalizeWebsiteUrl(submittedName) ? businessNameFromUrl(websiteUrl) : text(submittedName, businessNameFromUrl(websiteUrl) || 'Your Business')
   return {
     placeId: input.placeId,
+    websiteUrl,
     businessName,
     category: inferCategory(businessName),
     city: 'Your City',
@@ -102,6 +159,7 @@ function normalizePlace(place: Record<string, unknown>, fallback: PlaceProfile):
     : fallback.hours
 
   return {
+    ...fallback,
     placeId: text(place.id, fallback.placeId),
     businessName: text(place.displayName && typeof place.displayName === 'object' && 'text' in place.displayName ? place.displayName.text : '', fallback.businessName),
     category: types[0]?.replace(/_/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase()) || fallback.category,
@@ -112,6 +170,49 @@ function normalizePlace(place: Record<string, unknown>, fallback: PlaceProfile):
     rating: typeof place.rating === 'number' ? place.rating : fallback.rating,
     reviewCount: typeof place.userRatingCount === 'number' ? place.userRatingCount : fallback.reviewCount,
     hours,
+  }
+}
+
+async function fetchWebsiteProfile(input: OnboardRequest, fallback: PlaceProfile) {
+  const websiteUrl = input.websiteUrl ?? normalizeWebsiteUrl(input.businessName)
+  if (!websiteUrl) return fallback
+
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 6000)
+
+  try {
+    const response = await fetch(websiteUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; AdynexPreviewBot/1.0; +https://www.adynexsystems.com)',
+        Accept: 'text/html,application/xhtml+xml',
+      },
+      signal: controller.signal,
+    })
+    if (!response.ok) return { ...fallback, websiteUrl }
+
+    const html = (await response.text()).slice(0, 300000)
+    const title = cleanHtmlText(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || '')
+    const description = extractMeta(html, 'description') || extractMeta(html, 'og:description')
+    const headings = [...extractTagText(html, 'h1', 4), ...extractTagText(html, 'h2', 6)].filter(Boolean).slice(0, 8)
+    const hostname = businessNameFromUrl(websiteUrl)
+    const businessName = title ? title.split('|')[0].split('-')[0].trim() : fallback.businessName || hostname
+    const sourceText = [title, description, ...headings].filter(Boolean).join(' ')
+
+    return {
+      ...fallback,
+      websiteUrl,
+      businessName: businessName || hostname || fallback.businessName,
+      category: inferCategory(sourceText || fallback.businessName),
+      sourceTitle: title,
+      sourceDescription: description,
+      sourceHeadings: headings,
+      sourceSummary: [description, ...headings.slice(0, 4)].filter(Boolean).join(' | ') || `Existing website analyzed at ${websiteUrl}.`,
+    }
+  } catch (error) {
+    console.warn('Website analysis failed:', error)
+    return { ...fallback, websiteUrl, sourceSummary: `Existing website detected at ${websiteUrl}, but the page could not be fully analyzed.` }
+  } finally {
+    clearTimeout(timeout)
   }
 }
 
@@ -157,13 +258,14 @@ async function fetchPlaceProfile(input: OnboardRequest, fallback: PlaceProfile) 
 }
 
 function fallbackSite(profile: PlaceProfile): GeneratedSiteContext {
+  const isUpgradePreview = Boolean(profile.websiteUrl)
   return {
     ...profile,
-    heroHeadline: `${profile.businessName} deserves a website that turns visitors into customers.`,
-    heroSubheadline: `A polished ${profile.category.toLowerCase()} website preview built for credibility, local search, and easier lead capture in ${profile.city}, ${profile.state}.`,
-    services: ['Professional service pages', 'Lead capture and contact forms', 'Mobile-friendly layout', 'Google-ready local SEO'],
+    heroHeadline: isUpgradePreview ? `Upgrade ${profile.businessName} into a website that converts more visitors.` : `${profile.businessName} deserves a website that turns visitors into customers.`,
+    heroSubheadline: isUpgradePreview ? `A generated upgrade preview based on signals found at ${profile.websiteUrl}. Built to sharpen your offer, improve trust, and create a clearer path to new leads.` : `A polished ${profile.category.toLowerCase()} website preview built for credibility, local search, and easier lead capture in ${profile.city}, ${profile.state}.`,
+    services: isUpgradePreview ? ['Clearer homepage offer', 'Stronger lead capture path', 'Mobile-first service sections', 'Local SEO and trust signals'] : ['Professional service pages', 'Lead capture and contact forms', 'Mobile-friendly layout', 'Google-ready local SEO'],
     metaTitle: `${profile.businessName} | ${profile.category} in ${profile.city}, ${profile.state}`,
-    metaDescription: `Discover ${profile.businessName}, a ${profile.category.toLowerCase()} serving ${profile.city}, ${profile.state}. Request information, view services, and connect online.`,
+    metaDescription: isUpgradePreview ? `Generated website upgrade preview for ${profile.businessName}, based on the current website and focused on clearer messaging, lead capture, and conversion.` : `Discover ${profile.businessName}, a ${profile.category.toLowerCase()} serving ${profile.city}, ${profile.state}. Request information, view services, and connect online.`,
     colors: {
       primary: '#2D2A32',
       accent: '#FFB84D',
@@ -171,7 +273,7 @@ function fallbackSite(profile: PlaceProfile): GeneratedSiteContext {
       text: '#2D2A32',
     },
     images: [],
-    recommendedPlan: profile.category.toLowerCase().includes('restaurant') ? 'Accelerate' : 'Launch',
+    recommendedPlan: isUpgradePreview ? 'Accelerate' : profile.category.toLowerCase().includes('restaurant') ? 'Accelerate' : 'Launch',
   }
 }
 
@@ -198,6 +300,11 @@ async function generateCopyWithOpenAI(profile: PlaceProfile, fallback: Generated
             role: 'user',
             content: JSON.stringify({
               businessName: profile.businessName,
+              websiteUrl: profile.websiteUrl,
+              sourceSummary: profile.sourceSummary,
+              sourceTitle: profile.sourceTitle,
+              sourceDescription: profile.sourceDescription,
+              sourceHeadings: profile.sourceHeadings,
               category: profile.category,
               city: profile.city,
               state: profile.state,
@@ -241,10 +348,11 @@ Deno.serve(async (request) => {
 
   try {
     const input = await request.json() as OnboardRequest
-    if (!text(input.businessName) && !text(input.placeId)) throw new Error('A business name or placeId is required.')
+    if (!text(input.businessName) && !text(input.placeId) && !text(input.websiteUrl)) throw new Error('A business name, website URL, or placeId is required.')
 
     const fallback = fallbackProfile(input)
-    const profile = await fetchPlaceProfile(input, fallback)
+    const websiteProfile = await fetchWebsiteProfile(input, fallback)
+    const profile = await fetchPlaceProfile({ ...input, businessName: websiteProfile.businessName }, websiteProfile)
     const site = await generateCopyWithOpenAI(profile, fallbackSite(profile))
 
     return jsonResponse(site)

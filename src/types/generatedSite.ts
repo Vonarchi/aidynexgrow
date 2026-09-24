@@ -9,6 +9,8 @@ export type AgentStep = {
 
 export type GeneratedSiteContext = {
   placeId?: string
+  websiteUrl?: string
+  sourceSummary?: string
   businessName: string
   category: string
   city: string

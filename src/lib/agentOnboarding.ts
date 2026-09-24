@@ -4,6 +4,28 @@ import type { GeneratedSiteContext } from '../types/generatedSite'
 export type AgentOnboardingInput = {
   businessName: string
   placeId?: string
+  websiteUrl?: string
+}
+
+function normalizeWebsiteUrl(value?: string) {
+  const candidate = value?.trim()
+  if (!candidate || candidate.includes(' ')) return undefined
+  if (!candidate.includes('.') && !candidate.startsWith('http')) return undefined
+  try {
+    const url = new URL(candidate.startsWith('http') ? candidate : `https://${candidate}`)
+    return url.href
+  } catch {
+    return undefined
+  }
+}
+
+function businessNameFromUrl(url?: string) {
+  if (!url) return ''
+  try {
+    return new URL(url).hostname.replace(/^www\./, '')
+  } catch {
+    return ''
+  }
 }
 
 function inferCategory(name: string) {
@@ -17,13 +39,17 @@ function inferCategory(name: string) {
 }
 
 export function createFallbackSiteContext(input: AgentOnboardingInput): GeneratedSiteContext {
-  const businessName = input.businessName.trim() || 'Your Business'
+  const websiteUrl = input.websiteUrl ?? normalizeWebsiteUrl(input.businessName)
+  const submittedName = input.businessName.trim()
+  const businessName = websiteUrl && normalizeWebsiteUrl(submittedName) ? businessNameFromUrl(websiteUrl) : submittedName || businessNameFromUrl(websiteUrl) || 'Your Business'
   const category = inferCategory(businessName)
   const city = 'Your City'
   const state = 'Your State'
 
   return {
     placeId: input.placeId,
+    websiteUrl,
+    sourceSummary: websiteUrl ? `Generated from the existing website at ${websiteUrl}.` : undefined,
     businessName,
     category,
     city,
@@ -50,11 +76,12 @@ export function createFallbackSiteContext(input: AgentOnboardingInput): Generate
 }
 
 export async function generateAgenticSiteContext(input: AgentOnboardingInput): Promise<GeneratedSiteContext> {
-  const fallback = createFallbackSiteContext(input)
+  const payload = { ...input, websiteUrl: input.websiteUrl ?? normalizeWebsiteUrl(input.businessName) }
+  const fallback = createFallbackSiteContext(payload)
   if (!isSupabaseConfigured || !supabase) return fallback
 
   const { data, error } = await supabase.functions.invoke('agent-onboard', {
-    body: input,
+    body: payload,
   })
 
   if (error || !data) return fallback
