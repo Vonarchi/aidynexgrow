@@ -13,7 +13,7 @@ export function SitePreviewFrame({ site }: { site: GeneratedSiteContext }) {
   return <div className="rounded-[2rem] border border-orange-100 bg-white p-4 shadow-xl shadow-navy-950/10">
     <div className="mb-4 flex items-center justify-between gap-3 px-2">
       <div>
-        <p className="text-xs font-black uppercase tracking-[0.18em] text-amber-700">Generated Preview</p>
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-amber-700">Generated Concept</p>
         <h3 className="text-xl font-black text-navy-950">{site.businessName}</h3>
       </div>
       <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">Ready</span>
@@ -57,14 +57,14 @@ export function SitePreviewFrame({ site }: { site: GeneratedSiteContext }) {
 
           <div className="rounded-3xl border border-slate-200 p-5">
             <p className="mb-2 flex items-center gap-2 font-black text-navy-950"><CalendarCheck size={18} /> Suggested Plan</p>
-            <p className="text-sm leading-6 text-slate-600">{site.recommendedPlan} is the best first step based on this preview.</p>
+            <p className="text-sm leading-6 text-slate-600">{site.recommendedPlan} is the best first step based on this concept.</p>
           </div>
         </div>
       </div>
 
       <div className="sticky bottom-0 flex flex-col gap-3 border-t border-slate-200 bg-white/95 p-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm font-semibold text-slate-600">Approve the preview, complete the application, and activate your Business Launch Membership.</p>
-        <Link to={applyHref} className="primary-gradient primary-glow inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-black text-white">Activate Site - $34/mo</Link>
+        <p className="text-sm font-semibold text-slate-600">Use this first-draft concept to complete the application. The live website is built after review, onboarding, and launch approval.</p>
+        <Link to={applyHref} className="primary-gradient primary-glow inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-black text-white">Continue Application - $34/mo Launch</Link>
       </div>
     </div>
   </div>

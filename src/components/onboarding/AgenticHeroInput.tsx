@@ -7,7 +7,7 @@ import type { AgentStep, GeneratedSiteContext } from '../../types/generatedSite'
 const initialSteps: AgentStep[] = [
   { id: 'research', label: 'Research Agent', message: 'Waiting for a business name...', status: 'pending' },
   { id: 'seo', label: 'SEO Agent', message: 'Ready to generate localized copy...', status: 'pending' },
-  { id: 'visual', label: 'Visual Agent', message: 'Ready to assemble a responsive preview...', status: 'pending' },
+  { id: 'visual', label: 'Visual Agent', message: 'Ready to assemble a responsive concept...', status: 'pending' },
 ]
 
 const runningMessages: Record<AgentStep['id'], string> = {
@@ -51,10 +51,10 @@ export function AgenticHeroInput({ onGenerated }: { onGenerated: (context: Gener
 
       setSteps((current) => updateStep(current, 'visual', 'running', runningMessages.visual))
       const context = await generateAgenticSiteContext({ businessName: trimmedName })
-      setSteps((current) => updateStep(current, 'visual', 'complete', 'Visual Agent: Preview assembled and ready.'))
+      setSteps((current) => updateStep(current, 'visual', 'complete', 'Visual Agent: Concept assembled and ready.'))
       onGenerated(context)
     } catch (agentError) {
-      setError(agentError instanceof Error ? agentError.message : 'The preview could not be generated. Try again.')
+      setError(agentError instanceof Error ? agentError.message : 'The concept could not be generated. Try again.')
       setSteps((current) => current.map((step) => step.status === 'running' ? { ...step, status: 'error' } : step))
     } finally {
       setIsGenerating(false)
@@ -63,18 +63,18 @@ export function AgenticHeroInput({ onGenerated }: { onGenerated: (context: Gener
 
   return <div className="grid gap-5 lg:grid-cols-[1fr_.9fr]">
     <div className="flavor-card reveal-lift rounded-[2rem] border border-orange-100 bg-white p-6 shadow-sm sm:p-8">
-      <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-amber-700"><WandSparkles size={14} /> AI Preview Builder</div>
+      <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-amber-700"><WandSparkles size={14} /> AI Concept Builder</div>
       <h3 className="text-3xl font-black tracking-tight text-navy-950 sm:text-4xl">Start with your business name.</h3>
-      <p className="mt-3 text-sm leading-6 text-slate-600">Search for a business, then let the onboarding agents assemble a first website preview before the full application.</p>
+      <p className="mt-3 text-sm leading-6 text-slate-600">Search for a business, then let the onboarding agents assemble a first website concept before the full application.</p>
       <label className="mt-6 block text-sm font-bold text-navy-950">Business name or Google Business profile</label>
       <div className="mt-2 flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           <input value={businessName} onChange={(event) => setBusinessName(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') void runAgents() }} placeholder="Example: Johnson Family HVAC" className="w-full rounded-full border border-slate-200 bg-cloud-50 py-4 pl-12 pr-4 text-sm font-semibold outline-none transition focus:border-royal-600 focus:ring-4 focus:ring-blue-100" />
         </div>
-        <button type="button" onClick={runAgents} disabled={!businessName.trim() || isGenerating} className="primary-gradient primary-glow inline-flex items-center justify-center gap-2 rounded-full px-6 py-4 text-sm font-black text-white transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60">{isGenerating ? 'Building...' : 'Generate Preview'} <ArrowRight size={16} /></button>
+        <button type="button" onClick={runAgents} disabled={!businessName.trim() || isGenerating} className="primary-gradient primary-glow inline-flex items-center justify-center gap-2 rounded-full px-6 py-4 text-sm font-black text-white transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60">{isGenerating ? 'Building...' : 'Generate Concept'} <ArrowRight size={16} /></button>
       </div>
-      <p className="mt-3 text-xs leading-5 text-slate-500">Google Places can be enabled with `GOOGLE_PLACES_API_KEY`. Without it, the agents use a clean fallback preview.</p>
+      <p className="mt-3 text-xs leading-5 text-slate-500">Google Places can be enabled with `GOOGLE_PLACES_API_KEY`. Without it, the agents use a clean fallback concept.</p>
       {error && <p className="mt-4 rounded-2xl bg-red-50 p-3 text-sm font-semibold text-red-700">{error}</p>}
     </div>
 
