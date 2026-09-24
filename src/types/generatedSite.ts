@@ -11,6 +11,9 @@ export type GeneratedSiteContext = {
   placeId?: string
   websiteUrl?: string
   sourceSummary?: string
+  readinessScore?: number
+  opportunities?: string[]
+  recommendedActions?: string[]
   businessName: string
   category: string
   city: string

@@ -45,10 +45,30 @@ export function SitePreviewFrame({ site, showFullPreviewLink = true }: { site: G
         </div>
 
         <div className="grid gap-4 bg-white p-6 sm:p-8">
+          {typeof site.readinessScore === 'number' && <div className="rounded-3xl border border-royal-100 bg-blue-50 p-5">
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-royal-700">Upgrade Analysis</p>
+                <p className="mt-2 text-sm leading-6 text-slate-700">Generated from the available website signals.</p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs font-bold text-slate-500">Score</p>
+                <p className="text-3xl font-black text-navy-950">{site.readinessScore}/100</p>
+              </div>
+            </div>
+          </div>}
+
           {site.sourceSummary && <div className="rounded-3xl border border-amber-100 bg-amber-50 p-5">
             <p className="mb-2 font-black text-navy-950">What the Agent Found</p>
             <p className="text-sm leading-6 text-slate-700">{site.sourceSummary}</p>
           </div>}
+
+          {site.opportunities?.length ? <div className="rounded-3xl border border-slate-200 p-5">
+            <p className="mb-3 font-black text-navy-950">Upgrade Opportunities</p>
+            <div className="grid gap-2">
+              {site.opportunities.map((item) => <div key={item} className="rounded-2xl bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700">{item}</div>)}
+            </div>
+          </div> : null}
 
           <div className="rounded-3xl border border-slate-200 p-5">
             <div className="mb-2 flex items-center gap-2 text-amber-500"><Star size={18} fill="currentColor" /><span className="font-black text-navy-950">{ratingLabel(site)}</span></div>
@@ -65,6 +85,9 @@ export function SitePreviewFrame({ site, showFullPreviewLink = true }: { site: G
           <div className="rounded-3xl border border-slate-200 p-5">
             <p className="mb-2 flex items-center gap-2 font-black text-navy-950"><CalendarCheck size={18} /> Suggested Plan</p>
             <p className="text-sm leading-6 text-slate-600">{site.recommendedPlan} is the best first step based on this preview.</p>
+            {site.recommendedActions?.length ? <ul className="mt-3 grid gap-2 text-sm text-slate-700">
+              {site.recommendedActions.slice(0, 4).map((item) => <li key={item} className="font-semibold">- {item}</li>)}
+            </ul> : null}
           </div>
         </div>
       </div>

@@ -8,6 +8,9 @@ type GeneratedSiteContext = {
   placeId?: string
   websiteUrl?: string
   sourceSummary?: string
+  readinessScore?: number
+  opportunities?: string[]
+  recommendedActions?: string[]
   businessName: string
   category: string
   city: string
@@ -259,8 +262,18 @@ async function fetchPlaceProfile(input: OnboardRequest, fallback: PlaceProfile) 
 
 function fallbackSite(profile: PlaceProfile): GeneratedSiteContext {
   const isUpgradePreview = Boolean(profile.websiteUrl)
+  const readinessScore = isUpgradePreview
+    ? Math.min(92, 48 + (profile.sourceTitle ? 10 : 0) + (profile.sourceDescription ? 14 : 0) + ((profile.sourceHeadings?.length ?? 0) > 0 ? 10 : 0) + (profile.websiteUrl?.startsWith('https://') ? 8 : 0))
+    : 58
   return {
     ...profile,
+    readinessScore,
+    opportunities: isUpgradePreview
+      ? ['Clarify the above-the-fold offer', 'Make the primary call to action easier to find', 'Add stronger proof, reviews, or credibility signals', 'Create a clearer conversion path for visitors']
+      : ['Create a professional website foundation', 'Add lead capture and contact forms', 'Build service pages around customer intent', 'Set up basic local SEO'],
+    recommendedActions: isUpgradePreview
+      ? ['Rewrite the hero section around the strongest customer outcome', 'Add a conversion-focused lead form or booking path', 'Improve service sections and trust signals', 'Add analytics and automated customer follow-up']
+      : ['Launch a professional five-page website', 'Add a contact form and click-to-call paths', 'Set up basic SEO and Google-ready structure', 'Prepare launch membership and onboarding assets'],
     heroHeadline: isUpgradePreview ? `Upgrade ${profile.businessName} into a website that converts more visitors.` : `${profile.businessName} deserves a website that turns visitors into customers.`,
     heroSubheadline: isUpgradePreview ? `A generated upgrade preview based on signals found at ${profile.websiteUrl}. Built to sharpen your offer, improve trust, and create a clearer path to new leads.` : `A polished ${profile.category.toLowerCase()} website preview built for credibility, local search, and easier lead capture in ${profile.city}, ${profile.state}.`,
     services: isUpgradePreview ? ['Clearer homepage offer', 'Stronger lead capture path', 'Mobile-first service sections', 'Local SEO and trust signals'] : ['Professional service pages', 'Lead capture and contact forms', 'Mobile-friendly layout', 'Google-ready local SEO'],
@@ -312,8 +325,11 @@ async function generateCopyWithOpenAI(profile: PlaceProfile, fallback: Generated
                 heroHeadline: 'string',
                 heroSubheadline: 'string',
                 services: ['string', 'string', 'string', 'string'],
+                opportunities: ['string', 'string', 'string', 'string'],
+                recommendedActions: ['string', 'string', 'string', 'string'],
                 metaTitle: 'string',
                 metaDescription: 'string',
+                readinessScore: 'number from 1 to 100',
                 recommendedPlan: 'Launch | Accelerate | Scale | Enterprise',
               },
             }),
@@ -332,8 +348,11 @@ async function generateCopyWithOpenAI(profile: PlaceProfile, fallback: Generated
       heroHeadline: text(generated.heroHeadline, fallback.heroHeadline),
       heroSubheadline: text(generated.heroSubheadline, fallback.heroSubheadline),
       services: Array.isArray(generated.services) && generated.services.length ? generated.services.map((item: unknown) => text(item)).filter(Boolean).slice(0, 6) : fallback.services,
+      opportunities: Array.isArray(generated.opportunities) && generated.opportunities.length ? generated.opportunities.map((item: unknown) => text(item)).filter(Boolean).slice(0, 6) : fallback.opportunities,
+      recommendedActions: Array.isArray(generated.recommendedActions) && generated.recommendedActions.length ? generated.recommendedActions.map((item: unknown) => text(item)).filter(Boolean).slice(0, 6) : fallback.recommendedActions,
       metaTitle: text(generated.metaTitle, fallback.metaTitle),
       metaDescription: text(generated.metaDescription, fallback.metaDescription),
+      readinessScore: typeof generated.readinessScore === 'number' ? Math.max(1, Math.min(100, Math.round(generated.readinessScore))) : fallback.readinessScore,
       recommendedPlan: ['Launch', 'Accelerate', 'Scale', 'Enterprise'].includes(generated.recommendedPlan) ? generated.recommendedPlan : fallback.recommendedPlan,
     } satisfies GeneratedSiteContext
   } catch (error) {
