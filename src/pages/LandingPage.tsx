@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, Check, CheckCircle2, ClipboardCheck, Globe2, Info, Laptop, MessageSquare, Search, ShieldCheck, Smartphone, Sparkles, Wrench, X } from 'lucide-react'
 import { Footer, PageShell, SiteHeader } from '../components/Layout'
+import { AgenticHeroInput } from '../components/onboarding/AgenticHeroInput'
+import { SitePreviewFrame } from '../components/preview/SitePreviewFrame'
 import { Badge, CTAButton, FeatureCard, Section } from '../components/UI'
 import { demoData } from '../data/demoData'
 import { getPlatformSnapshot } from '../lib/platformService'
+import type { GeneratedSiteContext } from '../types/generatedSite'
 import type { PlatformSnapshot, PortfolioItem } from '../types/platform'
 
 const included = [
@@ -68,7 +71,7 @@ const offers = [
   {
     title: 'Enterprise',
     label: 'Custom Proposal',
-    price: 'Starting at $3,000+',
+    price: 'Starting at $1,500+',
     description: 'Custom software and automation for businesses that need systems beyond a standard website.',
     features: ['Customer portals', 'Employee dashboards', 'Mobile apps', 'Scheduling software', 'Restaurant ordering', 'Membership systems', 'AI automation', 'Internal dashboards', 'Business management systems'],
     cta: 'Schedule Strategy Session',
@@ -156,6 +159,7 @@ export function LandingPage() {
   const [snapshot, setSnapshot] = useState<PlatformSnapshot>(demoData)
   const [selectedCategory, setSelectedCategory] = useState('View All')
   const [previewItem, setPreviewItem] = useState<PortfolioItem | null>(null)
+  const [generatedSite, setGeneratedSite] = useState<GeneratedSiteContext | null>(null)
   useEffect(() => { getPlatformSnapshot().then(setSnapshot).catch(() => setSnapshot(demoData)) }, [])
   useEffect(() => {
     if (!previewItem) return
@@ -212,6 +216,17 @@ export function LandingPage() {
     </section>
 
     <div className="flavor-section bg-white px-4 py-5 text-navy-950"><div className="mx-auto grid max-w-7xl gap-3 text-sm font-semibold sm:grid-cols-5">{trustItems.map(([item, Icon]) => <div key={item} className="flavor-card reveal-lift flex items-center justify-center gap-2 rounded-full bg-cloud-100 px-4 py-3 text-center"><Icon size={16} className="text-royal-700" />{item}</div>)}</div></div>
+
+    <Section eyebrow="Agentic Onboarding" title="Preview Your Business Website in Seconds" className="flavor-section bg-cloud-50">
+      <div className="grid gap-8">
+        <AgenticHeroInput onGenerated={setGeneratedSite} />
+        {generatedSite ? <SitePreviewFrame site={generatedSite} /> : <div className="flavor-card reveal-lift rounded-[2rem] border border-dashed border-orange-200 bg-white p-8 text-center shadow-sm">
+          <p className="text-sm font-black uppercase tracking-[0.18em] text-amber-700">What happens next</p>
+          <h3 className="mt-3 text-2xl font-black text-navy-950">Your preview appears here before you apply.</h3>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-600">The agent pulls business signals, drafts localized copy, recommends a launch path, and gives you a clearer next step before the full application.</p>
+        </div>}
+      </div>
+    </Section>
 
     <Section eyebrow="Process" title="How It Works" className="flavor-section bg-cloud-50" >
       <div id="how-it-works" className="glow-process-line relative grid gap-5 md:grid-cols-4 md:before:absolute md:before:left-[12%] md:before:right-[12%] md:before:top-10 md:before:h-px md:before:bg-blue-100">{process.map(([title, body], i) => <div key={title} className="relative"><FeatureCard title={`Step ${i + 1}: ${title}`} body={body} icon={<span className="font-bold">{i + 1}</span>} /></div>)}</div>
