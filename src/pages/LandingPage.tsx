@@ -34,11 +34,16 @@ const trustItems = [
   ['Secure Launch Membership', ShieldCheck],
   ['No Upfront Design Fee', CheckCircle2],
 ] as const
+const conversionSteps = [
+  ['1. Preview', 'Enter your business name and get a generated website direction in seconds.'],
+  ['2. Apply', 'Complete the short application with your business details and readiness.'],
+  ['3. Activate', 'Approve the launch path and start your Business Launch Membership.'],
+] as const
 const process = [
+  ['Preview', 'Start with an AI-generated website preview so you can see the direction before filling out the full application.'],
   ['Apply', 'Tell us about your business, goals, current digital presence, and the type of launch support you need.'],
   ['Get Your Assessment', 'Our team reviews your application and identifies opportunities to help your business grow online.'],
-  ['Complete Onboarding', 'Upload your logo, photos, services, contact details, and business information through a guided onboarding process.'],
-  ['Review and Launch', 'Review your website, confirm your Business Launch Membership or upgraded plan, and approve it for launch.'],
+  ['Review and Launch', 'Confirm your Business Launch Membership or upgraded plan, complete onboarding, and approve your site for launch.'],
 ] as const
 const offers = [
   {
@@ -182,7 +187,7 @@ export function LandingPage() {
   const visiblePortfolio = selectedCategory === 'View All' ? realPortfolio : realPortfolio.filter((item) => item.industry.toLowerCase() === selectedCategory.toLowerCase())
   const approvedTestimonials = snapshot.testimonials.filter((item) => item.approved && !item.quote.toLowerCase().includes('demo testimonial'))
   const getPortfolioUrl = (fallbackUrl: string) => fallbackUrl && fallbackUrl !== '#' ? fallbackUrl : '/#examples'
-  const scrollToIncluded = () => document.getElementById('what-is-included')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  const scrollToAgenticPreview = () => document.getElementById('agentic-onboarding')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   const postHeroExamples = postHeroExampleTitles.map((title) => realPortfolio.find((item) => item.title === title) ?? demoData.portfolio.find((item) => item.title === title)).filter((item): item is PortfolioItem => Boolean(item))
 
   return <PageShell tone="dark"><SiteHeader />
@@ -201,8 +206,8 @@ export function LandingPage() {
         <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 16.8, duration: .9, ease: 'easeOut' }} className="max-w-4xl rounded-[2rem] border border-white/15 bg-navy-950/28 p-5 shadow-2xl shadow-navy-950/25 backdrop-blur-[2px] sm:p-8 lg:p-10">
           <Badge tone="gold">Business Launch Initiative</Badge>
           <KineticHeadline />
-          <p className="mt-6 max-w-2xl text-xl leading-8 text-slate-200">Receive a professionally designed, mobile-friendly website with no upfront website design fee. Build credibility, make it easier for customers to find you, and establish a digital home your business can grow from.</p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row"><button type="button" onClick={scrollToIncluded} className={gradientButtonClass}>Get My Free Website <ArrowRight size={18} /></button><a href="#examples" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20">See Examples <ArrowRight size={16} /></a></div>
+          <p className="mt-6 max-w-2xl text-xl leading-8 text-slate-200">Generate a first website preview, see the recommended launch path, then apply for a professionally designed site with no upfront website design fee.</p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row"><button type="button" onClick={scrollToAgenticPreview} className={gradientButtonClass}>Generate My Website Preview <ArrowRight size={18} /></button><Link to="/apply" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20">Start Application <ArrowRight size={16} /></Link></div>
           <p className="mt-5 max-w-2xl text-sm leading-6 text-slate-300">Website design and initial build included for approved applicants. The Business Launch Membership is required for launch at $34/month and includes managed hosting, SSL, backups, security monitoring, client portal access, technical maintenance, and platform updates.</p>
           <p className="mt-6 text-sm font-semibold text-gold-500">Professional Website. No Upfront Design Fee.</p>
           <p className="mt-2 text-sm text-slate-300">Built to help your business get discovered, earn trust, and grow.</p>
@@ -215,8 +220,8 @@ export function LandingPage() {
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-5 md:grid-cols-3">{postHeroExamples.map((item) => <WebsiteExampleCard key={item.id} item={item} onPreview={setPreviewItem} compact />)}</div>
         <div className="mt-9 text-center">
-          <p className="mb-4 text-lg font-semibold text-navy-900">No design skills needed. We build it for you.</p>
-          <button type="button" onClick={scrollToIncluded} className={gradientButtonClass}>Get My Free Website <ArrowRight size={18} /></button>
+          <p className="mb-4 text-lg font-semibold text-navy-900">No design skills needed. Preview it first, then apply when you are ready.</p>
+          <button type="button" onClick={scrollToAgenticPreview} className={gradientButtonClass}>Preview My Website <ArrowRight size={18} /></button>
         </div>
       </div>
     </section>
@@ -224,7 +229,14 @@ export function LandingPage() {
     <div className="flavor-section bg-white px-4 py-5 text-navy-950"><div className="mx-auto grid max-w-7xl gap-3 text-sm font-semibold sm:grid-cols-5">{trustItems.map(([item, Icon]) => <div key={item} className="flavor-card reveal-lift flex items-center justify-center gap-2 rounded-full bg-cloud-100 px-4 py-3 text-center"><Icon size={16} className="text-royal-700" />{item}</div>)}</div></div>
 
     <Section eyebrow="Agentic Onboarding" title="Preview Your Business Website in Seconds" className="flavor-section bg-cloud-50">
+      <div id="agentic-onboarding" className="scroll-mt-28" />
       <div className="grid gap-8">
+        <div className="grid gap-3 md:grid-cols-3">
+          {conversionSteps.map(([title, body]) => <div key={title} className="flavor-card reveal-lift rounded-3xl border border-orange-100 bg-white p-5 shadow-sm">
+            <p className="text-sm font-black uppercase tracking-[0.18em] text-amber-700">{title}</p>
+            <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>
+          </div>)}
+        </div>
         <AgenticHeroInput onGenerated={setGeneratedSite} />
         {generatedSite ? <div ref={generatedPreviewRef} className="scroll-mt-28">
           <div className="mb-4 rounded-[2rem] border border-emerald-100 bg-emerald-50 p-5 text-center shadow-sm">
@@ -237,6 +249,7 @@ export function LandingPage() {
           <p className="text-sm font-black uppercase tracking-[0.18em] text-amber-700">What happens next</p>
           <h3 className="mt-3 text-2xl font-black text-navy-950">Your preview appears here before you apply.</h3>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-600">The agent pulls business signals, drafts localized copy, recommends a launch path, and gives you a clearer next step before the full application.</p>
+          <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row"><button type="button" onClick={scrollToAgenticPreview} className="inline-flex items-center justify-center rounded-full bg-navy-950 px-5 py-3 text-sm font-bold text-white">Generate Preview First</button><Link to="/apply" className="inline-flex items-center justify-center rounded-full border border-slate-200 px-5 py-3 text-sm font-bold text-navy-950">Skip to Application</Link></div>
         </div>}
       </div>
     </Section>
@@ -302,7 +315,7 @@ export function LandingPage() {
     <Section eyebrow="FAQ" title="Frequently Asked Questions" className="flavor-section bg-cloud-50"><div id="faq" className="grid gap-4 lg:grid-cols-2">{faq.map(([q, a]) => <details key={q} className="flavor-card reveal-lift rounded-2xl border bg-white p-5"><summary className="cursor-pointer font-bold text-navy-950">{q}</summary><p className="mt-3 text-sm leading-6 text-slate-600">{a}</p></details>)}</div></Section>
 
     <div className="cinematic-divider" aria-hidden="true" />
-    <section className="flavor-section navy-shell px-4 py-20 text-center text-white"><Globe2 className="mx-auto mb-5 text-gold-500" size={42} /><h2 className="shimmer-heading mx-auto max-w-3xl text-4xl font-bold tracking-tight">Ready to Start Your Business Launch?</h2><p className="mx-auto mt-7 max-w-2xl text-slate-300">Complete the application and our team will review your business information, readiness, and available launch options.</p><div className="mt-8"><CTAButton to="/apply" variant="secondary">Start My Application</CTAButton></div></section>
+    <section className="flavor-section navy-shell px-4 py-20 text-center text-white"><Globe2 className="mx-auto mb-5 text-gold-500" size={42} /><h2 className="shimmer-heading mx-auto max-w-3xl text-4xl font-bold tracking-tight">Ready to See Your Launch Path?</h2><p className="mx-auto mt-7 max-w-2xl text-slate-300">Generate a preview first, then complete the application so our team can review your business information, readiness, and best launch option.</p><div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row"><button type="button" onClick={scrollToAgenticPreview} className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-black text-navy-950">Generate Preview</button><CTAButton to="/apply" variant="secondary">Start My Application</CTAButton></div></section>
     {previewItem && <div className="fixed inset-0 z-[100] bg-navy-950/82 p-3 backdrop-blur-md sm:p-5" role="dialog" aria-modal="true" aria-label={`${previewItem.title} website preview`}>
       <div className="mx-auto flex h-full max-w-7xl flex-col overflow-hidden rounded-[1.75rem] border border-white/15 bg-cloud-50 shadow-2xl shadow-navy-950/50">
         <div className="flex flex-col gap-3 border-b border-orange-100 bg-white/95 p-4 text-navy-950 sm:flex-row sm:items-center sm:justify-between">
