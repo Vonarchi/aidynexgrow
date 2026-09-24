@@ -6,6 +6,7 @@ import { AdminDashboard } from './pages/AdminDashboard'
 import { ApplicationForm } from './pages/ApplicationForm'
 import { AuthPage } from './pages/AuthPage'
 import { CustomerDashboard } from './pages/CustomerDashboard'
+import { GeneratedPreviewPage } from './pages/GeneratedPreviewPage'
 import { LandingPage } from './pages/LandingPage'
 import { PolicyPage } from './pages/PolicyPage'
 import { PremiumLeadPage } from './pages/PremiumLeadPage'
@@ -23,6 +24,7 @@ export default function App() {
     <AuthProvider>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/preview" element={<GeneratedPreviewPage />} />
         <Route path="/apply" element={<ApplicationForm />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/software-consultation" element={<PremiumLeadPage />} />

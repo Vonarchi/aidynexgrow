@@ -7,7 +7,8 @@ function ratingLabel(site: GeneratedSiteContext) {
   return `${site.rating.toFixed(1)} stars${site.reviewCount ? ` from ${site.reviewCount} reviews` : ''}`
 }
 
-export function SitePreviewFrame({ site }: { site: GeneratedSiteContext }) {
+export function SitePreviewFrame({ site, showFullPreviewLink = true }: { site: GeneratedSiteContext; showFullPreviewLink?: boolean }) {
+  const previewHref = `/preview?businessName=${encodeURIComponent(site.businessName)}`
   const applyHref = `/apply?plan=launch&source=agent-preview&businessName=${encodeURIComponent(site.businessName)}`
 
   return <div className="rounded-[2rem] border border-orange-100 bg-white p-4 shadow-xl shadow-navy-950/10">
@@ -63,8 +64,11 @@ export function SitePreviewFrame({ site }: { site: GeneratedSiteContext }) {
       </div>
 
       <div className="sticky bottom-0 flex flex-col gap-3 border-t border-slate-200 bg-white/95 p-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm font-semibold text-slate-600">Use this first-draft concept to complete the application. The live website is built after review, onboarding, and launch approval.</p>
-        <Link to={applyHref} className="primary-gradient primary-glow inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-black text-white">Continue Application - $34/mo Launch</Link>
+        <p className="text-sm font-semibold text-slate-600">Review this generated preview before payment. The final live website is built after application review and onboarding.</p>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          {showFullPreviewLink && <Link to={previewHref} className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-navy-950">Open Full Preview</Link>}
+          <Link to={applyHref} className="primary-gradient primary-glow inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-black text-white">Continue Application</Link>
+        </div>
       </div>
     </div>
   </div>
