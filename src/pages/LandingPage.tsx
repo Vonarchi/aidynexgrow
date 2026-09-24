@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, Check, CheckCircle2, ClipboardCheck, Globe2, Info, Laptop, MessageSquare, Search, ShieldCheck, Smartphone, Sparkles, Wrench, X } from 'lucide-react'
@@ -160,6 +160,7 @@ export function LandingPage() {
   const [selectedCategory, setSelectedCategory] = useState('View All')
   const [previewItem, setPreviewItem] = useState<PortfolioItem | null>(null)
   const [generatedSite, setGeneratedSite] = useState<GeneratedSiteContext | null>(null)
+  const generatedPreviewRef = useRef<HTMLDivElement | null>(null)
   useEffect(() => { getPlatformSnapshot().then(setSnapshot).catch(() => setSnapshot(demoData)) }, [])
   useEffect(() => {
     if (!previewItem) return
@@ -172,6 +173,11 @@ export function LandingPage() {
       window.removeEventListener('keydown', closeOnEscape)
     }
   }, [previewItem])
+  useEffect(() => {
+    if (!generatedSite) return
+    const scrollTimer = window.setTimeout(() => generatedPreviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
+    return () => window.clearTimeout(scrollTimer)
+  }, [generatedSite])
   const realPortfolio = snapshot.portfolio.filter((item) => !isConceptPortfolioItem(item))
   const visiblePortfolio = selectedCategory === 'View All' ? realPortfolio : realPortfolio.filter((item) => item.industry.toLowerCase() === selectedCategory.toLowerCase())
   const approvedTestimonials = snapshot.testimonials.filter((item) => item.approved && !item.quote.toLowerCase().includes('demo testimonial'))
@@ -220,7 +226,14 @@ export function LandingPage() {
     <Section eyebrow="Agentic Onboarding" title="Preview Your Business Website in Seconds" className="flavor-section bg-cloud-50">
       <div className="grid gap-8">
         <AgenticHeroInput onGenerated={setGeneratedSite} />
-        {generatedSite ? <SitePreviewFrame site={generatedSite} /> : <div className="flavor-card reveal-lift rounded-[2rem] border border-dashed border-orange-200 bg-white p-8 text-center shadow-sm">
+        {generatedSite ? <div ref={generatedPreviewRef} className="scroll-mt-28">
+          <div className="mb-4 rounded-[2rem] border border-emerald-100 bg-emerald-50 p-5 text-center shadow-sm">
+            <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-700">Output Ready</p>
+            <h3 className="mt-2 text-2xl font-black text-navy-950">Your Generated Website Preview</h3>
+            <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-slate-600">This is the first draft created from the agent analysis. Review the copy, layout, suggested plan, and activation button below.</p>
+          </div>
+          <SitePreviewFrame site={generatedSite} />
+        </div> : <div className="flavor-card reveal-lift rounded-[2rem] border border-dashed border-orange-200 bg-white p-8 text-center shadow-sm">
           <p className="text-sm font-black uppercase tracking-[0.18em] text-amber-700">What happens next</p>
           <h3 className="mt-3 text-2xl font-black text-navy-950">Your preview appears here before you apply.</h3>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-600">The agent pulls business signals, drafts localized copy, recommends a launch path, and gives you a clearer next step before the full application.</p>
