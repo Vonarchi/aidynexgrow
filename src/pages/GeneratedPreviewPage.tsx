@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Loader2, WandSparkles } from 'lucide-react'
@@ -14,6 +14,7 @@ export function GeneratedPreviewPage() {
   const [site, setSite] = useState<GeneratedSiteContext | null>(null)
   const [isGenerating, setIsGenerating] = useState(Boolean(initialBusinessName))
   const [error, setError] = useState('')
+  const previewRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (!initialBusinessName) return
@@ -26,6 +27,12 @@ export function GeneratedPreviewPage() {
       .finally(() => { if (!cancelled) setIsGenerating(false) })
     return () => { cancelled = true }
   }, [initialBusinessName])
+
+  useEffect(() => {
+    if (!site || isGenerating) return
+    const scrollTimer = window.setTimeout(() => previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
+    return () => window.clearTimeout(scrollTimer)
+  }, [site, isGenerating])
 
   function submitPreview(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -63,7 +70,7 @@ export function GeneratedPreviewPage() {
 
         {!isGenerating && error && <div className="rounded-3xl border border-red-100 bg-red-50 p-5 text-sm font-semibold text-red-700">{error}</div>}
 
-        {!isGenerating && site && <SitePreviewFrame site={site} showFullPreviewLink={false} />}
+        {!isGenerating && site && <div ref={previewRef} className="scroll-mt-28"><SitePreviewFrame site={site} showFullPreviewLink={false} /></div>}
 
         {!isGenerating && !site && !error && <div className="flavor-card reveal-lift rounded-[2rem] border border-dashed border-orange-200 bg-white p-8 text-center shadow-sm">
           <h2 className="text-2xl font-black text-navy-950">Enter a business name to generate a preview.</h2>

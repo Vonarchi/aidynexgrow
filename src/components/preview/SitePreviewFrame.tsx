@@ -14,7 +14,7 @@ export function SitePreviewFrame({ site, showFullPreviewLink = true }: { site: G
   return <div className="rounded-[2rem] border border-orange-100 bg-white p-4 shadow-xl shadow-navy-950/10">
     <div className="mb-4 flex items-center justify-between gap-3 px-2">
       <div>
-        <p className="text-xs font-black uppercase tracking-[0.18em] text-amber-700">Generated Concept</p>
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-amber-700">Generated Preview</p>
         <h3 className="text-xl font-black text-navy-950">{site.businessName}</h3>
       </div>
       <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">Ready</span>
@@ -58,7 +58,7 @@ export function SitePreviewFrame({ site, showFullPreviewLink = true }: { site: G
 
           <div className="rounded-3xl border border-slate-200 p-5">
             <p className="mb-2 flex items-center gap-2 font-black text-navy-950"><CalendarCheck size={18} /> Suggested Plan</p>
-            <p className="text-sm leading-6 text-slate-600">{site.recommendedPlan} is the best first step based on this concept.</p>
+            <p className="text-sm leading-6 text-slate-600">{site.recommendedPlan} is the best first step based on this preview.</p>
           </div>
         </div>
       </div>
