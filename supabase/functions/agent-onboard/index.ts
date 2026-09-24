@@ -160,7 +160,7 @@ function fallbackSite(profile: PlaceProfile): GeneratedSiteContext {
   return {
     ...profile,
     heroHeadline: `${profile.businessName} deserves a website that turns visitors into customers.`,
-    heroSubheadline: `A polished ${profile.category.toLowerCase()} website concept built for credibility, local search, and easier lead capture in ${profile.city}, ${profile.state}.`,
+    heroSubheadline: `A polished ${profile.category.toLowerCase()} website preview built for credibility, local search, and easier lead capture in ${profile.city}, ${profile.state}.`,
     services: ['Professional service pages', 'Lead capture and contact forms', 'Mobile-friendly layout', 'Google-ready local SEO'],
     metaTitle: `${profile.businessName} | ${profile.category} in ${profile.city}, ${profile.state}`,
     metaDescription: `Discover ${profile.businessName}, a ${profile.category.toLowerCase()} serving ${profile.city}, ${profile.state}. Request information, view services, and connect online.`,
@@ -192,7 +192,7 @@ async function generateCopyWithOpenAI(profile: PlaceProfile, fallback: Generated
         messages: [
           {
             role: 'system',
-            content: 'Return only valid JSON for a local business website concept. Keep language professional, specific, and concise.',
+            content: 'Return only valid JSON for a local business website preview. Keep language professional, specific, and concise.',
           },
           {
             role: 'user',
@@ -249,7 +249,7 @@ Deno.serve(async (request) => {
 
     return jsonResponse(site)
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unable to generate onboarding concept.'
+    const message = error instanceof Error ? error.message : 'Unable to generate onboarding preview.'
     return jsonResponse({ error: message }, 400)
   }
 })

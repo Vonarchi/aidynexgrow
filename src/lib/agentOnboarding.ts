@@ -34,10 +34,10 @@ export function createFallbackSiteContext(input: AgentOnboardingInput): Generate
     reviewCount: 42,
     hours: ['Monday-Friday: 9:00 AM - 5:00 PM', 'Saturday: By appointment'],
     heroHeadline: `${businessName} deserves a website that works as hard as you do.`,
-    heroSubheadline: `A polished ${category.toLowerCase()} website concept built to earn trust, explain your services, and turn visitors into leads.`,
+    heroSubheadline: `A polished ${category.toLowerCase()} website preview built to earn trust, explain your services, and turn visitors into leads.`,
     services: ['Professional service pages', 'Lead capture and contact forms', 'Mobile-friendly layout', 'Google-ready local SEO'],
-    metaTitle: `${businessName} | ${category} Website Concept`,
-    metaDescription: `Review a professional website concept for ${businessName}, designed to build credibility, improve discoverability, and capture more customer inquiries.`,
+    metaTitle: `${businessName} | ${category} Website Preview`,
+    metaDescription: `Review a professional website preview for ${businessName}, designed to build credibility, improve discoverability, and capture more customer inquiries.`,
     colors: {
       primary: '#2D2A32',
       accent: '#FFB84D',
