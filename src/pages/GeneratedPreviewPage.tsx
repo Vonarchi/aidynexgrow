@@ -46,7 +46,7 @@ export function GeneratedPreviewPage() {
     <section className="flavor-section bg-cloud-50 px-4 py-14 text-navy-950 sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-7xl gap-8">
         <div className="flavor-card reveal-lift rounded-[2rem] border border-orange-100 bg-white p-6 shadow-sm sm:p-8">
-          <Link to="/#agentic-onboarding" className="mb-5 inline-flex items-center gap-2 text-sm font-bold text-royal-700"><ArrowLeft size={16} /> Back to Business Launch</Link>
+          <Link to="/#try" className="mb-5 inline-flex items-center gap-2 text-sm font-bold text-royal-700"><ArrowLeft size={16} /> Back to Adynex Systems</Link>
           <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-amber-700"><WandSparkles size={14} /> Pre-Payment Generated Preview</div>
           <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
