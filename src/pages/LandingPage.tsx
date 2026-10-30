@@ -290,8 +290,8 @@ export function LandingPage() {
     <section className="x-block x-tight">
       <div className="x-wrap">
         <div className="x-guar x-glass x-reveal">
-          <div className="x-seal"><div><b>48h</b>PROMISE</div></div>
-          <div><h3>Live in 48 hours, or you don't pay.</h3><p>The preview is always free. If your Google Fix isn't live within 48 hours of payment, you get a full refund. Simple.</p></div>
+          <div className="x-seal"><div><b>7</b>DAYS</div></div>
+          <div><h3>See it before you pay a cent.</h3><p>Your preview is always free. You only pay once you approve it, and your Makeover goes live within 7 days.</p></div>
           <a href="#try" className="x-btn x-btn-primary">Start free</a>
         </div>
       </div>
