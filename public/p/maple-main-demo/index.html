@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Maple &amp; Main Pancake House · Your new website preview</title>
+<meta property="og:title" content="Tony, I built this for Maple &amp; Main Pancake House">
+<meta property="og:description" content="Your free website preview from Adynex Systems. Drag to see the before and after.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06070A;--glass:rgba(255,255,255,.035);--glass-strong:rgba(255,255,255,.06);--line:rgba(255,255,255,.08);--line-hi:rgba(255,255,255,.16);
+  --text:#F3F5F8;--text-2:#A3A9B6;--text-3:#6A7080;--mint:#2EE6A6;--cyan:#38D6F5;--violet:#A78BFA;--danger:#F87171;
+  --ui:'Geist',Inter,system-ui,sans-serif;--mono:'Geist Mono',ui-monospace,monospace;--accent:'Instrument Serif',Georgia,serif;--ease:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--ui);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background-image:radial-gradient(60% 40% at 10% 0%,rgba(46,230,166,.14),transparent 70%),radial-gradient(60% 40% at 100% 30%,rgba(167,139,250,.12),transparent 70%);background-repeat:no-repeat}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+.eyebrow{font-family:var(--mono);text-transform:uppercase;letter-spacing:.2em;font-size:11px;color:var(--text-3)}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 20px 60px -20px rgba(0,0,0,.8)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:54px;padding:0 26px;border-radius:999px;font-weight:600;font-size:16px;transition:all .25s var(--ease);font-family:inherit;width:100%}
+.btn-primary{background:var(--mint);color:#04140D;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 10px 40px -10px rgba(46,230,166,.6)}
+.btn-ghost{background:var(--glass);border:1px solid var(--line-hi);color:var(--text)}
+.top{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.brand{display:flex;align-items:center;gap:9px;font-weight:650;font-size:15px}
+.logo{width:22px;height:22px;border-radius:7px;background:conic-gradient(from 210deg,var(--mint),var(--cyan),var(--violet),var(--mint))}
+.hero{padding:26px 0 26px}
+.hero h1{font-size:clamp(34px,7vw,64px);line-height:1;letter-spacing:-.04em;font-weight:700;margin:12px 0 14px}
+.hero h1 em{font-family:var(--accent);font-style:italic;font-weight:400;color:var(--mint);letter-spacing:-.01em}
+.note{color:var(--text-2);font-size:17px;max-width:620px}
+.sig{margin-top:14px;font-size:14px;color:var(--text-3)}
+.sig b{color:var(--text)}
+.ba{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:4/5;border:1px solid var(--line-hi);box-shadow:0 40px 100px -30px rgba(0,0,0,.9),0 0 100px -50px var(--mint);user-select:none;margin-top:10px;background:#111}
+@media(min-width:760px){.ba{aspect-ratio:16/10}}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;pointer-events:none}
+.ba .after{clip-path:inset(0 0 0 var(--pos,50%))}
+.ba .handle{position:absolute;top:0;bottom:0;left:var(--pos,50%);width:2px;background:var(--mint);box-shadow:0 0 18px var(--mint);transform:translateX(-1px);pointer-events:none}
+.ba .knob{position:absolute;top:50%;left:50%;width:46px;height:46px;border-radius:50%;transform:translate(-50%,-50%);background:var(--mint);color:#04140D;display:grid;place-items:center;font-weight:700;box-shadow:0 0 0 6px rgba(46,230,166,.2)}
+.ba .tag{position:absolute;top:12px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;padding:6px 10px;border-radius:999px;font-weight:500}
+.ba .t-before{left:12px;background:var(--danger);color:#fff}
+.ba .t-after{right:12px;background:var(--mint);color:#04140D}
+.ba input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.hint{text-align:center;color:var(--text-3);font-size:13px;margin:10px 0 14px}
+.live{margin-bottom:10px}
+section{padding:34px 0}
+h2{font-size:clamp(26px,4.5vw,40px);letter-spacing:-.03em;line-height:1.05;margin:10px 0 18px}
+h2 em{font-family:var(--accent);font-style:italic;font-weight:400;color:var(--mint)}
+.finds{display:grid;gap:10px}
+@media(min-width:760px){.finds{grid-template-columns:repeat(3,1fr)}}
+.find{padding:18px}
+.bad{color:var(--danger);font-weight:600;font-size:15px;margin-bottom:8px}
+.good{color:var(--text);font-size:15px}
+.good::first-letter{color:var(--mint)}
+.offer{padding:26px}
+.offer .price{font-size:52px;font-weight:700;letter-spacing:-.04em;margin:6px 0 0}
+.offer .per{color:var(--text-2);margin-bottom:18px}
+.offer ul{list-style:none;display:grid;gap:10px;margin-bottom:22px}
+.offer li{display:flex;gap:10px;color:var(--text-2)}
+.offer li::before{content:"✓";color:var(--mint);font-weight:700}
+.stack{display:grid;gap:10px}
+.small{font-size:13px;color:var(--text-3);text-align:center;margin-top:12px}
+footer{padding:30px 0 60px;color:var(--text-3);font-size:13px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><span class="brand"><span class="logo"></span>Adynex Systems</span><span class="eyebrow">October 30, 2026</span></div>
+
+  <div class="hero">
+    <div class="eyebrow">Prepared for Maple &amp; Main Pancake House · Schererville, IN</div>
+    <h1>Hi Tony, I built this <em>for you.</em></h1>
+    <p class="note">This is a demo of how I&#x27;d rebuild a local restaurant&#x27;s website: phone-first menu, one-tap ordering, and photos that make people hungry. Maple &amp; Main is a fictional restaurant used for this demo.</p>
+    <p class="sig">— <b>James Archibald</b>, Adynex Systems</p>
+  </div>
+
+  <div class="ba" id="ba" style="--pos:50%">
+    <img src="before.png" alt="Your current website">
+    <img class="after" src="after.png" alt="Your new website preview">
+    <span class="tag t-before">TODAY</span><span class="tag t-after">YOUR NEW SITE</span>
+    <div class="handle"><div class="knob">⇆</div></div>
+    <input type="range" min="0" max="100" value="50" id="r" aria-label="Drag to compare your current site and your new site">
+  </div>
+  <p class="hint">← Drag to compare →</p>
+  <div class="live"><a class="btn btn-ghost" href="site/" target="_blank" rel="noopener">Open your new site live ↗</a></div>
+
+  <section>
+    <div class="eyebrow">What I noticed</div>
+    <h2>Three things costing you <em>customers.</em></h2>
+    <div class="finds"><div class="find glass"><div class="bad">✕ Your menu is a PDF</div><div class="good">✓ A fast menu that reads beautifully on any phone</div></div><div class="find glass"><div class="bad">✕ Hard to use on a phone</div><div class="good">✓ Designed phone-first with big call and directions buttons</div></div><div class="find glass"><div class="bad">✕ No way to order online</div><div class="good">✓ One-tap ordering so you capture takeout orders</div></div></div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Make it yours</div>
+    <h2>Ready when <em>you</em> are.</h2>
+    <div class="offer glass">
+      <div style="font-weight:600;font-size:18px">Website Makeover · Founding Rate</div>
+      <div class="price">$497</div>
+      <div class="per">+ $99/mo · live in 7 days</div>
+      <ul><li>The full site you see above, finished and live</li><li>Your Google listing fixed</li><li>Online ordering or booking link</li><li>Smooth animations tuned to your industry</li><li>Hosting + unlimited small updates (just text me)</li><li>Monthly Google post</li></ul>
+      <div class="stack">
+        <a class="btn btn-primary" href="#">Approve &amp; get started →</a>
+        <a class="btn btn-ghost" href="sms:(219) 555-0100?&body=Hi%20James%2C%20I%20saw%20the%20preview%20for%20Maple%20&amp;%20Main%20Pancake%20House">Text me a question</a>
+      </div>
+      <p class="small">Live within 7 days of approval. Want changes first? Just text me.</p>
+    </div>
+  </section>
+</div>
+<footer>Adynex Systems · Northwest Indiana &amp; Chicagoland · adynexsystems.com</footer>
+<script>
+const ba=document.getElementById('ba'),r=document.getElementById('r'),set=v=>ba.style.setProperty('--pos',v+'%');
+r.addEventListener('input',e=>set(e.target.value));
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches){let t0=null,touched=false;r.addEventListener('pointerdown',()=>touched=true,{once:true});
+  const sw=t=>{if(touched)return;t0??=t;const p=Math.min((t-t0)/2600,1),v=50+Math.sin(p*Math.PI*2)*30*(1-p);set(v);r.value=v;if(p<1)requestAnimationFrame(sw)};
+  setTimeout(()=>requestAnimationFrame(sw),700)}
+</script>
+</body>
+</html>

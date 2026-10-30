@@ -1,0 +1,1526 @@
+<!doctype html>
+<!-- Demo restaurant for Adynex sales: FICTIONAL business. Menu, prices, hours and address are samples.
+     No reviews or ratings (a fictional business has none). Imagery: design/image-library/restaurant (AI, labelled).
+     Motion: CineFX restaurant profile, Essential package (cinematic hero push-in + gentle parallax). -->
+<html lang="en" data-mx-manual>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Maple &amp; Main Pancake House · Demo restaurant by Adynex Systems</title>
+<meta name="description" content="Demo restaurant website by Adynex Systems. Fictional business with a sample menu.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="img/restaurant-breakfast-spread-2400.webp" imagesrcset="img/restaurant-breakfast-spread-1200.webp 1200w, img/restaurant-breakfast-spread-2400.webp 2400w" imagesizes="100vw">
+<style>
+/* ============================================================================
+   ADX Motion — "Cinematic Luxury Tech" motion library
+   Three levels set on <html data-mx-level="subtle | cinematic | edge">.
+   Mark elements with data-mx="<preset>". motion.js decides what actually runs
+   (it downgrades presets above the page's level) and writes data-mx-run.
+
+   Safety built in:
+   - Content is visible without JavaScript (hidden states only apply after
+     motion.js adds .mx-ready to <html>).
+   - prefers-reduced-motion: everything is shown instantly, loops stop.
+   - No large-area luminance flashing; flicker is text-only, 3 dips, once
+     (WCAG 2.3.1: never more than 3 flashes per second).
+   ========================================================================== */
+
+:root {
+  --mx-ease: cubic-bezier(.2, .8, .2, 1);
+  --mx-ease-out: cubic-bezier(.16, 1, .3, 1);
+  --mx-fast: 240ms;
+  --mx-base: 700ms;
+  --mx-slow: 1100ms;
+  --mx-stagger: 70ms;
+  --mx-distance: 18px;
+  --mx-accent: var(--mint, #2EE6A6);
+  --mx-accent-2: var(--violet, #A78BFA);
+  --mx-red: #ff3b5c;
+  --mx-cyan: #22e6ff;
+}
+
+/* ---------------------------------------------------------------- base ---- */
+.mx-ready [data-mx-run] { transition-timing-function: var(--mx-ease-out); }
+.mx-ready [data-mx-run]:not(.mx-in) { will-change: opacity, transform; }
+
+/* ============================ LEVEL 1 · SUBTLE ============================ */
+
+/* fade-up — the workhorse */
+.mx-ready [data-mx-run="fade-up"] { opacity: 0; transform: translate3d(0, var(--mx-distance), 0); transition: opacity var(--mx-base), transform var(--mx-base); transition-delay: var(--mx-delay, 0ms); }
+.mx-ready [data-mx-run="fade-up"].mx-in { opacity: 1; transform: none; }
+
+/* fade-in */
+.mx-ready [data-mx-run="fade-in"] { opacity: 0; transition: opacity var(--mx-slow); transition-delay: var(--mx-delay, 0ms); }
+.mx-ready [data-mx-run="fade-in"].mx-in { opacity: 1; }
+
+/* stagger — put on a parent; children rise one after another */
+.mx-ready [data-mx-run="stagger"] > * { opacity: 0; transform: translate3d(0, var(--mx-distance), 0); transition: opacity var(--mx-base) var(--mx-ease-out), transform var(--mx-base) var(--mx-ease-out); transition-delay: calc(var(--mx-i, 0) * var(--mx-stagger)); }
+.mx-ready [data-mx-run="stagger"].mx-in > * { opacity: 1; transform: none; }
+
+/* underline — accent line draws under a heading or link */
+[data-mx-run="underline"] { background-image: linear-gradient(var(--mx-accent), var(--mx-accent)); background-repeat: no-repeat; background-position: 0 100%; background-size: 100% 2px; padding-bottom: 4px; }
+.mx-ready [data-mx-run="underline"] { background-size: 0 2px; transition: background-size var(--mx-slow) var(--mx-ease-out) .2s; }
+.mx-ready [data-mx-run="underline"].mx-in { background-size: 100% 2px; }
+
+/* lift — hover state for cards/buttons (works without JS) */
+.mx-lift { transition: transform var(--mx-fast) var(--mx-ease), box-shadow var(--mx-fast) var(--mx-ease), border-color var(--mx-fast) var(--mx-ease); }
+.mx-lift:hover { transform: translateY(-3px); }
+
+/* count-up and parallax are driven by motion.js (data-mx="count-up" / "parallax") */
+[data-mx-run="parallax"] { will-change: transform; }
+
+/* ========================== LEVEL 2 · CINEMATIC =========================== */
+
+/* kenburns — slow continuous push-in on a hero image (put on the <img> or its wrapper) */
+[data-mx-run="kenburns"] { animation: mx-kenburns 22s var(--mx-ease) infinite alternate; transform-origin: 60% 40%; }
+@keyframes mx-kenburns { from { transform: scale(1.02) translate3d(0, 0, 0); } to { transform: scale(1.14) translate3d(-1.5%, -1%, 0); } }
+
+/* mask-reveal — image/panel wipes open */
+.mx-ready [data-mx-run="mask-reveal"] { clip-path: inset(0 100% 0 0 round var(--mx-radius, 0px)); transition: clip-path 1.2s var(--mx-ease-out); transition-delay: var(--mx-delay, 0ms); }
+.mx-ready [data-mx-run="mask-reveal"].mx-in { clip-path: inset(0 0 0 0 round var(--mx-radius, 0px)); }
+
+/* split-words — headline words rise in sequence (motion.js wraps each word) */
+[data-mx-run="split-words"] .mx-w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
+[data-mx-run="split-words"] .mx-w > span { display: inline-block; }
+.mx-ready [data-mx-run="split-words"] .mx-w > span { transform: translate3d(0, 110%, 0); transition: transform .9s var(--mx-ease-out); transition-delay: calc(var(--mx-i, 0) * 60ms + var(--mx-delay, 0ms)); }
+.mx-ready [data-mx-run="split-words"].mx-in .mx-w > span { transform: none; }
+
+/* blur-in — soft focus pull */
+.mx-ready [data-mx-run="blur-in"] { opacity: 0; filter: blur(14px); transform: scale(1.03); transition: opacity var(--mx-slow), filter var(--mx-slow), transform var(--mx-slow); transition-delay: var(--mx-delay, 0ms); }
+.mx-ready [data-mx-run="blur-in"].mx-in { opacity: 1; filter: none; transform: none; }
+
+/* scale-in — image settles from slightly large to normal as it enters */
+.mx-ready [data-mx-run="scale-in"] { opacity: 0; transform: scale(1.12); transition: opacity var(--mx-slow), transform 1.6s var(--mx-ease-out); }
+.mx-ready [data-mx-run="scale-in"].mx-in { opacity: 1; transform: none; }
+
+/* marquee — infinite strip (logos, reviews). motion.js duplicates the children once. */
+[data-mx-run="marquee"] { display: flex; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+[data-mx-run="marquee"] > .mx-track { display: flex; gap: var(--mx-gap, 48px); padding-right: var(--mx-gap, 48px); flex: none; animation: mx-marquee var(--mx-marquee-speed, 32s) linear infinite; }
+[data-mx-run="marquee"]:hover > .mx-track { animation-play-state: paused; }
+@keyframes mx-marquee { to { transform: translate3d(-100%, 0, 0); } }
+
+/* pulse-glow — slow breathing glow for ONE primary CTA */
+[data-mx-run="pulse-glow"] { animation: mx-pulse 3.2s var(--mx-ease) infinite; }
+@keyframes mx-pulse { 0%, 100% { box-shadow: 0 10px 40px -12px color-mix(in srgb, var(--mx-accent) 55%, transparent); } 50% { box-shadow: 0 10px 60px -6px color-mix(in srgb, var(--mx-accent) 90%, transparent); } }
+
+/* video-hero — motion.js handles autoplay/pause; poster shows until it plays */
+[data-mx-run="video-hero"] { object-fit: cover; }
+
+/* ============================= LEVEL 3 · EDGE ============================= */
+
+/* glitch — RGB-split slice jitter on text. Plays on reveal + hover. Needs data-text (motion.js sets it). */
+[data-mx-run="glitch"] { position: relative; display: inline-block; }
+[data-mx-run="glitch"]::before, [data-mx-run="glitch"]::after { content: attr(data-text); position: absolute; inset: 0; pointer-events: none; opacity: 0; }
+[data-mx-run="glitch"]::before { color: var(--mx-red); mix-blend-mode: screen; }
+[data-mx-run="glitch"]::after { color: var(--mx-cyan); mix-blend-mode: screen; }
+[data-mx-run="glitch"].mx-glitching::before { opacity: .85; animation: mx-glitch-a .6s steps(2, end) 1; }
+[data-mx-run="glitch"].mx-glitching::after { opacity: .85; animation: mx-glitch-b .6s steps(2, end) 1; }
+[data-mx-run="glitch"].mx-glitching { animation: mx-glitch-skew .6s steps(3, end) 1; }
+@keyframes mx-glitch-a { 0% { clip-path: inset(10% 0 70% 0); transform: translate(-4px, 0); } 25% { clip-path: inset(55% 0 20% 0); transform: translate(3px, 0); } 50% { clip-path: inset(30% 0 45% 0); transform: translate(-2px, 0); } 75% { clip-path: inset(80% 0 5% 0); transform: translate(4px, 0); } 100% { clip-path: inset(0 0 100% 0); transform: none; } }
+@keyframes mx-glitch-b { 0% { clip-path: inset(65% 0 10% 0); transform: translate(4px, 0); } 25% { clip-path: inset(15% 0 60% 0); transform: translate(-3px, 0); } 50% { clip-path: inset(45% 0 35% 0); transform: translate(2px, 0); } 75% { clip-path: inset(5% 0 85% 0); transform: translate(-4px, 0); } 100% { clip-path: inset(100% 0 0 0); transform: none; } }
+@keyframes mx-glitch-skew { 0%, 100% { transform: none; } 33% { transform: skewX(-6deg); } 66% { transform: skewX(4deg); } }
+
+/* flicker-in — neon sign turning on. Text only, 3 dips, plays once. */
+.mx-ready [data-mx-run="flicker-in"] { opacity: 0; }
+.mx-ready [data-mx-run="flicker-in"].mx-in { animation: mx-flicker .9s linear 1 forwards; animation-delay: var(--mx-delay, 0ms); }
+@keyframes mx-flicker { 0% { opacity: 0; } 12% { opacity: 1; } 22% { opacity: .55; } 40% { opacity: 1; } 52% { opacity: .6; } 70% { opacity: 1; } 80% { opacity: .7; } 100% { opacity: 1; text-shadow: 0 0 18px color-mix(in srgb, var(--mx-accent) 70%, transparent); } }
+
+/* rgb-split — chromatic aberration on images, on hover */
+[data-mx-run="rgb-split"] { transition: filter var(--mx-fast) var(--mx-ease); }
+[data-mx-run="rgb-split"]:hover { filter: drop-shadow(-3px 0 0 color-mix(in srgb, var(--mx-red) 70%, transparent)) drop-shadow(3px 0 0 color-mix(in srgb, var(--mx-cyan) 70%, transparent)); }
+
+/* jump-cut — hard stepped entrance, like a film cut */
+.mx-ready [data-mx-run="jump-cut"] { opacity: 0; transform: translate3d(-24px, 0, 0); }
+.mx-ready [data-mx-run="jump-cut"].mx-in { animation: mx-jump .5s steps(4, end) 1 forwards; animation-delay: var(--mx-delay, 0ms); }
+@keyframes mx-jump { 0% { opacity: 0; transform: translate3d(-24px, 0, 0); } 30% { opacity: 1; transform: translate3d(10px, 0, 0); } 60% { transform: translate3d(-4px, 0, 0); } 100% { opacity: 1; transform: none; } }
+
+/* scanlines — CRT overlay on a section (class, no JS needed) */
+.mx-scanlines { position: relative; }
+.mx-scanlines::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 3px); mix-blend-mode: overlay; }
+
+/* grain — animated film grain overlay on a section (class, no JS needed) */
+.mx-grain { position: relative; isolation: isolate; overflow: hidden; }
+.mx-grain::before { content: ""; position: absolute; inset: -50%; z-index: 1; pointer-events: none; opacity: .06; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); animation: mx-grain 1s steps(6) infinite; }
+@keyframes mx-grain { 0% { transform: translate(0, 0); } 20% { transform: translate(-4%, 3%); } 40% { transform: translate(3%, -5%); } 60% { transform: translate(-6%, -2%); } 80% { transform: translate(5%, 4%); } 100% { transform: translate(0, 0); } }
+
+/* ===================== reduced motion: show everything ==================== */
+@media (prefers-reduced-motion: reduce) {
+  .mx-ready [data-mx-run], .mx-ready [data-mx-run] > *, .mx-ready [data-mx-run] .mx-w > span {
+    opacity: 1 !important; transform: none !important; filter: none !important; clip-path: none !important;
+    animation: none !important; transition: none !important;
+  }
+  [data-mx-run="kenburns"], [data-mx-run="marquee"] > .mx-track, [data-mx-run="pulse-glow"], .mx-grain::before { animation: none !important; }
+  [data-mx-run="underline"] { background-size: 100% 2px !important; }
+}
+
+</style>
+<style>
+/* ============================================================================
+   CineFX primitives — extends ADX Motion (load after design/motion/motion.css).
+   Same contract as ADX: hidden states only apply under .mx-ready, every
+   animation uses transform / opacity / clip-path / filter (no layout shift),
+   and prefers-reduced-motion shows everything immediately.
+   Hover effects use the individual `translate` / `scale` / `rotate` properties
+   so they compose with ADX reveal transforms instead of fighting them.
+   ========================================================================== */
+
+/* ------------------------------------------------------------ entrance --- */
+/* FadeDown */
+.mx-ready [data-mx-run="cfx-fade-down"] { opacity: 0; transform: translate3d(0, calc(var(--mx-distance) * -1), 0); transition: opacity var(--mx-base) var(--mx-ease-out), transform var(--mx-base) var(--mx-ease-out); transition-delay: var(--mx-delay, 0ms); }
+.mx-ready [data-mx-run="cfx-fade-down"].mx-in { opacity: 1; transform: none; }
+
+/* SlideReveal (from the left; data-cfx-dir="right" flips it) */
+.mx-ready [data-mx-run="cfx-slide"] { opacity: 0; transform: translate3d(calc(var(--mx-distance) * -2.2), 0, 0); transition: opacity var(--mx-base) var(--mx-ease-out), transform var(--mx-slow) var(--mx-ease-out); transition-delay: var(--mx-delay, 0ms); }
+.mx-ready [data-mx-run="cfx-slide"][data-cfx-dir="right"] { transform: translate3d(calc(var(--mx-distance) * 2.2), 0, 0); }
+.mx-ready [data-mx-run="cfx-slide"].mx-in { opacity: 1; transform: none; }
+
+/* --------------------------------------------------------------- image --- */
+/* CrossDissolve — long, soft opacity + desaturation settle */
+.mx-ready [data-mx-run="cfx-dissolve"] { opacity: 0; filter: saturate(.55) brightness(1.06); transition: opacity calc(var(--mx-slow) * 1.4) var(--mx-ease-out), filter calc(var(--mx-slow) * 1.9) var(--mx-ease-out); transition-delay: var(--mx-delay, 0ms); }
+.mx-ready [data-mx-run="cfx-dissolve"].mx-in { opacity: 1; filter: none; }
+
+/* SlowZoom — media settles from 106% (put the frame on the role element; CineFX animates its [data-cfx-media] child) */
+.mx-ready [data-mx-run="cfx-slow-zoom"] { opacity: 0; transform: scale(1.06); transition: opacity var(--mx-slow) var(--mx-ease-out), transform calc(var(--mx-slow) * 2.2) var(--mx-ease-out); transition-delay: var(--mx-delay, 0ms); }
+.mx-ready [data-mx-run="cfx-slow-zoom"].mx-in { opacity: 1; transform: none; }
+
+/* ImageCurtain — frame rises open from the bottom edge */
+.mx-ready [data-mx-run="cfx-curtain"] { clip-path: inset(100% 0 0 0 round var(--mx-radius, 0px)); transition: clip-path calc(var(--mx-slow) * 1.25) var(--mx-ease-out); transition-delay: var(--mx-delay, 0ms); }
+.mx-ready [data-mx-run="cfx-curtain"].mx-in { clip-path: inset(0 0 0 0 round var(--mx-radius, 0px)); }
+
+/* DirectionalImageReveal — unveils from the right edge by default; data-cfx-dir="left|up|down" */
+.mx-ready [data-mx-run="cfx-dir-reveal"] { clip-path: inset(0 0 0 100%); transition: clip-path calc(var(--mx-slow) * 1.2) var(--mx-ease-out); transition-delay: var(--mx-delay, 0ms); }
+.mx-ready [data-mx-run="cfx-dir-reveal"][data-cfx-dir="left"] { clip-path: inset(0 100% 0 0); }
+.mx-ready [data-mx-run="cfx-dir-reveal"][data-cfx-dir="up"] { clip-path: inset(100% 0 0 0); }
+.mx-ready [data-mx-run="cfx-dir-reveal"][data-cfx-dir="down"] { clip-path: inset(0 0 100% 0); }
+.mx-ready [data-mx-run="cfx-dir-reveal"].mx-in { clip-path: inset(0 0 0 0); }
+
+/* ---------------------------------------------------------- typography --- */
+/* LineReveal — the headline rises out of its own baseline mask */
+.mx-ready [data-mx-run="cfx-line"] { clip-path: inset(0 0 100% 0); transform: translate3d(0, .4em, 0); transition: clip-path var(--mx-slow) var(--mx-ease-out), transform var(--mx-slow) var(--mx-ease-out); transition-delay: var(--mx-delay, 0ms); }
+.mx-ready [data-mx-run="cfx-line"].mx-in { clip-path: inset(-12% -4% -18% -4%); transform: none; }
+
+/* EditorialSlide — a measured slide from the left with a slow fade */
+.mx-ready [data-mx-run="cfx-editorial"] { opacity: 0; transform: translate3d(-1.1em, 0, 0); transition: opacity var(--mx-slow) var(--mx-ease-out), transform calc(var(--mx-slow) * 1.2) var(--mx-ease-out); transition-delay: var(--mx-delay, 0ms); }
+.mx-ready [data-mx-run="cfx-editorial"].mx-in { opacity: 1; transform: none; }
+
+/* MaskedHeadline — revealed left to right with an accent edge riding the mask */
+[data-mx-run="cfx-masked"] { position: relative; }
+.mx-ready [data-mx-run="cfx-masked"] { clip-path: inset(-12% 100% -18% -4%); transition: clip-path calc(var(--mx-slow) * 1.15) var(--mx-ease-out); transition-delay: var(--mx-delay, 0ms); }
+.mx-ready [data-mx-run="cfx-masked"]::after { content: ""; position: absolute; top: 4%; bottom: 4%; left: 0; width: 2px; background: var(--cfx-accent, var(--mx-accent)); transform: translateX(-3px); opacity: 0; transition: left calc(var(--mx-slow) * 1.15) var(--mx-ease-out), opacity .4s ease calc(var(--mx-slow) * 1.15); transition-delay: var(--mx-delay, 0ms); pointer-events: none; }
+.mx-ready [data-mx-run="cfx-masked"].mx-in { clip-path: inset(-12% -4% -18% -4%); }
+.mx-ready [data-mx-run="cfx-masked"].mx-in::after { left: 100%; opacity: 0; animation: cfx-edge calc(var(--mx-slow) * 1.15) var(--mx-ease-out) 1; }
+@keyframes cfx-edge { 0%, 85% { opacity: 1; } 100% { opacity: 0; } }
+
+/* CharacterStagger — CineFX wraps each character (words stay unbreakable) */
+.cfx-word { display: inline-block; white-space: nowrap; }
+.cfx-ch { display: inline-block; }
+.mx-ready [data-mx-run="cfx-chars"] .cfx-ch { opacity: 0; transform: translate3d(0, .45em, 0); transition: opacity .5s var(--mx-ease-out), transform .7s var(--mx-ease-out); transition-delay: calc(var(--cfx-i, 0) * 22ms + var(--mx-delay, 0ms)); }
+.mx-ready [data-mx-run="cfx-chars"].mx-in .cfx-ch { opacity: 1; transform: none; }
+
+/* --------------------------------------------------------- interaction --- */
+/* HoverLift */
+.cfx-lift { transition: translate var(--mx-fast) var(--mx-ease), box-shadow var(--mx-fast) var(--mx-ease); }
+.cfx-lift:hover, .cfx-lift:focus-within { translate: 0 -4px; box-shadow: 0 22px 44px -24px rgba(0, 0, 0, .35); }
+
+/* ImageZoom — the card's [data-cfx-media] scales inside its (clipped) frame */
+.cfx-zoom [data-cfx-media] { transition: scale .9s var(--mx-ease-out); }
+.cfx-zoom:hover [data-cfx-media], .cfx-zoom:focus-within [data-cfx-media] { scale: 1.06; }
+
+/* BorderTrace — a hairline draws around the card */
+.cfx-trace { position: relative; }
+.cfx-trace::after { content: ""; position: absolute; inset: 0; border-radius: inherit; border: 1px solid var(--cfx-accent, var(--mx-accent)); clip-path: inset(0 100% 100% 0); transition: clip-path .8s var(--mx-ease-out); pointer-events: none; }
+.cfx-trace:hover::after, .cfx-trace:focus-within::after { clip-path: inset(0 0 0 0); }
+
+/* LightSweep — a soft highlight passes across */
+.cfx-sweep { position: relative; overflow: hidden; isolation: isolate; }
+.cfx-sweep::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, .32) 50%, transparent 70%); translate: -120% 0; transition: translate 1s var(--mx-ease-out); pointer-events: none; }
+.cfx-sweep:hover::after, .cfx-sweep:focus-visible::after { translate: 120% 0; }
+
+/* MagneticButton + SubtleTilt — CineFX sets translate / rotate from the pointer (fine pointers only) */
+.cfx-magnetic { transition: translate .35s var(--mx-ease-out); }
+.cfx-tilt { transition: rotate .45s var(--mx-ease-out), translate var(--mx-fast) var(--mx-ease); }
+
+/* Hover props must keep animating inside ADX stagger groups (its transition list would otherwise win) */
+.mx-ready [data-mx-run="stagger"] > .cfx-lift, .mx-ready [data-mx-run="stagger"] > .cfx-trace, .mx-ready [data-mx-run="stagger"] > .cfx-tilt, .mx-ready [data-mx-run="stagger"] > .cfx-sweep {
+  transition: opacity var(--mx-base) var(--mx-ease-out) calc(var(--mx-i, 0) * var(--mx-stagger)), transform var(--mx-base) var(--mx-ease-out) calc(var(--mx-i, 0) * var(--mx-stagger)),
+              translate var(--mx-fast) var(--mx-ease), rotate .45s var(--mx-ease-out), box-shadow var(--mx-fast) var(--mx-ease);
+}
+
+/* ---------------------------------------------------------- navigation --- */
+.cfx-nav-overlay { inset: 0; z-index: 60; pointer-events: none; background: var(--cfx-overlay, var(--cfx-accent, #0b0b0c)); will-change: transform; }
+
+/* --------------------------------------------- reduced motion: show all --- */
+@media (prefers-reduced-motion: reduce) {
+  .mx-ready [data-mx-run] .cfx-ch { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .mx-ready [data-mx-run="cfx-masked"]::after { display: none; }
+  .cfx-lift, .cfx-zoom [data-cfx-media], .cfx-trace::after, .cfx-sweep::after, .cfx-magnetic, .cfx-tilt { transition: none !important; }
+  .cfx-zoom:hover [data-cfx-media] { scale: none; }
+  .cfx-sweep::after { display: none; }
+}
+
+</style>
+<style>
+:root{
+  --espresso:#1A110B;--roast:#2A1B12;--cream:#F7EEDF;--paper:#FFF9F0;--ink:#24170F;--muted:#6E5A4A;
+  --maple:#D98B2B;--maple-deep:#B86E16;--butter:#F2C46B;--line:rgba(36,23,15,.14);--r:26px;
+  --display:'Fraunces',Georgia,serif;--body:'Inter',system-ui,sans-serif;--pad:clamp(20px,5vw,72px);--max:1320px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--cream);color:var(--ink);font:17px/1.65 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--butter);outline-offset:3px;border-radius:8px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-.02em;line-height:1}
+em{font-style:italic;font-weight:400}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font:600 12px/1 var(--body);letter-spacing:.22em;text-transform:uppercase;color:var(--maple-deep)}
+.eyebrow::before{content:"";width:28px;height:1px;background:currentColor}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 28px;border-radius:999px;font:600 16px var(--body);text-decoration:none;white-space:nowrap;border:1px solid transparent;transition:background .3s,border-color .3s}
+.btn-maple{background:var(--maple);color:#1A110B}.btn-maple:hover{background:var(--butter)}
+.btn-glass{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.35);backdrop-filter:blur(12px)}.btn-glass:hover{background:rgba(255,255,255,.18)}
+.btn-ink{background:var(--ink);color:var(--cream)}.btn-ink:hover{background:var(--roast)}
+.cap{position:absolute;z-index:3;font:500 11px var(--body);letter-spacing:.06em;color:rgba(255,255,255,.92);background:rgba(26,17,11,.45);padding:6px 12px;border-radius:999px;backdrop-filter:blur(8px)}
+.demo-ribbon{position:fixed;left:18px;bottom:18px;z-index:45;font:500 12px var(--body);color:var(--cream);background:rgba(26,17,11,.78);padding:8px 14px;border-radius:999px;backdrop-filter:blur(10px);white-space:nowrap}
+@media (max-width:860px){.demo-ribbon{bottom:auto;top:78px;left:50%;transform:translateX(-50%);font-size:11px}}
+
+/* header */
+.head{position:fixed;inset:0 0 auto;z-index:40;color:#fff;transition:background .4s,color .4s,box-shadow .4s}
+.head .wrap{display:flex;align-items:center;gap:24px;height:84px}
+.head.solid{background:rgba(247,238,223,.92);backdrop-filter:blur(16px);color:var(--ink);box-shadow:0 1px 0 var(--line)}
+.logo{text-decoration:none;line-height:1}
+.logo b{display:block;font:600 24px var(--display);letter-spacing:-.01em}.logo b em{color:var(--butter)}.head.solid .logo b em{color:var(--maple-deep)}
+.logo small{font:600 10px var(--body);letter-spacing:.22em;text-transform:uppercase;opacity:.75}
+.nav{display:flex;gap:6px;margin-left:auto}.nav a{text-decoration:none;font-size:15px;padding:8px 14px;border-radius:999px;opacity:.85}.nav a:hover{opacity:1;background:rgba(255,255,255,.12)}.head.solid .nav a:hover{background:rgba(36,23,15,.06)}
+.head .btn{min-height:46px;padding:0 20px;font-size:15px}
+@media (max-width:860px){.nav,.head .btn{display:none}.head .wrap{height:72px}}
+
+/* hero */
+.hero{position:relative;min-height:max(680px,100svh);display:flex;align-items:flex-end;color:#fff;overflow:hidden;background:var(--espresso)}
+.hero-media{position:absolute;inset:0;overflow:hidden}
+.hero-amb{position:absolute;inset:-14% 0}
+.hero-amb img{width:100%;height:100%;object-fit:cover;object-position:55% 50%}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(26,17,11,.86) 0%,rgba(26,17,11,.55) 40%,rgba(26,17,11,.05) 75%),linear-gradient(0deg,rgba(26,17,11,.8),transparent 45%),linear-gradient(180deg,rgba(26,17,11,.5),transparent 22%)}
+.hero-inner{position:relative;z-index:2;width:100%;padding-top:150px;padding-bottom:clamp(56px,10vh,120px)}
+.hero h1{font-size:clamp(52px,8.4vw,128px);max-width:10.5ch;margin:22px 0 24px;font-weight:600}
+.hero h1 em{color:var(--butter)}
+.hero .lead{font-size:clamp(18px,1.6vw,21px);max-width:42ch;color:rgba(255,255,255,.86)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+.hours{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
+.tag{padding:9px 16px;border-radius:999px;font-size:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(10px)}
+.tag b{color:var(--butter);font-weight:600}
+.hero .cap{right:var(--pad);top:104px}
+@media (max-width:640px){.hero::after{background:linear-gradient(0deg,rgba(26,17,11,.94) 0%,rgba(26,17,11,.6) 60%,rgba(26,17,11,.35))}.hero-inner{padding-bottom:120px!important}.hero .cap{top:120px}}
+
+/* marquee strip */
+.strip{background:var(--maple);color:var(--espresso);padding:18px 0;font:600 clamp(20px,2.4vw,30px)/1 var(--display);--mx-gap:42px;--mx-marquee-speed:40s}
+.strip span{white-space:nowrap}.strip i{font-style:normal;opacity:.5;margin-left:42px}
+
+/* signature tiles */
+.sig{padding:clamp(90px,12vw,160px) 0}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:20px;margin-bottom:40px}
+.sec-head h2{font-size:clamp(40px,5.6vw,78px);max-width:12ch;margin-top:16px}
+.sec-head p{max-width:36ch;color:var(--muted)}
+.tiles{display:grid;gap:16px;grid-template-columns:1.1fr 1fr 1fr}
+.tile{position:relative;overflow:hidden;border-radius:var(--r);min-height:560px;isolation:isolate;background:var(--roast)}
+.tile .img{position:absolute;inset:0;overflow:hidden;border-radius:inherit}.tile img{width:100%;height:100%;object-fit:cover}
+.tile::after{content:"";position:absolute;inset:0;z-index:1;border-radius:inherit;background:linear-gradient(0deg,rgba(26,17,11,.88),rgba(26,17,11,.15) 50%,transparent 70%);pointer-events:none}
+.tile .txt{position:absolute;z-index:2;left:0;right:0;bottom:0;padding:28px;color:#fff}
+.tile h3{font-size:clamp(28px,2.6vw,38px);margin-bottom:6px}
+.tile p{color:rgba(255,255,255,.82)}
+.price{position:absolute;z-index:2;top:22px;right:22px;font:600 15px var(--body);color:var(--espresso);background:var(--butter);padding:7px 13px;border-radius:999px}
+@media (max-width:960px){.tiles{grid-template-columns:1fr}.tile{min-height:440px}}
+
+/* menu */
+.menu{background:var(--espresso);color:var(--cream);padding:clamp(90px,12vw,160px) 0;position:relative;overflow:hidden}
+.menu .eyebrow{color:var(--butter)}
+.menu .sec-head p{color:rgba(247,238,223,.7)}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(30px,4vw,64px)}
+.col h3{font-size:30px;margin-bottom:20px;color:var(--butter)}
+.item{display:grid;grid-template-columns:1fr auto;gap:2px 16px;padding:16px 0;border-top:1px solid rgba(247,238,223,.14)}
+.item b{font:600 19px var(--display)}.item .p{font:600 17px var(--body);color:var(--butter)}
+.item span:not(.p){grid-column:1/-1;font-size:15px;color:rgba(247,238,223,.66)}
+.menu-cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:50px}
+.menu-cta small{color:rgba(247,238,223,.55);font-size:13px}
+@media (max-width:960px){.cols{grid-template-columns:1fr}}
+
+/* parallax band */
+.band{position:relative;height:clamp(440px,78vh,800px);overflow:hidden;display:grid;place-items:center;text-align:center;color:#fff}
+.band .amb{position:absolute;inset:-18% 0}.band img{width:100%;height:100%;object-fit:cover}
+.band::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 50%,rgba(26,17,11,.35),rgba(26,17,11,.75))}
+.band blockquote{position:relative;z-index:2;font:400 clamp(44px,6.6vw,104px)/1 var(--display);letter-spacing:-.02em;max-width:16ch;padding:0 var(--pad)}
+.band blockquote em{color:var(--butter)}
+
+/* story */
+.story{padding:clamp(90px,12vw,160px) 0}
+.story .grid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(36px,6vw,90px);align-items:center}
+.frame{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:5/4}
+.frame img{width:100%;height:100%;object-fit:cover}
+.story h2{font-size:clamp(40px,5vw,70px);margin:16px 0 22px;max-width:11ch}
+.story h2 em{color:var(--maple-deep)}
+.story p{color:var(--muted);font-size:18px;max-width:44ch}
+.points{display:grid;gap:14px;margin-top:30px}
+.pt{display:flex;gap:14px;align-items:flex-start;padding:18px 20px;border-radius:18px;background:var(--paper);border:1px solid var(--line)}
+.pt i{flex:none;width:34px;height:34px;border-radius:50%;background:var(--butter);display:grid;place-items:center;font-style:normal;font:600 15px var(--display)}
+.pt b{display:block}.pt span{color:var(--muted);font-size:15px}
+@media (max-width:960px){.story .grid{grid-template-columns:1fr}}
+
+/* visit */
+.visit{position:relative;min-height:clamp(560px,86vh,860px);display:flex;align-items:flex-end;overflow:hidden;color:#fff}
+.visit .amb{position:absolute;inset:-16% 0}.visit img{width:100%;height:100%;object-fit:cover;object-position:40% 50%}
+.visit::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(26,17,11,.92) 0%,rgba(26,17,11,.45) 55%,rgba(26,17,11,.2))}
+.visit .in{position:relative;z-index:2;width:100%;padding-bottom:clamp(56px,9vh,110px);display:grid;grid-template-columns:1.2fr 1fr;gap:30px;align-items:end}
+.visit h2{font-size:clamp(46px,7vw,104px);max-width:9ch;margin-top:16px}
+.visit h2 em{color:var(--butter)}
+.visit .eyebrow{color:var(--butter)}
+.card{padding:26px;border-radius:var(--r);background:rgba(26,17,11,.55);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(16px)}
+.card .row{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,.12);font-size:16px}
+.card .row:first-child{border-top:0}.card .row span{color:rgba(255,255,255,.7)}
+.card .cta{margin-top:20px}.card .btn{flex:1}
+.visit .cap{right:var(--pad);top:104px}
+@media (max-width:960px){.visit .in{grid-template-columns:1fr}}
+footer{background:var(--espresso);color:rgba(247,238,223,.65);padding:46px 0 140px;font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 30px}
+@media (min-width:861px){footer{padding-bottom:80px}}
+
+/* mobile action bar */
+.callbar{position:fixed;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:50;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px;border-radius:999px;background:rgba(26,17,11,.85);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.14);box-shadow:0 20px 40px -16px rgba(0,0,0,.6)}
+.callbar .btn{min-height:50px}
+@media (min-width:861px){.callbar{display:none}}
+</style>
+</head>
+<body>
+<header class="head" id="head"><div class="wrap">
+  <a class="logo" href="#top"><b>Maple <em>&amp;</em> Main</b><small>Pancake House · Schererville</small></a>
+  <nav class="nav" aria-label="Main"><a href="#menu">Menu</a><a href="#story">Our kitchen</a><a href="#visit">Visit</a></nav>
+  <a class="btn btn-maple" href="#menu" data-cfx-role="button">Order pickup</a>
+</div></header>
+<div class="demo-ribbon">Demo restaurant by Adynex Systems · fictional business</div>
+
+<main id="top">
+  <section class="hero">
+    <div class="hero-media" data-cfx-role="hero-image">
+      <div class="hero-amb" data-cfx-role="hero-ambient" data-mx-speed="0.15">
+        <img data-cfx-media src="img/restaurant-breakfast-spread-2400.webp" srcset="img/restaurant-breakfast-spread-1200.webp 1200w, img/restaurant-breakfast-spread-2400.webp 2400w" sizes="100vw" alt="" fetchpriority="high">
+      </div>
+    </div>
+    <span class="cap">Sample imagery</span>
+    <div class="wrap hero-inner">
+      <span class="eyebrow" style="color:var(--butter)" data-cfx-role="text">Scratch-made breakfast · Schererville</span>
+      <h1 data-cfx-role="hero-headline">Breakfast worth <em>getting up for.</em></h1>
+      <p class="lead" data-cfx-role="text">Fluffy buttermilk stacks, crispy bacon and bottomless coffee, made from scratch every morning.</p>
+      <div class="cta" data-cfx-role="text">
+        <a class="btn btn-maple" href="#menu" data-cfx-role="button">Order pickup</a>
+        <a class="btn btn-glass" href="#menu">See the menu</a>
+      </div>
+      <div class="hours" data-cfx-role="text"><span class="tag"><b>Open daily</b> · 6am–2pm</span><span class="tag">Dine-in · Pickup</span><span class="tag">Sample hours</span></div>
+    </div>
+  </section>
+
+  <div class="strip" data-mx="marquee" aria-label="Signature dishes">
+    <span>Buttermilk stacks</span><span><i>✦</i></span><span>Blueberry pancakes</span><span><i>✦</i></span><span>Country breakfast</span><span><i>✦</i></span><span>Bottomless coffee</span><span><i>✦</i></span><span>Belgian waffles</span><span><i>✦</i></span>
+  </div>
+
+  <section class="sig"><div class="wrap">
+    <div class="sec-head">
+      <div><span class="eyebrow" data-cfx-role="text">The classics</span><h2 data-cfx-role="headline">The plates people <em>come back for.</em></h2></div>
+      <p data-cfx-role="text">Three reasons the booths fill up before 8am. Order ahead for pickup, or grab a seat.</p>
+    </div>
+    <div class="tiles" data-cfx-role="card-group">
+      <article class="tile" data-cfx-role="card"><div class="img"><img data-cfx-media src="img/restaurant-syrup-pour-1200.webp" alt="Maple syrup pouring onto blueberry pancakes" loading="lazy"></div><span class="price">$11.50</span><div class="txt"><h3>Blueberry stack</h3><p>Three buttermilk cakes, wild blueberries, warm maple.</p></div></article>
+      <article class="tile" data-cfx-role="card"><div class="img"><img data-cfx-media src="img/restaurant-breakfast-spread-1200.webp" alt="Pancakes, eggs and bacon breakfast spread" loading="lazy" style="object-position:30% 50%"></div><span class="price">$13.95</span><div class="txt"><h3>Country breakfast</h3><p>Two eggs, bacon, short stack and fresh berries.</p></div></article>
+      <article class="tile" data-cfx-role="card"><div class="img"><img data-cfx-media src="img/restaurant-coffee-pour-1200.webp" alt="Coffee pouring into a diner mug" loading="lazy"></div><span class="price">$3.25</span><div class="txt"><h3>Bottomless coffee</h3><p>Fresh pots all morning. Refills are on us.</p></div></article>
+    </div>
+  </div></section>
+
+  <section class="menu" id="menu"><div class="wrap">
+    <div class="sec-head">
+      <div><span class="eyebrow" data-cfx-role="text">The menu</span><h2 data-cfx-role="headline">Easy to read. <em>On any phone.</em></h2></div>
+      <p data-cfx-role="text">No PDFs, no pinching and zooming. Sample menu for this demo.</p>
+    </div>
+    <div class="cols" data-cfx-role="card-group">
+      <div class="col" data-cfx-role="card"><h3>Pancakes &amp; waffles</h3>
+        <div class="item"><b>Buttermilk short stack</b><span class="p">$8.95</span><span>Whipped butter, warm maple syrup</span></div>
+        <div class="item"><b>Blueberry stack</b><span class="p">$11.50</span><span>Wild blueberries folded in and on top</span></div>
+        <div class="item"><b>Banana pecan</b><span class="p">$11.95</span><span>Caramelized bananas, toasted pecans</span></div>
+        <div class="item"><b>Belgian waffle</b><span class="p">$10.25</span><span>Crisp outside, light inside, berries</span></div>
+      </div>
+      <div class="col" data-cfx-role="card"><h3>Eggs &amp; skillets</h3>
+        <div class="item"><b>Country breakfast</b><span class="p">$13.95</span><span>Two eggs, bacon or sausage, short stack</span></div>
+        <div class="item"><b>Denver omelet</b><span class="p">$12.50</span><span>Ham, peppers, onion, cheddar, toast</span></div>
+        <div class="item"><b>Farmhouse skillet</b><span class="p">$13.25</span><span>Potatoes, sausage gravy, two eggs</span></div>
+        <div class="item"><b>Avocado toast</b><span class="p">$10.75</span><span>Sourdough, poached egg, chili flakes</span></div>
+      </div>
+      <div class="col" data-cfx-role="card"><h3>Sides &amp; drinks</h3>
+        <div class="item"><b>Thick-cut bacon</b><span class="p">$4.50</span><span>Four slices, extra crispy on request</span></div>
+        <div class="item"><b>Hash browns</b><span class="p">$3.95</span><span>Shredded and griddled golden</span></div>
+        <div class="item"><b>Bottomless coffee</b><span class="p">$3.25</span><span>Regular or decaf</span></div>
+        <div class="item"><b>Fresh orange juice</b><span class="p">$4.25</span><span>Squeezed to order</span></div>
+      </div>
+    </div>
+    <div class="menu-cta" data-cfx-role="text"><a class="btn btn-maple" href="#visit" data-cfx-role="button">Order pickup</a><small>One tap to order ahead. Demo button.</small></div>
+  </div></section>
+
+  <section class="band" aria-label="Made from scratch">
+    <div class="amb" data-cfx-role="image" data-cfx-effect="parallax-depth" data-mx-speed="0.15"><img src="img/restaurant-chef-plating-2400.webp" alt="" loading="lazy"></div>
+    <blockquote data-cfx-role="headline">Made from scratch. <em>Every single morning.</em></blockquote>
+  </section>
+
+  <section class="story" id="story"><div class="wrap grid">
+    <div class="frame" data-cfx-role="image"><img data-cfx-media src="img/restaurant-evening-dining-room-1200.webp" alt="" loading="lazy"><span class="cap" style="left:16px;bottom:16px">Sample imagery</span></div>
+    <div>
+      <span class="eyebrow" data-cfx-role="text">Our kitchen</span>
+      <h2 data-cfx-role="headline">Your neighborhood <em>breakfast table.</em></h2>
+      <p data-cfx-role="text">Batter mixed fresh each morning, coffee that never sits, and a booth waiting for you whether you're here for a quick bite or a long Sunday.</p>
+      <div class="points" data-cfx-role="card-group">
+        <div class="pt" data-cfx-role="card"><i>1</i><div><b>Order ahead</b><span>Skip the wait with pickup ordering.</span></div></div>
+        <div class="pt" data-cfx-role="card"><i>2</i><div><b>Families welcome</b><span>Kids' menu and high chairs ready.</span></div></div>
+        <div class="pt" data-cfx-role="card"><i>3</i><div><b>Groups &amp; catering</b><span>Pancake trays for the office or team.</span></div></div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="visit" id="visit">
+    <div class="amb" data-cfx-role="image" data-cfx-effect="parallax-depth" data-mx-speed="0.15"><img src="img/restaurant-main-street-dusk-2400.webp" srcset="img/restaurant-main-street-dusk-1200.webp 1200w, img/restaurant-main-street-dusk-2400.webp 2400w" sizes="100vw" alt="" loading="lazy"></div>
+    <span class="cap">Sample imagery</span>
+    <div class="wrap in">
+      <div><span class="eyebrow" data-cfx-role="text">Come hungry</span><h2 data-cfx-role="headline">See you <em>at breakfast.</em></h2></div>
+      <div class="card" data-cfx-role="section">
+        <div class="row"><b>Address</b><span>Sample address · Schererville, IN</span></div>
+        <div class="row"><b>Hours</b><span>Daily 6am–2pm (sample)</span></div>
+        <div class="row"><b>Phone</b><span>(219) 555-0100 (demo)</span></div>
+        <div class="cta"><a class="btn btn-maple" href="#menu">Order pickup</a><a class="btn btn-glass" href="#top">Directions</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>Maple &amp; Main Pancake House is a fictional demo restaurant. Menu, prices and hours are samples.</span><span>Built by Adynex Systems · sample imagery</span></div></footer>
+
+<div class="callbar"><a class="btn btn-maple" href="#menu">Order</a><a class="btn btn-glass" href="#menu">Menu</a></div>
+
+<script>
+/* ADX Motion runtime — pairs with motion.css.
+ * Usage (plain HTML):
+ *   <html data-mx-level="cinematic">  …  <script src="motion.js"><\/script>   (auto-inits)
+ * Usage (React/Vite):
+ *   import '../design/motion/motion.css'; import '../design/motion/motion.js';
+ *   useEffect(() => window.AdxMotion.init(ref.current), [])   // returns a cleanup fn
+ * Pick a level from a business type:  AdxMotion.levelFor('restaurant') -> 'subtle'
+ */
+(function (root) {
+  'use strict';
+
+  var LEVELS = { subtle: 1, cinematic: 2, edge: 3 };
+  // Each preset's minimum level, and what it downgrades to when the page level is lower.
+  var PRESETS = {
+    'fade-up': [1], 'fade-in': [1], 'stagger': [1], 'underline': [1], 'count-up': [1], 'parallax': [1],
+    'kenburns': [2, 'none'], 'mask-reveal': [2, 'fade-in'], 'split-words': [2, 'fade-up'], 'blur-in': [2, 'fade-in'],
+    'scale-in': [2, 'fade-in'], 'marquee': [2, 'marquee'], 'pulse-glow': [2, 'none'], 'video-hero': [2, 'video-hero'],
+    'glitch': [3, 'fade-up'], 'flicker-in': [3, 'fade-in'], 'rgb-split': [3, 'none'], 'jump-cut': [3, 'fade-up']
+  };
+  // Business type → recommended level (see MOTION.md).
+  var LEVEL_FOR = {
+    church: 'subtle', ministry: 'subtle', medical: 'subtle', dental: 'subtle', law: 'subtle', legal: 'subtle',
+    accounting: 'subtle', insurance: 'subtle', nonprofit: 'subtle', restaurant: 'subtle', bakery: 'subtle',
+    cafe: 'subtle', plumbing: 'subtle', hvac: 'subtle', roofing: 'subtle', contractor: 'subtle', education: 'subtle',
+    salon: 'cinematic', barbershop: 'cinematic', fitness: 'cinematic', 'real estate': 'cinematic', realestate: 'cinematic',
+    retail: 'cinematic', boutique: 'cinematic', auto: 'cinematic', saas: 'cinematic', agency: 'cinematic',
+    events: 'cinematic', photography: 'cinematic', fashion: 'cinematic',
+    nightlife: 'edge', club: 'edge', lounge: 'edge', music: 'edge', gaming: 'edge', esports: 'edge',
+    streetwear: 'edge', entertainment: 'edge', tattoo: 'edge', sportsbetting: 'edge', creator: 'edge'
+  };
+
+  // Presets that start fully clipped (clip-path) are invisible to IntersectionObserver,
+  // so they are triggered by watching their parent instead.
+  var WATCH_PARENT = { 'mask-reveal': 1 };
+
+  var reduced = root.matchMedia ? root.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
+
+  function pageLevel(scope) {
+    var el = (scope && scope.closest && scope.closest('[data-mx-level]')) || document.documentElement;
+    var lvl = el.getAttribute('data-mx-level') || 'cinematic';
+    return LEVELS[lvl] ? lvl : 'cinematic';
+  }
+
+  function resolve(name, level) {
+    var p = PRESETS[name];
+    if (!p) return null;
+    if (LEVELS[level] >= p[0]) return name;
+    var fallback = p[1] || 'fade-up';
+    return fallback === name ? name : fallback;
+  }
+
+  function splitWords(el) {
+    if (el.getAttribute('data-mx-split')) return;
+    var words = el.textContent.trim().split(/\s+/);
+    el.setAttribute('aria-label', el.textContent.trim());
+    el.innerHTML = words.map(function (w, i) {
+      return '<span class="mx-w" aria-hidden="true" style="--mx-i:' + i + '"><span>' + escapeHtml(w) + '</span></span>';
+    }).join(' ');
+    el.setAttribute('data-mx-split', '1');
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
+  }
+
+  function setupMarquee(el) {
+    if (el.querySelector('.mx-track')) return;
+    var track = document.createElement('div');
+    track.className = 'mx-track';
+    while (el.firstChild) track.appendChild(el.firstChild);
+    var clone = track.cloneNode(true);
+    clone.setAttribute('aria-hidden', 'true');
+    el.appendChild(track);
+    el.appendChild(clone);
+  }
+
+  function countUp(el) {
+    var target = parseFloat(el.getAttribute('data-mx-count'));
+    if (isNaN(target)) return;
+    var dec = parseInt(el.getAttribute('data-mx-decimals') || '0', 10);
+    var pre = el.getAttribute('data-mx-prefix') || '', suf = el.getAttribute('data-mx-suffix') || '';
+    var fmt = function (v) { return pre + v.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + suf; };
+    if (reduced) { el.textContent = fmt(target); return; }
+    var dur = parseInt(el.getAttribute('data-mx-duration') || '1400', 10), t0 = null;
+    function step(t) {
+      t0 = t0 || t;
+      var p = Math.min((t - t0) / dur, 1);
+      el.textContent = fmt(target * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function glitchOnce(el) {
+    el.classList.remove('mx-glitching');
+    void el.offsetWidth; // restart animation
+    el.classList.add('mx-glitching');
+  }
+
+  function init(scope) {
+    scope = scope || document;
+    var docEl = document.documentElement;
+    var level = pageLevel(scope.nodeType === 1 ? scope : docEl);
+    var cleanups = [];
+
+    var nodes = scope.querySelectorAll('[data-mx]');
+    nodes.forEach(function (el) {
+      var run = resolve(el.getAttribute('data-mx'), level);
+      if (!run || run === 'none') { el.removeAttribute('data-mx-run'); return; }
+      el.setAttribute('data-mx-run', run);
+      var d = el.getAttribute('data-mx-delay');
+      if (d) el.style.setProperty('--mx-delay', d + 'ms');
+      if (run === 'stagger') Array.prototype.forEach.call(el.children, function (c, i) { c.style.setProperty('--mx-i', i); });
+      if (run === 'split-words') splitWords(el);
+      if (run === 'marquee') setupMarquee(el);
+      if (run === 'glitch') {
+        el.setAttribute('data-text', el.textContent.trim());
+        var onHover = function () { if (!reduced) glitchOnce(el); };
+        el.addEventListener('mouseenter', onHover);
+        cleanups.push(function () { el.removeEventListener('mouseenter', onHover); });
+      }
+    });
+
+    // Hidden "before" states only apply once we know JS is running.
+    docEl.classList.add('mx-ready');
+
+    // Reveal on scroll. Fully clipped elements (mask-reveal) count as invisible to
+    // IntersectionObserver, so those are triggered by watching their parent instead.
+    var watchTargets = new Map(); // observed node -> elements to reveal
+    function reveal(el) {
+      var run = el.getAttribute('data-mx-run');
+      el.classList.add('mx-in');
+      if (run === 'count-up') countUp(el);
+      if (run === 'glitch' && !reduced) setTimeout(function () { glitchOnce(el); }, 250);
+    }
+    var revealIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        (watchTargets.get(e.target) || []).forEach(reveal);
+        watchTargets.delete(e.target);
+        revealIO.unobserve(e.target);
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -5% 0px' });
+    scope.querySelectorAll('[data-mx-run]').forEach(function (el) {
+      if (reduced) { reveal(el); return; }
+      var target = WATCH_PARENT[el.getAttribute('data-mx-run')] && el.parentElement ? el.parentElement : el;
+      if (!watchTargets.has(target)) { watchTargets.set(target, []); revealIO.observe(target); }
+      watchTargets.get(target).push(el);
+    });
+    cleanups.push(function () { revealIO.disconnect(); });
+
+    // Occasional glitch replays (never more often than every 5s)
+    var glitches = scope.querySelectorAll('[data-mx-run="glitch"][data-mx-repeat]');
+    if (glitches.length && !reduced) {
+      var gi = setInterval(function () { glitches.forEach(function (el) { if (el.classList.contains('mx-in')) glitchOnce(el); }); }, 6000);
+      cleanups.push(function () { clearInterval(gi); });
+    }
+
+    // Video heroes: play only while visible; never autoplay for reduced-motion users
+    var videos = scope.querySelectorAll('video[data-mx-run="video-hero"]');
+    if (videos.length) {
+      var vio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var v = e.target;
+          if (e.isIntersecting && !reduced) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause();
+        });
+      }, { threshold: 0.25 });
+      videos.forEach(function (v) { v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute('playsinline', ''); v.removeAttribute('autoplay'); vio.observe(v); });
+      cleanups.push(function () { vio.disconnect(); });
+    }
+
+    // Parallax (transform only, elements in view only)
+    var px = Array.prototype.slice.call(scope.querySelectorAll('[data-mx-run="parallax"]'));
+    if (px.length && !reduced) {
+      var maxSpeed = level === 'subtle' ? 0.12 : 0.35, ticking = false;
+      var update = function () {
+        ticking = false;
+        var vh = innerHeight;
+        px.forEach(function (el) {
+          var r = el.getBoundingClientRect();
+          if (r.bottom < -200 || r.top > vh + 200) return;
+          var speed = Math.min(parseFloat(el.getAttribute('data-mx-speed') || '0.15'), maxSpeed);
+          el.style.transform = 'translate3d(0,' + ((r.top + r.height / 2 - vh / 2) * -speed).toFixed(1) + 'px,0)';
+        });
+      };
+      var onScroll = function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+      addEventListener('scroll', onScroll, { passive: true });
+      update();
+      cleanups.push(function () { removeEventListener('scroll', onScroll); });
+    }
+
+    return function destroy() { cleanups.forEach(function (fn) { fn(); }); };
+  }
+
+  function levelFor(type) {
+    if (!type) return 'cinematic';
+    var k = String(type).toLowerCase().trim();
+    return LEVEL_FOR[k] || LEVEL_FOR[k.replace(/\s+/g, '')] || 'cinematic';
+  }
+
+  function setLevel(level, scope) {
+    (scope || document.documentElement).setAttribute('data-mx-level', LEVELS[level] ? level : 'cinematic');
+  }
+
+  // Extension point (used by CineFX): add presets without editing this file.
+  // minLevel: 'subtle' | 'cinematic' | 'edge'; fallback: preset name or 'none'.
+  // opts.watchParent: true for presets whose hidden state is a full clip-path.
+  function registerPreset(name, minLevel, fallback, opts) {
+    PRESETS[name] = [LEVELS[minLevel] || 1, fallback || 'fade-up'];
+    if (opts && opts.watchParent) WATCH_PARENT[name] = 1;
+    api.presets = Object.keys(PRESETS);
+  }
+
+  var api = { init: init, levelFor: levelFor, setLevel: setLevel, registerPreset: registerPreset, presets: Object.keys(PRESETS), version: '1.1.0' };
+  root.AdxMotion = api;
+  if (typeof module === 'object' && module.exports) module.exports = api;
+
+  // Auto-init for plain HTML pages (skip with <html data-mx-manual>)
+  if (typeof document !== 'undefined' && !document.documentElement.hasAttribute('data-mx-manual')) {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { init(document); });
+    else init(document);
+  }
+})(typeof window !== 'undefined' ? window : this);
+
+</script>
+<script>
+/* CineFX core — industry-aware experience engine built on the ADX Motion runtime.
+ *
+ *   CineFX.assemble(input)        -> config   (pure + deterministic; runs in Node for tests)
+ *   CineFX.profileBrief(text)     -> { industry, personality, purpose, ... }
+ *   CineFX.fromBrief(text, opts)  -> config
+ *   CineFX.apply(config, root)    -> destroy()   (browser; maps data-cfx-role elements to tested primitives)
+ *   CineFX.navigate(el, swap, o)  -> Promise     (page transition around a content swap)
+ *
+ * Every effect a config can contain is a key in PRIMITIVES, and every primitive maps to
+ * a real implementation: an ADX preset (motion.css/motion.js or cinefx.css), a CSS class,
+ * or a navigation transition in this file. Nothing is generated at runtime.
+ */
+(function (root, factory) {
+  var api = factory(root);
+  root.CineFX = api;
+  if (typeof module === 'object' && module.exports) module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis, function (root) {
+  'use strict';
+
+  var VERSION = '0.1.0';
+
+  // ------------------------------------------------------------------ catalog
+  // min: lowest intensity (1-5) the primitive may run at. tier: lowest package (1-4).
+  // down: the next simpler primitive for the same job (used when a rule blocks this one).
+  // impl.kind: 'adx' (data-mx preset) | 'class' (CSS class, optional js) | 'nav' | 'none'.
+  // target 'inner': applied to the element's [data-cfx-media] child (keeps scaling inside a clipped frame).
+  var PRIMITIVES = {
+    'none':                     { component: 'None', cat: 'any', impl: { kind: 'none' }, min: 1, tier: 1 },
+    // entrance
+    'fade-in':                  { component: 'FadeIn', cat: 'entrance', impl: { kind: 'adx', preset: 'fade-in' }, min: 1, tier: 1, down: 'none' },
+    'fade-up':                  { component: 'FadeUp', cat: 'entrance', impl: { kind: 'adx', preset: 'fade-up' }, min: 1, tier: 1, down: 'fade-in' },
+    'fade-down':                { component: 'FadeDown', cat: 'entrance', impl: { kind: 'adx', preset: 'cfx-fade-down' }, min: 1, tier: 1, down: 'fade-in' },
+    'slide-reveal':             { component: 'SlideReveal', cat: 'entrance', impl: { kind: 'adx', preset: 'cfx-slide' }, min: 2, tier: 1, down: 'fade-up' },
+    'blur-reveal':              { component: 'BlurReveal', cat: 'entrance', impl: { kind: 'adx', preset: 'blur-in' }, min: 3, tier: 2, tags: ['blur'], heavy: true, down: 'fade-in' },
+    'scale-reveal':             { component: 'ScaleReveal', cat: 'entrance', impl: { kind: 'adx', preset: 'scale-in' }, min: 3, tier: 2, tags: ['zoom', 'aggressive-zoom'], target: 'inner', down: 'fade-in' },
+    'mask-reveal':              { component: 'MaskReveal', cat: 'entrance', impl: { kind: 'adx', preset: 'mask-reveal' }, min: 3, tier: 2, down: 'fade-in' },
+    'stagger':                  { component: 'Stagger', cat: 'entrance', impl: { kind: 'adx', preset: 'stagger' }, min: 1, tier: 1, down: 'fade-in' },
+    // image
+    'kenburns':                 { component: 'KenBurns', cat: 'image', impl: { kind: 'adx', preset: 'kenburns' }, min: 3, tier: 3, tags: ['zoom', 'loop'], down: 'none' },
+    'image-curtain':            { component: 'ImageCurtain', cat: 'image', impl: { kind: 'adx', preset: 'cfx-curtain' }, min: 3, tier: 2, down: 'cross-dissolve' },
+    'slow-zoom':                { component: 'SlowZoom', cat: 'image', impl: { kind: 'adx', preset: 'cfx-slow-zoom' }, min: 1, tier: 1, tags: ['zoom'], target: 'inner', down: 'cross-dissolve' },
+    'parallax-depth':           { component: 'ParallaxDepth', cat: 'image', impl: { kind: 'adx', preset: 'parallax' }, min: 2, tier: 1, tags: ['parallax'], mobile: false, heavy: true, down: 'none' },
+    'cross-dissolve':           { component: 'CrossDissolve', cat: 'image', impl: { kind: 'adx', preset: 'cfx-dissolve' }, min: 1, tier: 1, down: 'fade-in' },
+    'directional-image-reveal': { component: 'DirectionalImageReveal', cat: 'image', impl: { kind: 'adx', preset: 'cfx-dir-reveal' }, min: 3, tier: 2, down: 'cross-dissolve' },
+    // typography
+    'word-reveal':              { component: 'WordReveal', cat: 'typography', impl: { kind: 'adx', preset: 'split-words' }, min: 3, tier: 3, down: 'line-reveal' },
+    'line-reveal':              { component: 'LineReveal', cat: 'typography', impl: { kind: 'adx', preset: 'cfx-line' }, min: 1, tier: 1, down: 'fade-up' },
+    'character-stagger':        { component: 'CharacterStagger', cat: 'typography', impl: { kind: 'adx', preset: 'cfx-chars' }, min: 4, tier: 4, tags: ['busy-type'], heavy: true, down: 'word-reveal' },
+    'editorial-slide':          { component: 'EditorialSlide', cat: 'typography', impl: { kind: 'adx', preset: 'cfx-editorial' }, min: 2, tier: 2, down: 'line-reveal' },
+    'masked-headline':          { component: 'MaskedHeadline', cat: 'typography', impl: { kind: 'adx', preset: 'cfx-masked' }, min: 3, tier: 2, down: 'line-reveal' },
+    // navigation
+    'smooth-fade':              { component: 'SmoothPageFade', cat: 'navigation', impl: { kind: 'nav', nav: 'fade' }, min: 1, tier: 1, down: 'none' },
+    'curtain-transition':       { component: 'CurtainTransition', cat: 'navigation', impl: { kind: 'nav', nav: 'curtain' }, min: 3, tier: 2, down: 'smooth-fade' },
+    'directional-wipe':         { component: 'DirectionalWipe', cat: 'navigation', impl: { kind: 'nav', nav: 'wipe' }, min: 3, tier: 2, down: 'smooth-fade' },
+    'cinematic-dissolve':       { component: 'CinematicDissolve', cat: 'navigation', impl: { kind: 'nav', nav: 'dissolve' }, min: 3, tier: 3, tags: ['blur'], down: 'smooth-fade' },
+    'controlled-glitch':        { component: 'ControlledGlitch', cat: 'navigation', impl: { kind: 'nav', nav: 'glitch' }, min: 5, tier: 4, tags: ['glitch', 'hard-flash'], down: 'cinematic-dissolve' },
+    // interaction
+    'hover-lift':               { component: 'HoverLift', cat: 'interaction', impl: { kind: 'class', cls: ['cfx-lift'] }, min: 1, tier: 1, down: 'none' },
+    'image-zoom':               { component: 'ImageZoom', cat: 'interaction', impl: { kind: 'class', cls: ['cfx-zoom', 'cfx-lift'] }, min: 2, tier: 1, tags: ['zoom'], down: 'hover-lift' },
+    'border-trace':             { component: 'BorderTrace', cat: 'interaction', impl: { kind: 'class', cls: ['cfx-trace'] }, min: 2, tier: 2, down: 'hover-lift' },
+    'light-sweep':              { component: 'LightSweep', cat: 'interaction', impl: { kind: 'class', cls: ['cfx-sweep'] }, min: 3, tier: 2, down: 'none' },
+    'magnetic-button':          { component: 'MagneticButton', cat: 'interaction', impl: { kind: 'class', cls: ['cfx-magnetic'], js: 'magnetic' }, min: 3, tier: 3, tags: ['playful'], mobile: false, down: 'light-sweep' },
+    'subtle-tilt':              { component: 'SubtleTilt', cat: 'interaction', impl: { kind: 'class', cls: ['cfx-tilt'], js: 'tilt' }, min: 4, tier: 3, tags: ['playful', '3d'], mobile: false, down: 'hover-lift' }
+  };
+
+  // Presets CineFX adds to the ADX runtime (styles in cinefx.css). [minLevel, fallback, watchParent]
+  var ADX_EXTENSIONS = {
+    'cfx-fade-down': ['subtle', 'fade-in'], 'cfx-slide': ['subtle', 'fade-up'], 'cfx-dissolve': ['subtle', 'fade-in'],
+    'cfx-slow-zoom': ['subtle', 'fade-in'], 'cfx-line': ['subtle', 'fade-up', true], 'cfx-editorial': ['subtle', 'fade-up'],
+    'cfx-curtain': ['cinematic', 'fade-in', true], 'cfx-dir-reveal': ['cinematic', 'fade-in', true],
+    'cfx-masked': ['cinematic', 'cfx-line', true], 'cfx-chars': ['cinematic', 'split-words']
+  };
+
+  // Human-facing names for some primitives (used in summaries and briefs).
+  var LABELS = {
+    'cross-dissolve': 'soft-image-dissolve', 'line-reveal': 'gentle-line-reveal', 'hover-lift': 'subtle-hover-lift', 'smooth-fade': 'smooth-fade'
+  };
+  var ALIASES = {};
+  Object.keys(LABELS).forEach(function (k) { ALIASES[LABELS[k]] = k; });
+
+  // Roles a page can mark with data-cfx-role="…" and the config key each reads.
+  var ROLES = {
+    'hero-image': 'heroImage', 'hero-ambient': 'heroAmbient', 'hero-headline': 'heroHeadline', 'headline': 'headline',
+    'text': 'text', 'section': 'section', 'card-group': 'cardGroup', 'card': 'card', 'image': 'image', 'button': 'button'
+  };
+  var ROLE_KEYS = ['heroImage', 'heroAmbient', 'heroHeadline', 'headline', 'text', 'section', 'cardGroup', 'card', 'image', 'button', 'navigation'];
+
+  // Intensity ladders: personality nudges move a role up or down its ladder.
+  var LADDERS = {
+    heroImage: ['fade-in', 'cross-dissolve', 'slow-zoom', 'directional-image-reveal', 'image-curtain', 'mask-reveal'],
+    heroAmbient: ['none', 'kenburns', 'parallax-depth'],
+    heroHeadline: ['fade-up', 'line-reveal', 'editorial-slide', 'masked-headline', 'word-reveal', 'character-stagger'],
+    headline: ['fade-up', 'line-reveal', 'editorial-slide', 'masked-headline', 'word-reveal', 'character-stagger'],
+    text: ['fade-in', 'fade-up', 'slide-reveal'],
+    section: ['fade-in', 'fade-up', 'slide-reveal', 'blur-reveal'],
+    cardGroup: ['fade-in', 'stagger'],
+    card: ['none', 'hover-lift', 'border-trace', 'image-zoom', 'subtle-tilt'],
+    image: ['fade-in', 'cross-dissolve', 'slow-zoom', 'directional-image-reveal', 'image-curtain'],
+    button: ['none', 'light-sweep', 'magnetic-button'],
+    navigation: ['smooth-fade', 'curtain-transition', 'directional-wipe', 'cinematic-dissolve', 'controlled-glitch']
+  };
+
+  // ------------------------------------------------------------------ packages (metadata only — no billing)
+  var PACKAGES = {
+    essential:    { id: 'essential', name: 'Essential Motion', rank: 1, maxIntensity: 2, offer: 'Included in the $497 Website Makeover', summary: 'Clean entrances, gentle image dissolves, hover feedback and smooth page fades. Safe for any business.' },
+    professional: { id: 'professional', name: 'Professional Experience', rank: 2, maxIntensity: 3, offer: 'Upsell (price not set yet)', summary: 'Adds editorial typography, curtain and directional image reveals, border traces and curtain/wipe page transitions.' },
+    premium:      { id: 'premium', name: 'Premium Cinematic', rank: 3, maxIntensity: 4, offer: 'Upsell (price not set yet)', summary: 'Adds Ken Burns heroes, word cascades, parallax depth, cinematic dissolves, magnetic buttons and tilt.' },
+    signature:    { id: 'signature', name: 'Signature Custom Experience', rank: 4, maxIntensity: 5, offer: 'Upsell (price not set yet)', summary: 'Everything, including character typography and controlled glitch, plus a custom-tuned industry profile.' }
+  };
+  Object.keys(PACKAGES).forEach(function (k) {
+    var pk = PACKAGES[k];
+    pk.includes = Object.keys(PRIMITIVES).filter(function (id) { return id !== 'none' && PRIMITIVES[id].tier <= pk.rank; })
+      .map(function (id) { return PRIMITIVES[id].component; });
+  });
+
+  // ------------------------------------------------------------------ personality
+  // Each axis runs -1 (left) .. +1 (right).
+  var AXES = [
+    { key: 'modern', left: 'Traditional', right: 'Modern' },
+    { key: 'expressive', left: 'Reserved', right: 'Expressive' },
+    { key: 'formal', left: 'Friendly', right: 'Formal' },
+    { key: 'immersive', left: 'Minimal', right: 'Immersive' },
+    { key: 'energetic', left: 'Calm', right: 'Energetic' },
+    { key: 'exclusive', left: 'Accessible', right: 'Exclusive' }
+  ];
+  var EASINGS = { gentle: 'cubic-bezier(.45,0,.25,1)', smooth: 'cubic-bezier(.33,1,.68,1)', expo: 'cubic-bezier(.16,1,.3,1)', snappy: 'cubic-bezier(.2,.8,.2,1)' };
+
+  // ------------------------------------------------------------------ profiles
+  var PROFILES = {};
+  var DEFAULT_THEME = {
+    colors: { bg: '#F6F6F4', surface: '#FFFFFF', text: '#17181A', muted: '#55585E', accent: '#2B5BD7', accentText: '#FFFFFF', line: '#E3E3DF' },
+    fonts: { display: 'Inter', body: 'Inter' }, radius: 14,
+    imagery: ['linear-gradient(135deg,#c9d3e0,#7d8ba1)', 'linear-gradient(135deg,#e2ddd3,#9c9282)', 'linear-gradient(135deg,#d5e0d8,#7f978a)']
+  };
+  var GENERAL = {
+    id: 'general', name: 'General business', preset: 'balanced-default', status: 'baseline', keywords: [],
+    motion: { intensity: 2, maxIntensity: 4 },
+    roles: { heroImage: 'cross-dissolve', heroHeadline: 'line-reveal', headline: 'fade-up', section: 'fade-up', card: 'hover-lift', image: 'cross-dissolve', navigation: 'smooth-fade' },
+    avoid: ['hard-flash'], emotionalGoals: ['clarity', 'trust']
+  };
+
+  function clone(o) { return o == null ? o : JSON.parse(JSON.stringify(o)); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function round2(v) { return Math.round(v * 100) / 100; }
+  function resolveId(id) { return ALIASES[id] || id; }
+
+  function normalizeProfile(p) {
+    var out = clone(p);
+    out.status = out.status || 'baseline';
+    out.motion = Object.assign({ intensity: 2, maxIntensity: 5, durationScale: 1, distanceScale: 1, easing: 'smooth', stagger: 70 }, out.motion || {});
+    out.roles = Object.assign({ heroImage: 'cross-dissolve', heroAmbient: 'none', heroHeadline: 'line-reveal', headline: 'fade-up', text: 'fade-up', section: 'fade-up', cardGroup: 'stagger', card: 'hover-lift', image: 'cross-dissolve', button: 'none', navigation: 'smooth-fade' }, out.roles || {});
+    Object.keys(out.roles).forEach(function (k) { out.roles[k] = resolveId(out.roles[k]); });
+    out.avoid = out.avoid || [];
+    out.emotionalGoals = out.emotionalGoals || [];
+    out.visualDirection = out.visualDirection || {};
+    out.accessibility = out.accessibility || { notes: ['Honors prefers-reduced-motion', 'No flashing over 3 times per second'] };
+    var t = out.theme || {};
+    out.theme = { colors: Object.assign({}, DEFAULT_THEME.colors, t.colors || {}), fonts: Object.assign({}, DEFAULT_THEME.fonts, t.fonts || {}), radius: t.radius != null ? t.radius : DEFAULT_THEME.radius, imagery: t.imagery || DEFAULT_THEME.imagery };
+    out.recommendations = out.recommendations || [];
+    out.keywords = out.keywords || [];
+    return out;
+  }
+
+  /** Returns a list of problems (empty = valid). Mirrors schema/industry-profile.schema.json. */
+  function validateProfile(p) {
+    var errs = [];
+    if (!p || typeof p !== 'object') return ['profile must be an object'];
+    ['id', 'name', 'preset'].forEach(function (k) { if (typeof p[k] !== 'string' || !p[k]) errs.push(k + ' is required'); });
+    if (p.status && p.status !== 'full' && p.status !== 'baseline') errs.push('status must be full or baseline');
+    var m = p.motion || {};
+    if (!(m.intensity >= 1 && m.intensity <= 5)) errs.push('motion.intensity must be 1-5');
+    if (m.maxIntensity != null && !(m.maxIntensity >= m.intensity && m.maxIntensity <= 5)) errs.push('motion.maxIntensity must be between intensity and 5');
+    Object.keys(p.roles || {}).forEach(function (k) {
+      if (ROLE_KEYS.indexOf(k) < 0) errs.push('unknown role ' + k);
+      if (!PRIMITIVES[resolveId(p.roles[k])]) errs.push('role ' + k + ' uses unknown primitive ' + p.roles[k]);
+    });
+    if (p.status === 'full') {
+      ['visualDirection', 'emotionalGoals', 'accessibility', 'theme', 'avoid', 'recommendations'].forEach(function (k) { if (!p[k]) errs.push('full profile needs ' + k); });
+    }
+    return errs;
+  }
+
+  function registerProfile(p) {
+    var errs = validateProfile(p);
+    if (errs.length) throw new Error('CineFX profile "' + (p && p.id) + '": ' + errs.join('; '));
+    PROFILES[p.id] = normalizeProfile(p);
+    return PROFILES[p.id];
+  }
+  function getProfile(id) { return id && PROFILES[id] ? clone(PROFILES[id]) : normalizeProfile(GENERAL); }
+  function listProfiles() {
+    return Object.keys(PROFILES).map(function (k) { var p = PROFILES[k]; return { id: p.id, name: p.name, preset: p.preset, status: p.status, intensity: p.motion.intensity }; });
+  }
+
+  // ------------------------------------------------------------------ assembly (deterministic rules engine)
+  function isAvoided(id, avoid) {
+    var p = PRIMITIVES[id];
+    if (!p || id === 'none') return false;
+    return avoid.indexOf(id) > -1 || (p.tags || []).some(function (t) { return avoid.indexOf(t) > -1; });
+  }
+
+  // Why a primitive can't run under the given constraints, or null if it can.
+  function blockReason(id, c) {
+    var p = PRIMITIVES[id];
+    if (!p) return 'unknown primitive';
+    if (id === 'none') return null;
+    if (p.min > c.intensity) return 'needs intensity ' + p.min;
+    if (p.tier > c.packageRank) return 'not in package';
+    if (isAvoided(id, c.avoid)) return 'avoided for this industry';
+    if (c.device.mobile && p.mobile === false) return 'disabled on mobile';
+    if (c.device.lowPower && p.heavy) return 'disabled on low-power devices';
+    if (c.noPlayful && (p.tags || []).indexOf('playful') > -1) return 'disabled for accessibility-first brands';
+    return null;
+  }
+
+  // Rebuild the rule set from a finished config (used to check per-element overrides at apply time).
+  function constraintsOf(config) {
+    var pk = PACKAGES[config.package] || PACKAGES.signature;
+    return { intensity: config.intensity, packageRank: pk.rank, avoid: config.avoid || [], device: config.device || {}, noPlayful: (config.personality || {}).exclusive <= -0.5 };
+  }
+
+  // Walk down the fallback chain until something is allowed.
+  function settle(id, c) {
+    var chain = [], cur = id, guard = 0;
+    while (cur && guard++ < 12) {
+      var why = blockReason(cur, c);
+      if (!why) return { id: cur, chain: chain };
+      chain.push({ from: cur, reason: why });
+      cur = PRIMITIVES[cur] ? PRIMITIVES[cur].down || 'none' : 'none';
+    }
+    return { id: 'none', chain: chain };
+  }
+
+  function shift(role, id, steps) {
+    var ladder = LADDERS[role];
+    if (!ladder || !steps) return id;
+    var i = ladder.indexOf(id);
+    if (i < 0) return id;
+    return ladder[clamp(i + steps, 0, ladder.length - 1)];
+  }
+
+  function normPersonality(pers) {
+    var out = {};
+    AXES.forEach(function (a) { var v = Number((pers || {})[a.key]); out[a.key] = isFinite(v) ? round2(clamp(v, -1, 1)) : 0; });
+    return out;
+  }
+
+  /**
+   * input: { industry, personality, purpose, intensity, package, overrides: { roles }, device: { mobile, lowPower, reducedMotion }, brand }
+   * Pure function: same input -> same output.
+   */
+  function assemble(input) {
+    input = input || {};
+    var profile = getProfile(input.industry);
+    var pers = normPersonality(input.personality);
+    var device = { mobile: !!(input.device && input.device.mobile), lowPower: !!(input.device && input.device.lowPower), reducedMotion: !!(input.device && input.device.reducedMotion) };
+    var pkg = PACKAGES[input.package] || PACKAGES.signature;
+    var warnings = [], recommendations = [];
+
+    // 1. Intensity: profile default (or explicit), nudged by personality, capped by industry + package.
+    var base = input.intensity != null ? clamp(Math.round(Number(input.intensity)) || 1, 1, 5) : profile.motion.intensity;
+    var nudge = input.intensity != null ? 0 : Math.round(0.5 * pers.energetic + 0.5 * pers.immersive + 0.35 * pers.expressive);
+    var intensity = clamp(base + nudge, 1, 5);
+    if (intensity > profile.motion.maxIntensity) { warnings.push('Intensity capped at ' + profile.motion.maxIntensity + ' for ' + profile.name + '.'); intensity = profile.motion.maxIntensity; }
+    if (intensity > pkg.maxIntensity) { warnings.push('Intensity capped at ' + pkg.maxIntensity + ' by the ' + pkg.name + ' package.'); intensity = pkg.maxIntensity; }
+    var noPlayful = pers.exclusive <= -0.5;
+    if (noPlayful && intensity > 3) { intensity = 3; warnings.push('Accessibility-first brand: intensity capped at 3.'); }
+
+    // 2. Timing.
+    var dur = profile.motion.durationScale * (1 - 0.2 * pers.energetic) * (1 + 0.15 * pers.exclusive);
+    if (noPlayful) dur = Math.min(dur, 1);
+    var easing = pers.modern >= 0.3 ? 'expo' : pers.modern <= -0.3 ? 'gentle' : profile.motion.easing;
+    var timing = {
+      durationScale: round2(clamp(dur, 0.6, 1.6)),
+      distanceScale: round2(clamp(profile.motion.distanceScale * (1 + 0.3 * pers.expressive), 0.5, 1.6)),
+      easing: EASINGS[easing] ? easing : 'smooth',
+      stagger: Math.round(clamp(profile.motion.stagger * (1 - 0.2 * pers.energetic), 40, 140))
+    };
+
+    // 3. Roles: profile defaults -> personality/purpose nudges -> explicit overrides -> constraints.
+    var requested = clone(profile.roles);
+    var up = function (role, n) { requested[role] = shift(role, requested[role], n); };
+    if (pers.expressive >= 0.5) { up('heroHeadline', 1); up('headline', 1); }
+    if (pers.expressive <= -0.5) { up('heroHeadline', -1); up('headline', -1); }
+    if (pers.immersive >= 0.5) { up('heroImage', 1); up('image', 1); }
+    if (pers.immersive <= -0.5) { up('heroImage', -1); up('section', -1); requested.heroAmbient = 'none'; }
+    if (pers.modern >= 0.5 && requested.section === 'fade-up') requested.section = 'slide-reveal';
+    if (pers.modern <= -0.5 && requested.section === 'slide-reveal') requested.section = 'fade-up';
+    if (pers.formal >= 0.5 && requested.card === 'hover-lift') requested.card = 'border-trace';
+    if (pers.formal <= -0.5 && requested.card === 'border-trace') requested.card = 'hover-lift';
+    if (pers.exclusive >= 0.5 && requested.button === 'none') requested.button = 'light-sweep';
+    if (pers.energetic >= 0.5) up('navigation', 1);
+    if (pers.energetic <= -0.5) up('navigation', -1);
+    var purpose = input.purpose || null;
+    if ((purpose === 'booking' || purpose === 'leads') && requested.button === 'none') requested.button = 'light-sweep';
+    if (purpose === 'portfolio') up('image', 1);
+    var ov = (input.overrides && input.overrides.roles) || {};
+    Object.keys(ov).forEach(function (k) {
+      if (ROLE_KEYS.indexOf(k) < 0) { warnings.push('Ignored unknown role "' + k + '".'); return; }
+      var id = resolveId(ov[k]);
+      if (!PRIMITIVES[id]) { warnings.push('Ignored unknown effect "' + ov[k] + '" for ' + k + '.'); return; }
+      requested[k] = id;
+    });
+
+    var c = { intensity: intensity, packageRank: pkg.rank, avoid: profile.avoid.concat((input.overrides && input.overrides.avoid) || []), device: device, noPlayful: noPlayful };
+    var roles = {}, effects = [];
+    ROLE_KEYS.forEach(function (k) {
+      var want = requested[k] || 'none';
+      var s = settle(want, c);
+      roles[k] = s.id;
+      var p = PRIMITIVES[s.id];
+      var eff = { role: k, primitive: s.id, component: p.component, implementation: p.impl.kind === 'none' ? 'none' : p.impl.kind + ':' + (p.impl.preset || p.impl.nav || p.impl.cls.join('+')) };
+      if (s.chain.length) {
+        eff.requested = want;
+        eff.steppedDown = s.chain;
+        if (ov[k]) warnings.push(k + ': "' + want + '" replaced by "' + s.id + '" (' + s.chain[0].reason + ').');
+      }
+      effects.push(eff);
+    });
+
+    // 4. Visual recommendations — advice only, never implemented by the engine.
+    (profile.recommendations || []).forEach(function (r) { recommendations.push({ area: 'visual', text: r, implemented: false }); });
+    if (purpose === 'booking') recommendations.push({ area: 'conversion', text: 'Keep the booking button visible in the header on every page.', implemented: false });
+    if (purpose === 'leads') recommendations.push({ area: 'conversion', text: 'Put one clear call to action above the fold; repeat it at the end of each page.', implemented: false });
+    if (purpose === 'portfolio') recommendations.push({ area: 'content', text: 'Lead with your strongest real photography; motion cannot rescue weak images.', implemented: false });
+    if (device.reducedMotion) recommendations.push({ area: 'accessibility', text: 'Reduced-motion visitors see every element immediately; check the layout reads well with no animation.', implemented: false });
+
+    var level = intensity <= 2 ? 'subtle' : intensity <= 4 ? 'cinematic' : 'edge';
+    var brand = Object.assign({}, profile.theme.colors, (input.brand && input.brand.colors) || {});
+    var fonts = Object.assign({}, profile.theme.fonts, (input.brand && input.brand.fonts) || {});
+
+    return {
+      cfxVersion: VERSION,
+      enabled: input.enabled !== false,
+      industry: profile.id, industryName: profile.name, preset: profile.preset, profileStatus: profile.status,
+      intensity: intensity, level: level,
+      package: pkg.id, packageName: pkg.name,
+      personality: pers, purpose: purpose, device: device,
+      timing: timing, roles: roles, effects: effects,
+      avoid: c.avoid.slice(),
+      theme: { colors: brand, fonts: fonts, radius: profile.theme.radius, imagery: profile.theme.imagery },
+      emotionalGoals: profile.emotionalGoals.slice(),
+      recommendations: recommendations, warnings: warnings
+    };
+  }
+
+  function label(id) { return LABELS[id] || id; }
+
+  /** Compact view in the brief's format. */
+  function summarize(config) {
+    var r = config.roles;
+    return {
+      industry: config.industry, preset: config.preset, motionIntensity: config.intensity,
+      hero: label(r.heroImage), headlines: label(r.headline), sections: label(r.section),
+      cards: label(r.card), navigation: label(r.navigation), avoid: config.avoid.slice()
+    };
+  }
+
+  /** Every effect must exist in the catalog and (in a browser) in the loaded ADX runtime. */
+  function validateConfig(config) {
+    var errs = [];
+    (config.effects || []).forEach(function (e) {
+      var p = PRIMITIVES[e.primitive];
+      if (!p) { errs.push(e.role + ': unknown primitive ' + e.primitive); return; }
+      if (p.impl.kind === 'adx' && root.AdxMotion && root.AdxMotion.presets.indexOf(p.impl.preset) < 0) errs.push(e.role + ': ADX preset ' + p.impl.preset + ' is not loaded');
+      if (p.min > config.intensity) errs.push(e.role + ': ' + e.primitive + ' exceeds intensity');
+    });
+    return errs;
+  }
+
+  // ------------------------------------------------------------------ brief profiler (keyword rules, no AI)
+  var CUES = {
+    modern: [[/\b(modern|contemporary|sleek|innovative|cutting[- ]edge|tech[- ]forward)\b/, 0.6], [/\b(traditional|classic|established|heritage|timeless|old[- ]school|since \d{4})\b/, -0.6]],
+    expressive: [[/\b(bold|vibrant|expressive|playful|fun|loud|eye[- ]catching)\b/, 0.6], [/\b(understated|quiet|reserved|discreet|subtle|conservative)\b/, -0.6]],
+    formal: [[/\b(formal|corporate|prestigious|authoritative|serious|executive)\b/, 0.6], [/\b(friendly|family|warm|welcoming|neighborhood|approachable|casual)\b/, -0.6]],
+    immersive: [[/\b(immersive|cinematic|dramatic|storytelling|experience|stunning)\b/, 0.6], [/\b(minimal|minimalist|clean|simple|no[- ]frills)\b/, -0.5]],
+    energetic: [[/\b(energetic|high[- ]energy|dynamic|fast[- ]paced|exciting|hype)\b/, 0.6], [/\b(calm|calming|relaxing|gentle|peaceful|soothing|anxious|nervous)\b/, -0.6]],
+    exclusive: [[/\b(luxury|luxurious|exclusive|high[- ]end|premium|elite|bespoke|upscale)\b/, 0.6], [/\b(affordable|budget|accessible|everyone|low[- ]cost|seniors?|elderly)\b/, -0.6]]
+  };
+  var PURPOSES = [
+    ['booking', /\b(book|booking|appointments?|reservations?|schedule)\b/],
+    ['ecommerce', /\b(shop|store|buy online|e-?commerce|checkout|products?)\b/],
+    ['portfolio', /\b(portfolio|gallery|listings?|showcase|showings?)\b/],
+    ['leads', /\b(leads?|quotes?|consultations?|estimates?|calls?|inquir(y|ies)|clients?)\b/]
+  ];
+
+  function profileBrief(text) {
+    var t = ' ' + String(text || '').toLowerCase().replace(/[^a-z0-9&'\- ]+/g, ' ') + ' ';
+    var best = null, scores = [];
+    Object.keys(PROFILES).forEach(function (id) {
+      var p = PROFILES[id], score = 0, hits = [];
+      p.keywords.forEach(function (kw) {
+        var re = new RegExp('\\b' + kw.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
+        if (re.test(t)) { score += kw.split(/\s+/).length; hits.push(kw); }
+      });
+      if (score) scores.push({ id: id, score: score, hits: hits });
+    });
+    scores.sort(function (a, b) { return b.score - a.score || (a.id < b.id ? -1 : 1); });
+    best = scores[0] || null;
+    var pers = {};
+    Object.keys(CUES).forEach(function (axis) {
+      var v = 0;
+      CUES[axis].forEach(function (cue) { if (cue[0].test(t)) v += cue[1]; });
+      if (v) pers[axis] = round2(clamp(v, -1, 1));
+    });
+    var purpose = null;
+    for (var i = 0; i < PURPOSES.length; i++) if (PURPOSES[i][1].test(t)) { purpose = PURPOSES[i][0]; break; }
+    var wantsLessMotion = /\b(no|minimal|less|little) (animation|motion|movement)\b|\breduced motion\b/.test(t);
+    var second = scores[1];
+    return {
+      industry: best ? best.id : null,
+      matched: best ? best.hits : [],
+      confidence: !best ? 0 : round2(clamp(0.45 + 0.15 * best.score - (second && second.score === best.score ? 0.25 : 0), 0, 0.95)),
+      alternatives: scores.slice(1, 3).map(function (s) { return s.id; }),
+      personality: pers, purpose: purpose,
+      intensity: wantsLessMotion ? 1 : undefined,
+      note: best ? null : 'No industry keywords found; using the general profile. Pick an industry to refine.'
+    };
+  }
+
+  function fromBrief(text, opts) {
+    var b = profileBrief(text);
+    var input = Object.assign({ industry: b.industry, personality: b.personality, purpose: b.purpose }, b.intensity ? { intensity: b.intensity } : {}, opts || {});
+    var config = assemble(input);
+    config.brief = { confidence: b.confidence, matched: b.matched, alternatives: b.alternatives, note: b.note };
+    return config;
+  }
+
+  // ------------------------------------------------------------------ browser: register ADX extensions
+  function registerWithAdx() {
+    var adx = root.AdxMotion;
+    if (!adx || !adx.registerPreset) return false;
+    Object.keys(ADX_EXTENSIONS).forEach(function (name) {
+      var e = ADX_EXTENSIONS[name];
+      adx.registerPreset(name, e[0], e[1], { watchParent: !!e[2] });
+    });
+    return true;
+  }
+  registerWithAdx();
+
+  function prefersReduced() { return !!(root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches); }
+
+  function detectDevice() {
+    if (typeof document === 'undefined') return { mobile: false, lowPower: false, reducedMotion: false };
+    var nav = root.navigator || {};
+    var coarse = root.matchMedia && root.matchMedia('(pointer: coarse)').matches;
+    return {
+      mobile: !!(coarse || root.innerWidth < 720),
+      lowPower: !!((nav.connection && nav.connection.saveData) || (nav.hardwareConcurrency && nav.hardwareConcurrency <= 2)),
+      reducedMotion: prefersReduced()
+    };
+  }
+
+  // ------------------------------------------------------------------ browser: apply
+  var APPLIED_CLASSES = ['cfx-lift', 'cfx-zoom', 'cfx-trace', 'cfx-sweep', 'cfx-magnetic', 'cfx-tilt', 'mx-in'];
+
+  function isGlobalOff(rootEl) {
+    var html = document.documentElement;
+    return html.getAttribute('data-cfx') === 'off' || !!(rootEl.closest && rootEl.closest('[data-cfx="off"]'));
+  }
+  // Never touch protected UI: forms, dialogs, anything opted out.
+  function isProtected(el) { return !!el.closest('[data-cfx="off"], form, [role="dialog"], [data-cfx-protect]'); }
+
+  function targetFor(el, p) {
+    return p.target === 'inner' ? (el.querySelector('[data-cfx-media]') || el) : el;
+  }
+
+  function reset(el) {
+    if (el._cfxOrig) {
+      el.innerHTML = el._cfxOrig.html;
+      if (el._cfxOrig.aria == null) el.removeAttribute('aria-label'); else el.setAttribute('aria-label', el._cfxOrig.aria);
+      el.removeAttribute('data-mx-split');
+    }
+    ['data-mx', 'data-mx-run', 'data-mx-delay', 'data-cfx-applied'].forEach(function (a) { el.removeAttribute(a); });
+    APPLIED_CLASSES.forEach(function (c) { el.classList.remove(c); });
+    ['transform', 'translate', 'rotate', '--mx-delay', '--cfx-i'].forEach(function (s) { el.style.removeProperty(s); });
+  }
+
+  function splitChars(el) {
+    if (el.getAttribute('data-cfx-split')) return;
+    var text = el.textContent.trim(), i = 0;
+    el.setAttribute('aria-label', text);
+    el.innerHTML = text.split(/\s+/).map(function (w) {
+      return '<span class="cfx-word" aria-hidden="true">' + Array.prototype.map.call(w, function (ch) {
+        return '<span class="cfx-ch" style="--cfx-i:' + (i++) + '">' + esc(ch) + '</span>';
+      }).join('') + '</span>';
+    }).join(' ');
+    el.setAttribute('data-cfx-split', '1');
+  }
+  function esc(s) { return s.replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+  function setVars(rootEl, config) {
+    var t = config.timing, s = rootEl.style, ms = function (v) { return Math.round(v * t.durationScale) + 'ms'; };
+    s.setProperty('--mx-base', ms(700));
+    s.setProperty('--mx-slow', ms(1100));
+    s.setProperty('--mx-fast', ms(240));
+    s.setProperty('--mx-distance', Math.round(18 * t.distanceScale) + 'px');
+    s.setProperty('--mx-stagger', t.stagger + 'ms');
+    s.setProperty('--mx-ease-out', EASINGS[t.easing]);
+    s.setProperty('--cfx-accent', config.theme.colors.accent);
+    s.setProperty('--mx-accent', config.theme.colors.accent);
+  }
+
+  function bindPointer(el, kind, reduced) {
+    var fine = root.matchMedia && root.matchMedia('(pointer: fine)').matches;
+    if (!fine || reduced) return null;
+    var parentPersp = null;
+    if (kind === 'tilt' && el.parentElement) { parentPersp = el.parentElement.style.perspective; el.parentElement.style.perspective = '900px'; }
+    function move(e) {
+      var r = el.getBoundingClientRect(), dx = (e.clientX - r.left) / r.width - 0.5, dy = (e.clientY - r.top) / r.height - 0.5;
+      if (kind === 'magnetic') el.style.translate = (dx * 12).toFixed(1) + 'px ' + (dy * 10).toFixed(1) + 'px';
+      else el.style.rotate = (-dy).toFixed(3) + ' ' + dx.toFixed(3) + ' 0 ' + (Math.min(1, Math.hypot(dx, dy) * 2) * 4).toFixed(2) + 'deg';
+    }
+    function leave() { el.style.removeProperty(kind === 'magnetic' ? 'translate' : 'rotate'); }
+    el.addEventListener('pointermove', move);
+    el.addEventListener('pointerleave', leave);
+    return function () {
+      el.removeEventListener('pointermove', move); el.removeEventListener('pointerleave', leave); leave();
+      if (kind === 'tilt' && el.parentElement) el.parentElement.style.perspective = parentPersp || '';
+    };
+  }
+
+  /**
+   * Maps every [data-cfx-role] inside rootEl to the config's primitive and starts ADX.
+   * Safe to call repeatedly (it resets what it changed first). Returns destroy().
+   */
+  function apply(config, rootEl) {
+    rootEl = rootEl || document.documentElement;
+    if (rootEl._cfxDestroy) rootEl._cfxDestroy();
+    var nodes = Array.prototype.slice.call(rootEl.querySelectorAll('[data-cfx-role], [data-cfx-applied]'));
+    nodes.forEach(function (el) { reset(el); if (el.querySelector('[data-cfx-media]')) reset(el.querySelector('[data-cfx-media]')); });
+
+    var off = !config || config.enabled === false || isGlobalOff(rootEl);
+    var reduced = off || (config.device && config.device.reducedMotion) || prefersReduced();
+    rootEl.setAttribute('data-cfx-state', off ? 'off' : reduced ? 'reduced' : 'on');
+    if (off || (config.device && config.device.reducedMotion)) { rootEl._cfxDestroy = function () {}; return rootEl._cfxDestroy; }
+
+    rootEl.setAttribute('data-mx-level', config.level);
+    setVars(rootEl, config);
+    var cleanups = [];
+
+    nodes.forEach(function (el) {
+      var key = ROLES[el.getAttribute('data-cfx-role')];
+      if (!key || isProtected(el)) return;
+      var id = el.getAttribute('data-cfx-effect') ? resolveId(el.getAttribute('data-cfx-effect')) : config.roles[key];
+      var p = PRIMITIVES[id];
+      if (!p || p.impl.kind === 'none' || p.impl.kind === 'nav') return;
+      if (el.getAttribute('data-cfx-effect') && blockReason(id, constraintsOf(config))) return; // per-element picks obey every rule
+      var t = targetFor(el, p);
+      if ((p.impl.preset === 'split-words' || p.impl.preset === 'cfx-chars') && !el._cfxOrig) el._cfxOrig = { html: el.innerHTML, aria: el.getAttribute('aria-label') };
+      t.setAttribute('data-cfx-applied', '1');
+      if (p.impl.kind === 'adx') t.setAttribute('data-mx', p.impl.preset);
+      if (p.impl.kind === 'class') {
+        p.impl.cls.forEach(function (c) { t.classList.add(c); });
+        if (p.impl.js) { var un = bindPointer(t, p.impl.js, reduced); if (un) cleanups.push(un); }
+      }
+    });
+
+    var adxDestroy = root.AdxMotion ? root.AdxMotion.init(rootEl) : function () {};
+    rootEl.querySelectorAll('[data-mx-run="cfx-chars"]').forEach(function (el) {
+      if (!el._cfxOrig) el._cfxOrig = { html: el.innerHTML, aria: el.getAttribute('aria-label') };
+      splitChars(el);
+    });
+
+    rootEl._cfxDestroy = function () { adxDestroy(); cleanups.forEach(function (fn) { fn(); }); rootEl._cfxDestroy = null; };
+    return rootEl._cfxDestroy;
+  }
+
+  // ------------------------------------------------------------------ browser: page transitions
+  function anim(el, frames, ms, easing, fill) {
+    if (!el.animate) return Promise.resolve(null);
+    var a = el.animate(frames, { duration: ms, easing: easing || 'ease', fill: fill || 'none' });
+    return a.finished.then(function () { return a; }, function () { return a; });
+  }
+
+  /**
+   * Runs the configured page transition around swap(). swap() always runs exactly once,
+   * even if an animation fails. opts: { type, durationScale, overlayHost, color, reducedMotion, lowPower }
+   */
+  function navigate(container, swap, opts) {
+    opts = opts || {};
+    var p = PRIMITIVES[resolveId(opts.type || 'smooth-fade')];
+    var swapped = false;
+    var doSwap = function () { swapped = true; return Promise.resolve().then(swap); };
+    if (!p || p.impl.kind !== 'nav' || opts.reducedMotion || prefersReduced() || !container.animate) return doSwap();
+    var k = clamp(opts.durationScale || 1, 0.6, 1.6), ms = function (v) { return Math.round(v * k); };
+    var host = opts.overlayHost || document.body, overlay = null, outA = null;
+    var ease = 'cubic-bezier(.65,0,.35,1)';
+    function makeOverlay() {
+      overlay = document.createElement('div');
+      overlay.className = 'cfx-nav-overlay';
+      overlay.setAttribute('aria-hidden', 'true');
+      overlay.style.position = host === document.body ? 'fixed' : 'absolute';
+      if (opts.color) overlay.style.background = opts.color;
+      host.appendChild(overlay);
+      return overlay;
+    }
+    var run;
+    switch (p.impl.nav) {
+      case 'curtain':
+        run = anim(makeOverlay(), [{ transform: 'scaleY(0)', transformOrigin: '50% 100%' }, { transform: 'scaleY(1)', transformOrigin: '50% 100%' }], ms(420), ease, 'forwards')
+          .then(doSwap)
+          .then(function () { return anim(overlay, [{ transform: 'scaleY(1)', transformOrigin: '50% 0%' }, { transform: 'scaleY(0)', transformOrigin: '50% 0%' }], ms(480), ease, 'forwards'); });
+        break;
+      case 'wipe':
+        run = anim(makeOverlay(), [{ transform: 'translateX(-100%)' }, { transform: 'translateX(0)' }], ms(380), ease, 'forwards')
+          .then(doSwap)
+          .then(function () { return anim(overlay, [{ transform: 'translateX(0)' }, { transform: 'translateX(100%)' }], ms(420), ease, 'forwards'); });
+        break;
+      case 'dissolve':
+        var blur = opts.lowPower ? '0px' : '6px';
+        run = anim(container, [{ opacity: 1, filter: 'blur(0px)', transform: 'scale(1)' }, { opacity: 0, filter: 'blur(' + blur + ')', transform: 'scale(1.01)' }], ms(420), 'ease-in', 'forwards')
+          .then(function (a) { outA = a; return doSwap(); })
+          .then(function () { if (outA) outA.cancel(); return anim(container, [{ opacity: 0, filter: 'blur(' + blur + ')', transform: 'scale(.995)' }, { opacity: 1, filter: 'blur(0px)', transform: 'scale(1)' }], ms(620), 'cubic-bezier(.16,1,.3,1)'); });
+        break;
+      case 'glitch':
+        // Position jitter + slice clipping only; brightness never changes (no flashing).
+        var frames = [
+          { transform: 'translateX(0)', clipPath: 'inset(0 0 0 0)' }, { transform: 'translateX(-6px)', clipPath: 'inset(12% 0 58% 0)' },
+          { transform: 'translateX(5px)', clipPath: 'inset(48% 0 22% 0)' }, { transform: 'translateX(-3px)', clipPath: 'inset(0 0 0 0)' }, { transform: 'translateX(0)', clipPath: 'inset(0 0 0 0)' }
+        ];
+        run = anim(container, frames, 180, 'steps(4, end)')
+          .then(function () { return anim(container, [{ opacity: 1 }, { opacity: 0 }], ms(120), 'linear', 'forwards'); })
+          .then(function (a) { outA = a; return doSwap(); })
+          .then(function () { if (outA) outA.cancel(); return anim(container, frames.slice().reverse(), 200, 'steps(4, end)'); });
+        break;
+      default: // fade
+        run = anim(container, [{ opacity: 1 }, { opacity: 0 }], ms(260), 'ease-in', 'forwards')
+          .then(function (a) { outA = a; return doSwap(); })
+          .then(function () { if (outA) outA.cancel(); return anim(container, [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], ms(460), 'cubic-bezier(.16,1,.3,1)'); });
+    }
+    return run.catch(function (err) { if (!swapped) return doSwap(); throw err; }).then(function () {
+      if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+      if (outA) outA.cancel();
+    });
+  }
+
+  return {
+    version: VERSION,
+    primitives: PRIMITIVES, packages: PACKAGES, axes: AXES, ladders: LADDERS, roles: ROLES, easings: EASINGS, labels: LABELS,
+    registerProfile: registerProfile, getProfile: getProfile, listProfiles: listProfiles, validateProfile: validateProfile,
+    assemble: assemble, summarize: summarize, validateConfig: validateConfig, label: label,
+    profileBrief: profileBrief, fromBrief: fromBrief,
+    detectDevice: detectDevice, registerWithAdx: registerWithAdx, apply: apply, navigate: navigate
+  };
+});
+
+</script>
+<script>
+/* CineFX industry profiles. 22 industries.
+ * status "full"     — complete art direction, theme, accessibility notes and recommendations (Phase 1 demos).
+ * status "baseline" — motion defaults only; theme/typography fall back to neutral. Upgrade to "full" when sold.
+ * Profiles are defaults: brand settings, personality sliders and per-role overrides always win.
+ */
+(function (root) {
+  'use strict';
+  var CFX = root.CineFX || (typeof require === 'function' ? require('./cinefx-core.js') : null);
+
+  var FULL = [
+    {
+      id: 'dental', name: 'Dental & orthodontics', preset: 'clinical-calm', status: 'full',
+      keywords: ['dental', 'dentist', 'dentistry', 'orthodontist', 'orthodontics', 'teeth', 'smile', 'braces', 'invisalign', 'hygienist', 'implants', 'teeth whitening'],
+      visualDirection: {
+        mood: 'Bright, clean and reassuring',
+        palette: 'Clinical whites with one soft teal accent; no harsh reds',
+        imagery: 'Real team and treatment rooms in natural light. Calm faces, not stock grins.',
+        layout: 'Generous whitespace, rounded cards, short sections'
+      },
+      emotionalGoals: ['trust', 'calm', 'cleanliness', 'approachability'],
+      motion: { intensity: 2, maxIntensity: 3, durationScale: 1.15, distanceScale: 0.8, easing: 'smooth', stagger: 90 },
+      roles: {
+        heroImage: 'slow-zoom', heroAmbient: 'parallax-depth', heroHeadline: 'line-reveal', headline: 'line-reveal', text: 'fade-up',
+        section: 'fade-up', cardGroup: 'stagger', card: 'image-zoom', image: 'slow-zoom', button: 'none', navigation: 'smooth-fade'
+      },
+      transitions: 'Smooth page fade only: nothing that feels like a jolt.',
+      typography: 'Rounded geometric display + highly legible sans. Gentle line reveals; never per-character.',
+      imageBehavior: 'Soft dissolves and a slow 6% settle. No aggressive zoom.',
+      scrollEffects: 'Gentle hero parallax (speed capped for calm sites) and simple fade-ups. No fast or layered parallax.',
+      hover: 'Small lift on cards; buttons stay still so they feel dependable.',
+      timing: '15% slower than default: calm, never rushed.',
+      avoid: ['glitch', 'hard-flash', 'aggressive-zoom', 'busy-type', 'playful'],
+      accessibility: { notes: ['Many visitors are anxious about treatment: keep motion slow and predictable', 'Body text contrast at least 4.5:1', 'Booking button never animates its position'], minContrast: 4.5 },
+      theme: {
+        colors: { bg: '#F5F9FA', surface: '#FFFFFF', text: '#0F2A33', muted: '#4A626B', accent: '#0B7F80', accentText: '#FFFFFF', line: '#DCE8EB' },
+        fonts: { display: 'Outfit', body: 'Inter' }, radius: 20,
+        imagery: ['linear-gradient(160deg,#e9f5f6 0%,#bfe0e2 45%,#7fb9bd 100%)', 'linear-gradient(140deg,#f4f1ea,#d9e7e4 50%,#9cc7c4)', 'linear-gradient(120deg,#dfeef4,#a9cbd8 55%,#6f9fb3)']
+      },
+      recommendations: ['Use real photos of the team and treatment rooms', 'Show insurance accepted and new-patient steps near the top', 'Keep the booking button in the header on every page']
+    },
+    {
+      id: 'law', name: 'Law firm', preset: 'executive-authority', status: 'full',
+      keywords: ['law', 'law firm', 'lawyer', 'lawyers', 'attorney', 'attorneys', 'legal', 'litigation', 'counsel', 'injury', 'personal injury', 'estate planning', 'family law', 'criminal defense', 'paralegal'],
+      visualDirection: {
+        mood: 'Composed, authoritative, discreet',
+        palette: 'Deep navy and warm ivory with a restrained brass accent',
+        imagery: 'Architecture, documents, real attorney portraits. No gavels or scales clip art.',
+        layout: 'Strong grid, editorial serif headlines, hairline rules'
+      },
+      emotionalGoals: ['authority', 'confidence', 'discretion', 'competence'],
+      motion: { intensity: 3, maxIntensity: 3, durationScale: 1.05, distanceScale: 0.7, easing: 'gentle', stagger: 80 },
+      roles: {
+        heroImage: 'directional-image-reveal', heroAmbient: 'none', heroHeadline: 'editorial-slide', headline: 'editorial-slide', text: 'fade-up',
+        section: 'fade-up', cardGroup: 'stagger', card: 'border-trace', image: 'directional-image-reveal', button: 'none', navigation: 'curtain-transition'
+      },
+      transitions: 'A navy curtain between pages: deliberate, like turning a page in a brief.',
+      typography: 'High-contrast serif display slides in from the left; body in a sober sans.',
+      imageBehavior: 'Images unveil from one side, once. No looping motion.',
+      scrollEffects: 'Restrained fade-ups. No parallax, no blur.',
+      hover: 'Hairline border traces around practice-area cards; no bounce.',
+      timing: 'Slightly slower than default; nothing playful.',
+      avoid: ['glitch', 'hard-flash', 'aggressive-zoom', 'parallax', 'busy-type', 'playful', 'loop', 'blur'],
+      accessibility: { notes: ['Visitors are often stressed: content must be readable immediately', 'Phone number and consultation button must never move', 'Serif display only at large sizes'], minContrast: 4.5 },
+      theme: {
+        colors: { bg: '#F7F4EE', surface: '#FFFFFF', text: '#111A2B', muted: '#4D5566', accent: '#1C2B4A', accentText: '#F7F4EE', line: '#DCD5C8' },
+        fonts: { display: 'Cormorant Garamond', body: 'Source Sans 3' }, radius: 4,
+        imagery: ['linear-gradient(150deg,#2a3754 0%,#1a2338 55%,#0d1322 100%)', 'linear-gradient(140deg,#d9d2c4,#a89f8d 60%,#6d6656)', 'linear-gradient(120deg,#3b4660,#232c40 60%,#141a28)']
+      },
+      recommendations: ['Use real attorney portraits, not stock', 'State practice areas and the consultation process plainly', 'Put the phone number in the header']
+    },
+    {
+      id: 'luxury-real-estate', name: 'Luxury real estate', preset: 'cinematic-living', status: 'full',
+      keywords: ['luxury real estate', 'luxury homes', 'luxury property', 'luxury properties', 'luxury listings', 'estates', 'penthouse', 'penthouses', 'waterfront', 'mansion', 'high-end property', 'high-end homes', 'luxury realtor', 'luxury'],
+      visualDirection: {
+        mood: 'Cinematic, aspirational, unhurried',
+        palette: 'Near-black and warm stone with a muted champagne accent',
+        imagery: 'Full-bleed architectural photography and dusk exteriors. Let the property be the hero.',
+        layout: 'Full-bleed media, large serif display, wide margins'
+      },
+      emotionalGoals: ['aspiration', 'exclusivity', 'calm confidence', 'desire'],
+      motion: { intensity: 4, maxIntensity: 5, durationScale: 1.3, distanceScale: 1.1, easing: 'expo', stagger: 110 },
+      roles: {
+        heroImage: 'image-curtain', heroAmbient: 'kenburns', heroHeadline: 'masked-headline', headline: 'word-reveal', text: 'fade-up',
+        section: 'fade-in', cardGroup: 'stagger', card: 'image-zoom', image: 'directional-image-reveal', button: 'light-sweep', navigation: 'cinematic-dissolve'
+      },
+      transitions: 'Cinematic dissolve between pages, like a film cut to the next room.',
+      typography: 'High-contrast didone headlines revealed behind a mask; word cascades on section titles.',
+      imageBehavior: 'Curtain reveals, then a slow Ken Burns drift on the hero. Listing images zoom slightly on hover.',
+      scrollEffects: 'Slow fades; generous pacing (1.3x).',
+      hover: 'Image zoom on listing cards, light sweep on the primary button.',
+      timing: '30% slower than default: luxurious, never sluggish on interaction.',
+      avoid: ['glitch', 'hard-flash', 'playful'],
+      accessibility: { notes: ['Ken Burns stops for reduced-motion visitors', 'Light text on dark: keep body at 16px+ and contrast 7:1 where possible', 'Listing details must be readable without waiting for animation'], minContrast: 4.5 },
+      theme: {
+        colors: { bg: '#0E0D0B', surface: '#17150F', text: '#F3EEE4', muted: '#B5AC9C', accent: '#C9A96A', accentText: '#15120B', line: '#2E2A22' },
+        fonts: { display: 'Bodoni Moda', body: 'Jost' }, radius: 2,
+        imagery: ['radial-gradient(40% 30% at 68% 58%,rgba(255,196,120,.55),transparent 70%), linear-gradient(180deg,#1d2238 0%,#4a3f55 30%,#a8705a 52%,#e0a868 60%,#2a2019 61%,#120e0b 100%)', 'linear-gradient(180deg,#3a3a40 0%,#6e5c48 48%,#c9a36e 58%,#2b241c 59%,#15110d 100%)', 'linear-gradient(180deg,#22313b 0%,#4f6470 45%,#9fb0b3 56%,#1e2a2e 57%,#0d1316 100%)']
+      },
+      recommendations: ['Commission real twilight photography; motion cannot fix weak images', 'One listing per screen on mobile', 'Private showing request instead of a generic contact form']
+    }
+  ];
+
+  // name, preset, intensity, maxIntensity, keywords, roles (only the differences), avoid, goals
+  var BASE = [
+    ['medical', 'Medical clinic', 'care-first', 2, 3, ['clinic', 'medical', 'doctor', 'physician', 'urgent care', 'pediatric', 'healthcare', 'chiropractor', 'physical therapy'], { card: 'hover-lift' }, ['glitch', 'hard-flash', 'aggressive-zoom', 'parallax', 'busy-type'], ['trust', 'calm']],
+    ['finance', 'Accounting & financial advisory', 'measured-precision', 2, 3, ['accounting', 'accountant', 'cpa', 'bookkeeping', 'tax', 'financial advisor', 'wealth management'], { card: 'border-trace', headline: 'editorial-slide' }, ['glitch', 'hard-flash', 'playful', 'busy-type'], ['competence', 'clarity']],
+    ['insurance', 'Insurance agency', 'steady-assurance', 2, 3, ['insurance', 'insurance agency', 'coverage', 'auto insurance', 'life insurance'], {}, ['glitch', 'hard-flash', 'busy-type'], ['security', 'clarity']],
+    ['real-estate', 'Residential real estate', 'open-house', 3, 4, ['real estate', 'realtor', 'realty', 'homes for sale', 'broker', 'property', 'properties', 'listings'], { heroImage: 'image-curtain', card: 'image-zoom', image: 'directional-image-reveal' }, ['glitch', 'hard-flash'], ['optimism', 'trust']],
+    ['restaurant', 'Restaurant', 'warm-table', 3, 4, ['restaurant', 'dining', 'menu', 'chef', 'kitchen', 'bistro', 'grill', 'bbq', 'pizza', 'tacos', 'soul food', 'catering'], { heroImage: 'slow-zoom', heroAmbient: 'parallax-depth', headline: 'line-reveal', card: 'image-zoom', image: 'slow-zoom' }, ['glitch', 'hard-flash'], ['appetite', 'warmth']],
+    ['cafe-bakery', 'Cafe & bakery', 'morning-light', 2, 3, ['cafe', 'coffee', 'bakery', 'pastry', 'donuts', 'tea house', 'brunch'], { image: 'slow-zoom', card: 'image-zoom' }, ['glitch', 'hard-flash', 'aggressive-zoom'], ['warmth', 'comfort']],
+    ['salon-spa', 'Salon & spa', 'soft-glow', 3, 4, ['salon', 'spa', 'beauty', 'hair', 'nails', 'lashes', 'esthetician', 'massage', 'med spa'], { heroImage: 'cross-dissolve', headline: 'masked-headline', button: 'light-sweep' }, ['glitch', 'hard-flash'], ['relaxation', 'confidence']],
+    ['barbershop', 'Barbershop', 'sharp-cut', 3, 4, ['barber', 'barbershop', 'fades', 'haircut', 'grooming', 'shave'], { headline: 'editorial-slide', card: 'border-trace', navigation: 'directional-wipe' }, ['hard-flash'], ['confidence', 'community']],
+    ['fitness', 'Gym & fitness', 'kinetic-drive', 4, 5, ['gym', 'fitness', 'personal trainer', 'crossfit', 'boxing', 'yoga', 'pilates', 'martial arts', 'bootcamp'], { headline: 'word-reveal', section: 'slide-reveal', navigation: 'directional-wipe', button: 'magnetic-button' }, ['hard-flash'], ['energy', 'motivation']],
+    ['church', 'Church & ministry', 'sanctuary', 1, 3, ['church', 'ministry', 'worship', 'congregation', 'pastor', 'faith', 'sermon', 'parish'], { headline: 'fade-up', image: 'cross-dissolve' }, ['glitch', 'hard-flash', 'aggressive-zoom', 'busy-type', 'playful'], ['belonging', 'peace']],
+    ['nonprofit', 'Nonprofit', 'mission-story', 2, 4, ['nonprofit', 'non-profit', 'charity', 'foundation', 'donate', 'volunteer', 'mission'], { image: 'slow-zoom' }, ['glitch', 'hard-flash'], ['empathy', 'hope']],
+    ['home-services', 'Home services', 'job-done-right', 2, 3, ['plumber', 'plumbing', 'hvac', 'roofing', 'roofer', 'electrician', 'landscaping', 'cleaning', 'pest control', 'handyman'], { button: 'light-sweep' }, ['glitch', 'hard-flash', 'busy-type'], ['reliability', 'speed']],
+    ['construction', 'Construction & contractors', 'built-solid', 3, 4, ['construction', 'contractor', 'remodeling', 'renovation', 'builder', 'general contractor', 'concrete'], { heroImage: 'directional-image-reveal', image: 'directional-image-reveal', navigation: 'directional-wipe' }, ['glitch', 'hard-flash'], ['strength', 'reliability']],
+    ['automotive', 'Automotive', 'torque', 3, 5, ['auto', 'car', 'cars', 'dealership', 'auto repair', 'mechanic', 'detailing', 'tires', 'collision'], { heroImage: 'mask-reveal', headline: 'editorial-slide', navigation: 'directional-wipe' }, ['hard-flash'], ['power', 'trust']],
+    ['retail', 'Retail & boutique', 'shop-window', 3, 4, ['boutique', 'retail', 'clothing', 'apparel', 'jewelry', 'gift shop', 'store'], { card: 'image-zoom', button: 'light-sweep' }, ['glitch', 'hard-flash'], ['desire', 'discovery']],
+    ['saas', 'SaaS & tech', 'product-clarity', 3, 5, ['saas', 'software', 'mobile app', 'platform', 'startup', 'ai', 'tech', 'api', 'dashboard'], { section: 'slide-reveal', headline: 'word-reveal', card: 'border-trace', button: 'magnetic-button' }, ['hard-flash'], ['clarity', 'momentum']],
+    ['agency', 'Creative agency', 'studio-reel', 4, 5, ['agency', 'creative agency', 'design studio', 'branding', 'marketing agency', 'studio'], { heroImage: 'mask-reveal', headline: 'word-reveal', card: 'subtle-tilt', navigation: 'curtain-transition' }, ['hard-flash'], ['originality', 'confidence']],
+    ['photography-events', 'Photography & events', 'gallery-light', 3, 5, ['photographer', 'photography', 'wedding', 'events', 'event planner', 'venue', 'videographer'], { heroAmbient: 'kenburns', image: 'image-curtain', card: 'image-zoom', navigation: 'cinematic-dissolve' }, ['glitch', 'hard-flash'], ['emotion', 'memory']],
+    ['nightlife', 'Nightlife & entertainment', 'after-dark', 5, 5, ['nightclub', 'club', 'lounge', 'bar', 'nightlife', 'dj', 'concert', 'entertainment', 'hookah', 'gaming', 'esports'], { heroImage: 'mask-reveal', heroAmbient: 'kenburns', headline: 'character-stagger', section: 'blur-reveal', card: 'subtle-tilt', button: 'magnetic-button', navigation: 'controlled-glitch' }, [], ['excitement', 'exclusivity']]
+  ];
+
+  FULL.forEach(function (p) { CFX.registerProfile(p); });
+  BASE.forEach(function (b) {
+    CFX.registerProfile({
+      id: b[0], name: b[1], preset: b[2], status: 'baseline', keywords: b[5],
+      motion: { intensity: b[3], maxIntensity: b[4] }, roles: b[6], avoid: b[7], emotionalGoals: b[8],
+      visualDirection: { mood: 'Baseline profile: motion defaults only. Art direction is set per client.' }
+    });
+  });
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+  var config = CineFX.assemble({ industry: 'restaurant', package: 'essential', purpose: 'ecommerce', device: CineFX.detectDevice() });
+  CineFX.apply(config, document.body);
+  (function () {
+    var head = document.getElementById('head'), hero = document.querySelector('.hero');
+    new IntersectionObserver(function (e) { head.classList.toggle('solid', !e[0].isIntersecting); }, { rootMargin: '-90px 0px 0px 0px' }).observe(hero);
+  })();
+</script>
+</body>
+</html>
