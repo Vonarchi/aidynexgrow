@@ -41,7 +41,41 @@ type OnboardRequest = {
   websiteUrl?: string
 }
 
+type WebsiteSignals = {
+  url: string
+  reachable: boolean
+  https: boolean
+  responseMs?: number
+  htmlKb?: number
+  hasViewport: boolean
+  hasTitle: boolean
+  hasMetaDescription: boolean
+  h1Count: number
+  hasLocalBusinessSchema: boolean
+  hasOgImage: boolean
+  hasClickToCall: boolean
+  hasContactForm: boolean
+  hasPdfMenu: boolean
+  hasOrderingOrBooking: boolean
+  copyrightYear?: number
+  builder?: string
+  socialLinks: { network: string; url: string }[]
+}
+
+type GoogleSignals = {
+  found: boolean
+  rating?: number
+  reviewCount?: number
+  hasHours: boolean
+  hasPhone: boolean
+  hasWebsite: boolean
+  photoCount?: number
+  businessStatus?: string
+}
+
 type PlaceProfile = {
+  websiteSignals?: WebsiteSignals
+  googleSignals?: GoogleSignals
   placeId?: string
   websiteUrl?: string
   sourceSummary?: string
@@ -74,7 +108,7 @@ function inferCategory(name: string) {
   const normalized = name.toLowerCase()
   if (normalized.includes('hvac') || normalized.includes('air') || normalized.includes('heating')) return 'HVAC Services'
   if (normalized.includes('restaurant') || normalized.includes('cafe') || normalized.includes('kitchen')) return 'Restaurant'
-  if (normalized.includes('spa') || normalized.includes('beauty') || normalized.includes('salon')) return 'Beauty and Wellness'
+  if (normalized.includes('spa') || normalized.includes('barber') || normalized.includes('beauty') || normalized.includes('salon')) return 'Beauty and Wellness'
   if (normalized.includes('church') || normalized.includes('ministry')) return 'Church or Ministry'
   if (normalized.includes('realty') || normalized.includes('real estate')) return 'Real Estate'
   return 'Local Business'
@@ -126,6 +160,49 @@ function extractTagText(html: string, tag: string, limit = 5) {
   return matches.map((match) => cleanHtmlText(match[1])).filter(Boolean).slice(0, limit)
 }
 
+const SOCIAL_PATTERNS: [string, RegExp][] = [
+  ['Facebook', /https?:\/\/(?:www\.|m\.)?facebook\.com\/[^"'\s<>]+/i],
+  ['Instagram', /https?:\/\/(?:www\.)?instagram\.com\/[^"'\s<>]+/i],
+  ['TikTok', /https?:\/\/(?:www\.)?tiktok\.com\/@[^"'\s<>]+/i],
+  ['YouTube', /https?:\/\/(?:www\.)?youtube\.com\/[^"'\s<>]+/i],
+  ['X', /https?:\/\/(?:www\.)?(?:twitter|x)\.com\/[^"'\s<>]+/i],
+  ['LinkedIn', /https?:\/\/(?:www\.)?linkedin\.com\/[^"'\s<>]+/i],
+  ['Yelp', /https?:\/\/(?:www\.)?yelp\.com\/biz\/[^"'\s<>]+/i],
+]
+
+function extractWebsiteSignals(html: string, url: string, responseMs: number): WebsiteSignals {
+  const lower = html.toLowerCase()
+  const years = [...html.matchAll(/(?:©|&copy;|copyright)\s*(?:\d{4}\s*[-–]\s*)?(\d{4})/gi)].map((m) => Number(m[1])).filter((y) => y > 1995 && y < 2100)
+  const builders: [string, string][] = [['wix.com', 'Wix'], ['squarespace', 'Squarespace'], ['godaddy', 'GoDaddy'], ['weebly', 'Weebly'], ['wp-content', 'WordPress'], ['shopify', 'Shopify']]
+  return {
+    url,
+    reachable: true,
+    https: url.startsWith('https://'),
+    responseMs,
+    htmlKb: Math.round(html.length / 1024),
+    hasViewport: /<meta[^>]+name=["']viewport["']/i.test(html),
+    hasTitle: /<title[^>]*>\s*[^<\s][^<]*<\/title>/i.test(html),
+    hasMetaDescription: Boolean(extractMeta(html, 'description')),
+    h1Count: (html.match(/<h1[\s>]/gi) ?? []).length,
+    hasLocalBusinessSchema: /application\/ld\+json/i.test(html) && /"@type"\s*:\s*"(?:LocalBusiness|Restaurant|Dentist|MedicalBusiness|HomeAndConstructionBusiness|HVACBusiness|Plumber|RoofingContractor|BeautySalon|HairSalon|AutoRepair|Store|ProfessionalService|[A-Za-z]*Business)"/i.test(html),
+    hasOgImage: Boolean(extractMeta(html, 'og:image')),
+    hasClickToCall: /href=["']tel:/i.test(html),
+    hasContactForm: /<form[\s>]/i.test(html),
+    hasPdfMenu: /href=["'][^"']*menu[^"']*\.pdf/i.test(html) || /href=["'][^"']*\.pdf["'][^>]*>[^<]*menu/i.test(html),
+    hasOrderingOrBooking: /(order online|order now|online ordering|book now|book online|schedule (?:an )?appointment|reserve|reservation|doordash|ubereats|grubhub|toasttab|opentable|calendly|vagaro|booksy|square\.site)/i.test(lower),
+    copyrightYear: years.length ? Math.max(...years) : undefined,
+    builder: builders.find(([needle]) => lower.includes(needle))?.[1],
+    socialLinks: SOCIAL_PATTERNS.flatMap(([network, pattern]) => {
+      const match = html.match(pattern)
+      return match && !/sharer|share\?|intent\/|plugins/i.test(match[0]) ? [{ network, url: match[0] }] : []
+    }),
+  }
+}
+
+function unreachableSignals(url: string): WebsiteSignals {
+  return { url, reachable: false, https: url.startsWith('https://'), hasViewport: false, hasTitle: false, hasMetaDescription: false, h1Count: 0, hasLocalBusinessSchema: false, hasOgImage: false, hasClickToCall: false, hasContactForm: false, hasPdfMenu: false, hasOrderingOrBooking: false, socialLinks: [] }
+}
+
 function fallbackProfile(input: OnboardRequest): PlaceProfile {
   const websiteUrl = input.websiteUrl ?? normalizeWebsiteUrl(input.businessName)
   const submittedName = text(input.businessName)
@@ -137,11 +214,6 @@ function fallbackProfile(input: OnboardRequest): PlaceProfile {
     category: inferCategory(businessName),
     city: 'Your City',
     state: 'Your State',
-    phone: '(555) 010-2026',
-    address: 'Local service area',
-    rating: 4.8,
-    reviewCount: 42,
-    hours: ['Monday-Friday: 9:00 AM - 5:00 PM', 'Saturday: By appointment'],
   }
 }
 
@@ -173,6 +245,17 @@ function normalizePlace(place: Record<string, unknown>, fallback: PlaceProfile):
     rating: typeof place.rating === 'number' ? place.rating : fallback.rating,
     reviewCount: typeof place.userRatingCount === 'number' ? place.userRatingCount : fallback.reviewCount,
     hours,
+    websiteUrl: fallback.websiteUrl ?? (text(place.websiteUri) || undefined),
+    googleSignals: {
+      found: true,
+      rating: typeof place.rating === 'number' ? place.rating : undefined,
+      reviewCount: typeof place.userRatingCount === 'number' ? place.userRatingCount : undefined,
+      hasHours: Array.isArray(hours) && hours.length > 0,
+      hasPhone: Boolean(text(place.nationalPhoneNumber)),
+      hasWebsite: Boolean(text(place.websiteUri)),
+      photoCount: Array.isArray(place.photos) ? place.photos.length : 0,
+      businessStatus: text(place.businessStatus) || undefined,
+    },
   }
 }
 
@@ -183,6 +266,7 @@ async function fetchWebsiteProfile(input: OnboardRequest, fallback: PlaceProfile
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), 6000)
 
+  const startedAt = Date.now()
   try {
     const response = await fetch(websiteUrl, {
       headers: {
@@ -191,9 +275,12 @@ async function fetchWebsiteProfile(input: OnboardRequest, fallback: PlaceProfile
       },
       signal: controller.signal,
     })
-    if (!response.ok) return { ...fallback, websiteUrl }
+    if (!response.ok) return { ...fallback, websiteUrl, websiteSignals: unreachableSignals(websiteUrl) }
 
-    const html = (await response.text()).slice(0, 300000)
+    const fullHtml = await response.text()
+    const websiteSignals = extractWebsiteSignals(fullHtml, response.url || websiteUrl, Date.now() - startedAt)
+    websiteSignals.htmlKb = Math.round(fullHtml.length / 1024)
+    const html = fullHtml.slice(0, 300000)
     const title = cleanHtmlText(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || '')
     const description = extractMeta(html, 'description') || extractMeta(html, 'og:description')
     const headings = [...extractTagText(html, 'h1', 4), ...extractTagText(html, 'h2', 6)].filter(Boolean).slice(0, 8)
@@ -204,6 +291,7 @@ async function fetchWebsiteProfile(input: OnboardRequest, fallback: PlaceProfile
     return {
       ...fallback,
       websiteUrl,
+      websiteSignals,
       businessName: businessName || hostname || fallback.businessName,
       category: inferCategory(sourceText || fallback.businessName),
       sourceTitle: title,
@@ -213,17 +301,19 @@ async function fetchWebsiteProfile(input: OnboardRequest, fallback: PlaceProfile
     }
   } catch (error) {
     console.warn('Website analysis failed:', error)
-    return { ...fallback, websiteUrl, sourceSummary: `Existing website detected at ${websiteUrl}, but the page could not be fully analyzed.` }
+    return { ...fallback, websiteUrl, websiteSignals: unreachableSignals(websiteUrl), sourceSummary: `Existing website detected at ${websiteUrl}, but the page could not be fully analyzed.` }
   } finally {
     clearTimeout(timeout)
   }
 }
 
+const notFoundOnGoogle: GoogleSignals = { found: false, hasHours: false, hasPhone: false, hasWebsite: false }
+
 async function fetchPlaceProfile(input: OnboardRequest, fallback: PlaceProfile) {
   const apiKey = Deno.env.get('GOOGLE_PLACES_API_KEY')
   if (!apiKey) return fallback
 
-  const fields = 'id,displayName,formattedAddress,nationalPhoneNumber,rating,userRatingCount,types,regularOpeningHours'
+  const fields = 'id,displayName,formattedAddress,nationalPhoneNumber,rating,userRatingCount,types,regularOpeningHours,websiteUri,photos,businessStatus'
   const searchFields = fields.split(',').map((field) => `places.${field}`).join(',')
 
   try {
@@ -234,7 +324,7 @@ async function fetchPlaceProfile(input: OnboardRequest, fallback: PlaceProfile) 
           'X-Goog-FieldMask': fields,
         },
       })
-      if (!response.ok) return fallback
+      if (!response.ok) return { ...fallback, googleSignals: notFoundOnGoogle }
       return normalizePlace(await response.json(), fallback)
     }
 
@@ -248,16 +338,27 @@ async function fetchPlaceProfile(input: OnboardRequest, fallback: PlaceProfile) 
         },
         body: JSON.stringify({ textQuery: input.businessName, maxResultCount: 1 }),
       })
-      if (!response.ok) return fallback
+      if (!response.ok) return { ...fallback, googleSignals: notFoundOnGoogle }
       const data = await response.json()
       const place = Array.isArray(data.places) ? data.places[0] : null
-      return place ? normalizePlace(place, fallback) : fallback
+      return place ? normalizePlace(place, fallback) : { ...fallback, googleSignals: notFoundOnGoogle }
     }
   } catch (error) {
     console.warn('Google Places lookup failed:', error)
   }
 
   return fallback
+}
+
+function customerCopy(profile: PlaceProfile) {
+  const c = profile.category.toLowerCase()
+  const where = profile.city && profile.city !== 'Your City' ? ` in ${profile.city}` : ''
+  if (/dent|medical|clinic|doctor|health|chiro|physical/.test(c)) return { heroHeadline: 'Gentle care for the whole family.', heroSubheadline: `Modern, comfortable care${where}. New patients welcome, and booking takes a minute.`, services: ['New patient visits', 'Preventive care', 'Same-week appointments'] }
+  if (/hvac|heating|air|plumb|roof|electric|contractor|repair|clean|landscap|construction/.test(c)) return { heroHeadline: 'Fast, honest service when you need it.', heroSubheadline: `Licensed local pros${where}. Upfront pricing, on-time arrivals and work we stand behind.`, services: ['Emergency service', 'Repairs & installs', 'Free estimates'] }
+  if (/beauty|salon|barber|spa|nail|wellness|hair/.test(c)) return { heroHeadline: 'Look good. Feel even better.', heroSubheadline: `Skilled stylists and a space made for you${where}. Book online in seconds.`, services: ['Cuts & styling', 'Color & treatments', 'Online booking'] }
+  if (/restaurant|cafe|food|bakery|pizza|grill|kitchen|diner|\bbar\b/.test(c)) return { heroHeadline: 'Great food, close to home.', heroSubheadline: `Fresh plates, friendly faces and easy online ordering${where}. Order ahead and skip the wait.`, services: ['Dine in', 'Order pickup', 'Catering & events'] }
+  if (/church|ministry|worship/.test(c)) return { heroHeadline: "There's a place for you here.", heroSubheadline: `A welcoming church family${where}. Join us this Sunday, in person or online.`, services: ['Sunday service', 'Youth & family', 'Give online'] }
+  return { heroHeadline: `${profile.businessName}, ready when you are.`, heroSubheadline: `Trusted local service${where}. Get in touch today and see why customers keep coming back.`, services: ['What we do', 'Why customers choose us', 'Get in touch'] }
 }
 
 function fallbackSite(profile: PlaceProfile): GeneratedSiteContext {
@@ -274,9 +375,7 @@ function fallbackSite(profile: PlaceProfile): GeneratedSiteContext {
     recommendedActions: isUpgradePreview
       ? ['Rewrite the hero section around the strongest customer outcome', 'Add a conversion-focused lead form or booking path', 'Improve service sections and trust signals', 'Add analytics and automated customer follow-up']
       : ['Launch a professional five-page website', 'Add a contact form and click-to-call paths', 'Set up basic SEO and Google-ready structure', 'Prepare launch membership and onboarding assets'],
-    heroHeadline: isUpgradePreview ? `Upgrade ${profile.businessName} into a website that converts more visitors.` : `${profile.businessName} deserves a website that turns visitors into customers.`,
-    heroSubheadline: isUpgradePreview ? `A generated upgrade preview based on signals found at ${profile.websiteUrl}. Built to sharpen your offer, improve trust, and create a clearer path to new leads.` : `A polished ${profile.category.toLowerCase()} website preview built for credibility, local search, and easier lead capture in ${profile.city}, ${profile.state}.`,
-    services: isUpgradePreview ? ['Clearer homepage offer', 'Stronger lead capture path', 'Mobile-first service sections', 'Local SEO and trust signals'] : ['Professional service pages', 'Lead capture and contact forms', 'Mobile-friendly layout', 'Google-ready local SEO'],
+    ...customerCopy(profile),
     metaTitle: `${profile.businessName} | ${profile.category} in ${profile.city}, ${profile.state}`,
     metaDescription: isUpgradePreview ? `Generated website upgrade preview for ${profile.businessName}, based on the current website and focused on clearer messaging, lead capture, and conversion.` : `Discover ${profile.businessName}, a ${profile.category.toLowerCase()} serving ${profile.city}, ${profile.state}. Request information, view services, and connect online.`,
     colors: {
@@ -307,7 +406,7 @@ async function generateCopyWithOpenAI(profile: PlaceProfile, fallback: Generated
         messages: [
           {
             role: 'system',
-            content: 'Return only valid JSON for a local business website preview. Keep language professional, specific, and concise.',
+            content: 'Return only valid JSON for a local business website preview. heroHeadline, heroSubheadline and services are the business\'s OWN website copy, written to its customers (not a pitch to the owner). opportunities and recommendedActions are notes to the owner. Never invent facts such as years in business, awards, prices or reviews. Keep language warm, specific and concise.',
           },
           {
             role: 'user',
@@ -371,10 +470,23 @@ Deno.serve(async (request) => {
 
     const fallback = fallbackProfile(input)
     const websiteProfile = await fetchWebsiteProfile(input, fallback)
-    const profile = await fetchPlaceProfile({ ...input, businessName: websiteProfile.businessName }, websiteProfile)
-    const site = await generateCopyWithOpenAI(profile, fallbackSite(profile))
+    let profile = await fetchPlaceProfile({ ...input, businessName: websiteProfile.businessName }, websiteProfile)
+    if (!profile.websiteSignals && profile.websiteUrl) {
+      const scanned = await fetchWebsiteProfile({ ...input, websiteUrl: profile.websiteUrl }, profile)
+      profile = { ...profile, websiteSignals: scanned.websiteSignals, sourceSummary: scanned.sourceSummary ?? profile.sourceSummary }
+    }
+    const { websiteSignals, googleSignals, ...publicProfile } = profile
+    const site = await generateCopyWithOpenAI(publicProfile, fallbackSite(publicProfile))
 
-    return jsonResponse(site)
+    return jsonResponse({
+      ...site,
+      signals: {
+        scannedAt: new Date().toISOString(),
+        website: websiteSignals ?? null,
+        google: googleSignals ?? null,
+        googleChecked: Boolean(Deno.env.get('GOOGLE_PLACES_API_KEY')),
+      },
+    })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unable to generate onboarding preview.'
     return jsonResponse({ error: message }, 400)
