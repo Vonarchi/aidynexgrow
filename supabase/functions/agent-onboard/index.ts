@@ -137,11 +137,6 @@ function fallbackProfile(input: OnboardRequest): PlaceProfile {
     category: inferCategory(businessName),
     city: 'Your City',
     state: 'Your State',
-    phone: '(555) 010-2026',
-    address: 'Local service area',
-    rating: 4.8,
-    reviewCount: 42,
-    hours: ['Monday-Friday: 9:00 AM - 5:00 PM', 'Saturday: By appointment'],
   }
 }
 
