@@ -39,7 +39,7 @@ export function SitePreviewFrame({ site, showFullPreviewLink = true }: { site: G
           <h4 className="max-w-xl text-4xl font-black leading-tight tracking-tight">{site.heroHeadline}</h4>
           <p className="mt-4 max-w-xl text-sm leading-6 opacity-80">{site.heroSubheadline}</p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <a href={`tel:${site.phone ?? ''}`} className="rounded-full px-5 py-3 text-sm font-black text-white shadow-sm" style={{ background: site.colors.primary }}><Phone className="mr-2 inline" size={15} /> Call Now</a>
+            {site.phone && <a href={`tel:${site.phone}`} className="rounded-full px-5 py-3 text-sm font-black text-white shadow-sm" style={{ background: site.colors.primary }}><Phone className="mr-2 inline" size={15} /> Call Now</a>}
             <button className="rounded-full bg-white px-5 py-3 text-sm font-black shadow-sm" type="button">Request Estimate</button>
           </div>
         </div>
@@ -72,7 +72,7 @@ export function SitePreviewFrame({ site, showFullPreviewLink = true }: { site: G
 
           <div className="rounded-3xl border border-slate-200 p-5">
             <div className="mb-2 flex items-center gap-2 text-amber-500"><Star size={18} fill="currentColor" /><span className="font-black text-navy-950">{ratingLabel(site)}</span></div>
-            <p className="text-sm leading-6 text-slate-600">{site.address ?? 'Service area available after profile verification.'}</p>
+            <p className="text-sm leading-6 text-slate-600">{site.address || 'Service area available after profile verification.'}</p>
           </div>
 
           <div className="rounded-3xl border border-slate-200 p-5">
