@@ -339,3 +339,4 @@
 .adx .x-addon > div { display: grid; gap: 4px; } .adx .x-addon b { font-size: 18px; } .adx .x-addon span:not(.x-tag) { color: var(--text-2); font-size: 14px; }
 .adx .x-addon .x-tag { background: #F5C542; color: #1a1300; border-color: #F5C542; }
 .adx .x-addon em { font-style: normal; font-family: var(--mono); color: #F5C542; white-space: nowrap; }
+.adx .x-addon .x-tag { justify-self: start; }
