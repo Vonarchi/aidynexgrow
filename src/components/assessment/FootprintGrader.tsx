@@ -5,7 +5,7 @@ import { gradeFootprint } from '../../lib/assessment/gradeFootprint'
 import type { FootprintGrade, LetterGrade } from '../../lib/assessment/gradeFootprint'
 import type { GeneratedSiteContext } from '../../types/generatedSite'
 import { UpgradeSlider } from './UpgradeSlider'
-import { offers, priceLabel, recommendFor } from '../../data/offers'
+import { isRestaurant, offers, priceLabel, recommendFor } from '../../data/offers'
 
 export const CONTACT_EMAIL = 'james@adynexsystems.com'
 
@@ -49,9 +49,11 @@ function GradeReport({ grade }: { grade: FootprintGrade }) {
   </div>
 }
 
-function Offers({ grade }: { grade: FootprintGrade }) {
+function Offers({ grade, site }: { grade: FootprintGrade; site: GeneratedSiteContext }) {
   const { primary, extras } = recommendFor(grade)
-  const others = Object.values(offers).filter((o) => o.key !== primary.key && !extras.some((e) => e.key === o.key))
+  const restaurant = isRestaurant(site.category)
+  const kk = offers.kiokitchen
+  const others = Object.values(offers).filter((o) => o.key !== 'kiokitchen' && o.key !== primary.key && !extras.some((e) => e.key === o.key))
   return <div className="x-offers">
     <div className="x-head">
       <div><div className="x-eyebrow">Your fix</div><h2 className="x-title" style={{ marginTop: 12 }}>Turn your {grade.letter} into an <em>A.</em></h2></div>
@@ -71,6 +73,10 @@ function Offers({ grade }: { grade: FootprintGrade }) {
         <span className="x-fine">Secure checkout by Stripe</span>
       </div>
     </div>
+    {restaurant && <a href={kk.checkout} className="x-addon x-glass">
+      <div><span className="x-tag">Restaurants</span><b>{kk.name}</b><span>{kk.result}. {kk.when}.</span></div>
+      <em>${kk.monthly}/mo →</em>
+    </a>}
     {extras.length > 0 && <p className="x-also">{primary.key === 'all_in_growth' ? 'Includes everything your scan flagged: ' : 'Also flagged in your scan: '}{extras.map((e) => e.name).join(', ')}.</p>}
     <div className="x-mini-grid">
       {[...extras.filter(() => primary.key !== 'all_in_growth'), ...others].map((o) => <a key={o.key} href={o.checkout} className="x-mini x-glass">
@@ -136,7 +142,7 @@ export function FootprintGrader() {
           </div>
           <UpgradeSlider site={site} grade={grade} />
         </div>
-        <Offers grade={grade} />
+        <Offers grade={grade} site={site} />
       </>}
     </div>
   </>

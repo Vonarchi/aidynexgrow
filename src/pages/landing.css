@@ -335,3 +335,7 @@
 .adx .x-allin-price { text-align: right; } .adx .x-allin-price span { color: var(--violet); font-size: 14px; }
 .adx .x-allin .x-tag { background: var(--violet); color: #120a24; border-color: var(--violet); }
 .adx .x-agents { align-items: start; }
+.adx .x-addon { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 14px; padding: 18px 22px; border-color: rgba(245,197,66,.4); background: radial-gradient(120% 160% at 0% 0%, rgba(245,197,66,.14), transparent 60%), var(--glass); }
+.adx .x-addon > div { display: grid; gap: 4px; } .adx .x-addon b { font-size: 18px; } .adx .x-addon span:not(.x-tag) { color: var(--text-2); font-size: 14px; }
+.adx .x-addon .x-tag { background: #F5C542; color: #1a1300; border-color: #F5C542; }
+.adx .x-addon em { font-style: normal; font-family: var(--mono); color: #F5C542; white-space: nowrap; }

@@ -99,7 +99,7 @@ export function LandingPage() {
           <div className="x-allin-price"><div className="x-amt">${offers.all_in_growth.setup}<small> + ${offers.all_in_growth.monthly}/mo</small></div><span>{offers.all_in_growth.when}</span></div>
         </a>
         <div className="x-mini-grid">
-          {(['google_fix', 'website_makeover', 'ai_front_desk', 'cinematic_ad', 'ad_studio'] as const).map((k) => offers[k]).map((o) => <a key={o.key} href={o.checkout} className="x-mini x-glass x-reveal">
+          {(['google_fix', 'website_makeover', 'ai_front_desk', 'cinematic_ad', 'ad_studio', 'kiokitchen'] as const).map((k) => offers[k]).map((o) => <a key={o.key} href={o.checkout} className="x-mini x-glass x-reveal">
             <b>{o.name}</b><span>{o.result}</span><em>{priceLabel(o)}</em>
           </a>)}
         </div>

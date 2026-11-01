@@ -3,7 +3,7 @@ import type { CategoryKey, FootprintGrade } from '../lib/assessment/gradeFootpri
 // Adynex offer lineup (Nov 2026). Checkout links are live Stripe Payment Links.
 // Monthly plans start 30 days after purchase, so the first month is free.
 
-export type OfferKey = 'google_fix' | 'website_makeover' | 'ai_front_desk' | 'cinematic_ad' | 'ad_studio' | 'all_in_growth'
+export type OfferKey = 'kiokitchen' | 'google_fix' | 'website_makeover' | 'ai_front_desk' | 'cinematic_ad' | 'ad_studio' | 'all_in_growth'
 
 export type Offer = {
   key: OfferKey
@@ -18,6 +18,12 @@ export type Offer = {
 }
 
 export const offers: Record<OfferKey, Offer> = {
+  kiokitchen: {
+    key: 'kiokitchen', name: 'KioKitchen Online Ordering', result: 'Take orders from your phone with zero commission',
+    monthly: 99, when: 'Digital menu free forever · first month of ordering free',
+    items: ['Free QR digital menu', 'Online ordering and payments', 'No per-order fees, ever', 'Orders straight to your phone'],
+    checkout: 'https://buy.stripe.com/fZu3cvcmm6qM2iad2IdQQ06', fixes: [],
+  },
   google_fix: {
     key: 'google_fix', name: 'Google Fix', result: 'Show up right on Google Maps',
     setup: 297, when: 'Live in 48 hours',
@@ -71,3 +77,5 @@ export function recommendFor(grade: FootprintGrade): { primary: Offer; extras: O
   const [first, ...rest] = picks
   return { primary: offers[first], extras: rest.map((k) => offers[k]) }
 }
+
+export const isRestaurant = (category: string) => /restaurant|cafe|food|bakery|pizza|grill|kitchen|diner|\bbar\b|bbq|wings|taco|burger/i.test(category)
