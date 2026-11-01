@@ -1,3 +1,5 @@
+import type { FootprintSignals } from '../lib/assessment/gradeFootprint'
+
 export type AgentStepStatus = 'pending' | 'running' | 'complete' | 'error'
 
 export type AgentStep = {
@@ -36,4 +38,5 @@ export type GeneratedSiteContext = {
   }
   images: string[]
   recommendedPlan: 'Launch' | 'Accelerate' | 'Scale' | 'Enterprise'
+  signals?: FootprintSignals
 }

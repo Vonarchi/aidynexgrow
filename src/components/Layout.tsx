@@ -1,5 +1,5 @@
 import { Link, NavLink } from 'react-router-dom'
-import { ArrowRight, Building2, LockKeyhole, Menu, X } from 'lucide-react'
+import { ArrowRight, LockKeyhole, Menu, X } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useAuth } from '../lib/auth'
 import { cn, getInitials } from '../lib/utils'
@@ -8,35 +8,34 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false)
   const { user, profile, isAdmin, signOut } = useAuth()
   const links = [
-    ['How It Works', '/#how-it-works'],
-    ['What Is Included', '/#included'],
-    ['Examples', '/#examples'],
-    ['Growth Options', '/#packages'],
+    ['How It Works', '/#how'],
+    ['Automations', '/#automations'],
+    ['Pricing', '/#pricing'],
     ['FAQ', '/#faq'],
   ]
   return (
-    <header className="sticky top-0 z-50 border-b border-amber-200/70 bg-[linear-gradient(135deg,#ffb84d_0%,#ffc857_46%,#ff8a3d_100%)] text-navy-950 shadow-[0_10px_35px_rgba(255,184,77,.28)]">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#06070A]/95 text-white backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-3 font-semibold">
-          <span className="grid size-10 place-items-center rounded-2xl bg-navy-950 text-gold-500"><Building2 size={21} /></span>
-          <span><span className="block text-sm uppercase tracking-[0.28em] text-navy-900/75">Business Launch</span><span className="text-lg">Initiative</span></span>
+          <span className="size-7 rounded-lg bg-[conic-gradient(from_210deg,#2EE6A6,#38D6F5,#A78BFA,#2EE6A6)]" />
+          <span className="text-lg">Adynex Systems</span>
         </Link>
-        <nav className="hidden items-center gap-7 text-sm font-semibold text-navy-900/80 lg:flex">
-          {links.map(([label, href]) => <a key={label} href={href} className="hover:text-navy-950">{label}</a>)}
-          {isAdmin && <NavLink to="/admin" className="hover:text-navy-950">Admin</NavLink>}
-          {user ? <NavLink to="/dashboard" className="hover:text-navy-950">Dashboard</NavLink> : <NavLink to="/auth" className="hover:text-navy-950">Sign In</NavLink>}
+        <nav className="hidden items-center gap-7 text-sm font-semibold text-white/70 lg:flex">
+          {links.map(([label, href]) => <a key={label} href={href} className="hover:text-white">{label}</a>)}
+          {isAdmin && <NavLink to="/admin" className="hover:text-white">Admin</NavLink>}
+          {user ? <NavLink to="/dashboard" className="hover:text-white">Dashboard</NavLink> : <NavLink to="/auth" className="hover:text-white">Sign In</NavLink>}
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
-          {user && <span className="grid size-9 place-items-center rounded-full bg-navy-950/10 text-xs font-bold">{getInitials(profile?.full_name)}</span>}
-          <Link to="/apply" className="inline-flex items-center gap-2 rounded-full bg-navy-950 px-5 py-3 text-sm font-semibold text-white shadow-xl shadow-orange-950/20 hover:bg-navy-900">Start My Application <ArrowRight size={16} /></Link>
-          {user && <button onClick={signOut} className="text-xs font-semibold text-navy-900/75 hover:text-navy-950">Sign out</button>}
+          {user && <span className="grid size-9 place-items-center rounded-full bg-white/10 text-xs font-bold">{getInitials(profile?.full_name)}</span>}
+          <a href="/#contact" className="inline-flex items-center gap-2 rounded-full bg-[#2EE6A6] px-5 py-3 text-sm font-semibold text-[#04140D] hover:brightness-110">Get my real preview <ArrowRight size={16} /></a>
+          {user && <button onClick={signOut} className="text-xs font-semibold text-white/60 hover:text-white">Sign out</button>}
         </div>
         <button className="lg:hidden" onClick={() => setOpen(!open)} aria-label="Open menu">{open ? <X /> : <Menu />}</button>
       </div>
-      {open && <div className="border-t border-amber-200/70 bg-[#ffb84d] px-4 py-5 lg:hidden">
-        <div className="grid gap-3 text-sm font-semibold text-navy-950">
+      {open && <div className="border-t border-white/10 bg-[#06070A] px-4 py-5 lg:hidden">
+        <div className="grid gap-3 text-sm font-semibold text-white">
           {links.map(([label, href]) => <a key={label} href={href} onClick={() => setOpen(false)}>{label}</a>)}
-          <Link to="/apply" className="rounded-full bg-navy-950 px-4 py-3 text-center font-semibold text-white">Start My Application</Link>
+          <a href="/#contact" className="rounded-full bg-[#2EE6A6] px-4 py-3 text-center font-semibold text-[#04140D]">Get my real preview</a>
           <Link to={user ? '/dashboard' : '/auth'}>{user ? 'Dashboard' : 'Sign In'}</Link>
           {isAdmin && <Link to="/admin">Admin</Link>}
         </div>
@@ -55,7 +54,7 @@ export function DashboardLayout({ children, title, subtitle, actions }: { childr
     <PageShell>
       <div className="border-b bg-white">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-          <Link to="/" className="flex items-center gap-3 font-semibold text-navy-950"><span className="grid size-10 place-items-center rounded-2xl bg-navy-950 text-gold-500"><Building2 size={20} /></span>Business Launch Initiative</Link>
+          <Link to="/" className="flex items-center gap-3 font-semibold text-navy-950"><span className="size-7 rounded-lg bg-[conic-gradient(from_210deg,#2EE6A6,#38D6F5,#A78BFA,#2EE6A6)]" />Adynex Systems</Link>
           <div className="flex flex-wrap items-center gap-3 text-sm">
             <Link to="/dashboard" className="rounded-full px-4 py-2 hover:bg-cloud-100">Client Dashboard</Link>
             {isAdmin && <Link to="/admin" className="rounded-full px-4 py-2 hover:bg-cloud-100">Admin</Link>}
@@ -85,5 +84,5 @@ export function Footer() {
     ['Accessibility', '/accessibility'],
     ['Contact', '/contact'],
   ]
-  return <footer className="bg-navy-950 px-4 py-12 text-white"><div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-4"><div><h3 className="text-xl font-semibold">Business Launch Initiative</h3><p className="mt-3 text-sm text-slate-300">A digital business-launch program helping small businesses launch, look credible, get discovered, and grow online.</p></div><div><p className="font-semibold">Important</p><p className="mt-3 text-sm text-slate-300">Website design and the initial standard build may be included for approved applicants. The Business Launch Membership is required for launch at $34/month and includes managed hosting, SSL, backups, security monitoring, client portal access, technical maintenance, and platform updates. Domain registration, premium integrations, custom functionality, and advanced services may require separate payment.</p></div><div><p className="font-semibold">Policies</p><div className="mt-3 grid gap-2 text-sm">{policyLinks.map(([label, to]) => <Link key={to} to={to} className="text-slate-300 hover:text-white">{label}</Link>)}</div></div><div><p className="font-semibold">Next Step</p><Link to="/apply" className="mt-3 inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-navy-950">Start My Application</Link></div></div></footer>
+  return <footer className="bg-navy-950 px-4 py-12 text-white"><div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-4"><div><h3 className="text-xl font-semibold">Adynex Systems</h3><p className="mt-3 text-sm text-slate-300">Websites, Google presence and business automation for local businesses in Northwest Indiana and Chicagoland.</p></div><div><p className="font-semibold">How it works</p><p className="mt-3 text-sm text-slate-300">Every project starts with a free preview of your new site. You only pay once you have seen it and approved it. Domain registration and third-party services may be billed separately.</p></div><div><p className="font-semibold">Policies</p><div className="mt-3 grid gap-2 text-sm">{policyLinks.map(([label, to]) => <Link key={to} to={to} className="text-slate-300 hover:text-white">{label}</Link>)}</div></div><div><p className="font-semibold">Next Step</p><a href="/#contact" className="mt-3 inline-flex rounded-full bg-[#2EE6A6] px-5 py-3 text-sm font-semibold text-[#04140D]">Get my free preview</a></div></div></footer>
 }

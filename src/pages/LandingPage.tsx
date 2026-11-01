@@ -1,330 +1,164 @@
-import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { ArrowRight, Check, CheckCircle2, ClipboardCheck, Globe2, Info, Laptop, MessageSquare, Search, ShieldCheck, Smartphone, Sparkles, Wrench, X } from 'lucide-react'
-import { Footer, PageShell, SiteHeader } from '../components/Layout'
-import { AgenticHeroInput } from '../components/onboarding/AgenticHeroInput'
-import { Badge, CTAButton, FeatureCard, Section } from '../components/UI'
-import { demoData } from '../data/demoData'
-import { getPlatformSnapshot } from '../lib/platformService'
-import type { PlatformSnapshot, PortfolioItem } from '../types/platform'
+import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { CONTACT_EMAIL, FootprintGrader } from '../components/assessment/FootprintGrader'
+import { beforeAfterWork, products, screenshotOf, siteWork } from '../data/work'
+import { offers, priceLabel } from '../data/offers'
+import { AdShowcase } from '../components/showcase/AdShowcase'
+import './landing.css'
 
-const included = [
-  ['Professionally designed homepage', 'A polished first impression built around your business, offer, and next step.'],
-  ['Up to five standard pages', 'Common pages include Home, About, Services, Work, Contact, FAQ, or similar standard content pages.'],
-  ['Mobile-responsive design', 'Your site automatically adapts to phones, tablets, laptops, and desktop screens.'],
-  ['Contact or lead-capture form', 'Give visitors a clear way to request information, quotes, appointments, or next steps.'],
-  ['Click-to-call functionality', 'Phone links are formatted so mobile visitors can contact your business quickly.'],
-  ['Social media links', 'Connect visitors to your existing business profiles where appropriate.'],
-  ['Google Maps integration', 'Help customers understand your service area or physical location.'],
-  ['Basic search-engine setup', 'Includes page titles, descriptions, heading structure, image alt text, and search-friendly page organization. Rankings are not guaranteed.'],
-  ['SSL security', 'The launched site should use secure HTTPS when hosted on an approved platform.'],
-  ['One standard revision round', 'A focused round of changes is included so the final site reflects your approved content and goals.'],
-  ['Website launch assistance', 'Support for final checks, launch coordination, and next-step guidance.'],
-] as const
-const qualifies = ['Legitimate businesses, organizations, ministries, professionals, and entrepreneurs', 'Businesses that can provide accurate contact and service information', 'Applicants prepared to submit content and feedback promptly', 'Businesses willing to maintain the Business Launch Membership or an approved upgraded plan for a launched website', 'Owners ready to launch within the stated production window']
-const notRightFit = ['You need advanced custom software under the standard website offer', 'You need unlimited revisions', 'You cannot provide required business information', 'You are not prepared to respond during onboarding', 'You expect paid third-party services to be included at no cost']
-const categories = ['View All', 'Professional Services', 'Restaurants', 'Beauty and Wellness', 'Contractors', 'Transportation', 'Nonprofits', 'Entertainment', 'Churches', 'Coaches', 'Real Estate', 'Retail', 'Education', 'Healthcare']
-const trustItems = [
-  ['Professional Designs', Sparkles],
-  ['Mobile Responsive', Smartphone],
-  ['Lead Capture Ready', MessageSquare],
-  ['Secure Launch Membership', ShieldCheck],
-  ['No Upfront Design Fee', CheckCircle2],
-] as const
-const conversionSteps = [
-  ['1. Enter URL', 'Paste an existing website or enter a business name.'],
-  ['2. Preview', 'Review a generated upgrade preview before payment.'],
-  ['3. Apply', 'Continue only when you are ready for review and onboarding.'],
-] as const
-const process = [
-  ['Preview', 'Start with an AI-generated website preview so you can see the direction before filling out the full application.'],
-  ['Apply', 'Tell us about your business, goals, current digital presence, and the type of launch support you need.'],
-  ['Get Your Assessment', 'Our team reviews your application and identifies opportunities to help your business grow online.'],
-  ['Review and Launch', 'Confirm your Business Launch Membership or upgraded plan, complete onboarding, and approve your site for launch.'],
-] as const
-const offers = [
-  {
-    title: 'Launch',
-    label: 'No Upfront Design Fee',
-    price: '$34/month',
-    description: 'Perfect for startups and small businesses looking to establish a professional online presence.',
-    features: ['No upfront website design fee', 'Up to 5 professionally designed pages', 'Mobile-responsive design', 'Contact and lead form', 'Google Maps integration', 'SSL security', 'Basic SEO setup', 'One revision round', 'Standard production queue', 'Client portal', 'Business Launch Membership', 'Managed hosting', 'Daily backups', 'Website security monitoring'],
-    cta: 'Start My Application',
-    to: '/apply',
-  },
-  {
-    title: 'Accelerate',
-    label: 'Most Popular',
-    price: '$99/month',
-    description: 'For businesses that want a faster, more customized launch path with stronger creative support.',
-    features: ['Everything in Launch', 'Priority build queue', 'Launch in 3-5 business days target', 'Premium template library', 'Expanded customization', 'Copywriting assistance', 'Additional revisions', 'Enhanced onboarding', 'AI-generated business copy', 'Premium animations', 'Better support'],
-    cta: 'Upgrade My Launch',
-    to: '/apply',
-  },
-  {
-    title: 'Scale',
-    label: 'Growth System',
-    price: '$249/month',
-    description: 'Your outsourced digital marketing department for ongoing improvement, automation, and lead capture.',
-    features: ['Everything in Accelerate', 'Monthly website updates', 'Managed hosting', 'Maintenance', 'Performance monitoring', 'Advanced SEO', 'Google Business Profile optimization', 'CRM integration', 'AI chatbot', 'Appointment booking', 'Email automation', 'Analytics dashboard', 'Monthly business review', 'Priority support'],
-    cta: 'Choose Scale Plan',
-    to: '#growth-services',
-  },
-  {
-    title: 'Enterprise',
-    label: 'Custom Proposal',
-    price: 'Starting at $1,500+',
-    description: 'Custom software and automation for businesses that need systems beyond a standard website.',
-    features: ['Customer portals', 'Employee dashboards', 'Mobile apps', 'Scheduling software', 'Restaurant ordering', 'Membership systems', 'AI automation', 'Internal dashboards', 'Business management systems'],
-    cta: 'Schedule Strategy Session',
-    to: '/software-consultation',
-  },
-] as const
-const platformFeatures = [
-  ['Business Launch Membership', 'Managed hosting, SSL, backups, client portal access, technical maintenance, security monitoring, and platform updates.'],
-  ['Website Maintenance', 'Keep content, plugins, security, and routine updates from becoming a distraction.'],
-  ['Appointment Booking', 'Add scheduling paths that reduce back-and-forth and help customers take action.'],
-  ['Lead Management', 'Route inquiries into a more organized follow-up process as your business grows.'],
-  ['AI Chatbot', 'Support common questions and lead qualification with automation when it fits the business.'],
-  ['Email Automation', 'Prepare follow-up, onboarding, and customer communication workflows.'],
-  ['Reputation Tools', 'Support review collection, credibility signals, and customer trust-building.'],
-  ['Custom Business Software', 'Plan portals, dashboards, ordering systems, mobile apps, and operational tools.'],
-] as const
-const faq = [
-  ['Is the website really free?', 'The website design and initial standard build have no upfront design fee for approved applicants. A Business Launch Membership is required for launch because every live website needs hosting, security, backups, and technical maintenance.'],
-  ['What do I have to pay for?', 'The Launch plan uses a $34/month Business Launch Membership that includes managed hosting, SSL, backups, security monitoring, client portal access, technical maintenance, and platform updates. Accelerate, Scale, and Enterprise options add more support and growth features.'],
-  ['Do I have to purchase hosting?', 'Approved websites launched through this program use the Business Launch Membership at $34/month. Hosting is included as one of the membership benefits, along with SSL, backups, monitoring, maintenance, and platform support.'],
-  ['Can I use my existing domain?', 'Yes. We can help connect an existing domain during launch.'],
-  ['How long will the website take?', 'Timing depends on application review, content readiness, queue capacity, and the selected launch option. You will receive next-step guidance after review.'],
-  ['How many pages are included?', 'The standard website build includes up to five standard pages for approved applicants. Larger scopes may require a premium plan or custom quote.'],
-  ['What information do I need to provide?', 'Be prepared to provide accurate contact information, services, business details, logo files, photos, desired pages, and any existing domain information.'],
-  ['How many revisions are included?', 'Standard website builds include one standard revision round. Additional revisions may require an upgraded plan or separate approval.'],
-  ['Can you write my content?', 'Basic guidance is included. Custom copywriting is available as an optional paid service.'],
-  ['Can you build an online store?', 'Basic ecommerce may be possible as an upgrade. Large stores and marketplaces are custom paid projects.'],
-  ['What happens after the website launches?', 'You can stay on Launch or upgrade into Accelerate or Scale for updates, SEO, analytics, booking, automation, CRM, email follow-up, and growth support.'],
-  ['Can I upgrade later?', 'Yes. You can move from Launch to Accelerate, Scale, or Enterprise as your business needs more support, automation, custom features, or software.'],
-  ['Do you build web applications?', 'Yes. Customer portals, dashboards, marketplaces, booking systems, AI tools, and mobile apps are quoted separately.'],
-  ['Who owns the completed website?', 'Ownership and access details are handled in the project terms and depend on selected membership, tools, and third-party services.'],
-  ['Are all applications approved?', 'No. Applications are reviewed for fit, readiness, capacity, and scope. Approval is not guaranteed.'],
-  ['Do you guarantee leads or search rankings?', 'No. The site is built to improve credibility, clarity, and discoverability, but leads, revenue, approvals, completion dates, and search placement are not guaranteed.'],
-  ['What happens if I do not submit my content?', 'Projects waiting on content can be paused or skipped temporarily so ready projects can keep moving.'],
-  ['Can an existing website be redesigned?', 'Yes. Existing websites can be reviewed during the application process, but redesign scope and migration needs may affect the launch path.'],
-]
+// Homepage: one job. Drop in a business name or URL → get a grade → see the upgrade → see our work.
 
-const heroSequence = [
-  { src: '/hero-cinematic/eye-surveillance.png', className: 'cinematic-eye-frame', position: 'object-[52%_50%]' },
-  { src: '/hero-cinematic/flooded-futuristic-city.png', className: 'cinematic-flood-frame', position: 'object-[52%_50%]' },
-  { src: '/hero-cinematic/robot-delivering-groceries.png', className: 'cinematic-grocery-robot-frame', position: 'object-[45%_50%] sm:object-center' },
-  { src: '/hero-cinematic/autonomous-mercedes.png', className: 'cinematic-mercedes-frame', position: 'object-[54%_50%]' },
-  { src: '/hero-cinematic/mercedes-delivery-pod.png', className: 'cinematic-delivery-pod-frame', position: 'object-[54%_50%]' },
-  { src: '/hero-cinematic/cyber-robot.png', className: 'cinematic-cyber-frame', position: 'object-[52%_50%]' },
-  { src: '/hero-cinematic/cyber-dog-black.png', className: 'cinematic-cyber-dog-frame', position: 'object-[42%_50%] sm:object-center' },
-  { src: '/hero-cinematic/cyber-dog-rider.png', className: 'cinematic-cyber-rider-frame', position: 'object-[48%_50%] sm:object-center' },
-  { src: '/hero-cinematic/iridescent-supra.png', className: 'cinematic-supra-frame', position: 'object-[58%_50%] sm:object-center' },
-  { src: '/hero-cinematic/iridescent-supra-wide.png', className: 'cinematic-supra-wide-frame', position: 'object-[52%_50%]' },
-  { src: '/hero-cinematic/friends-laughing.png', className: 'cinematic-friends-frame', position: 'object-[58%_50%] sm:object-center' },
-  { src: '/hero-cinematic/living-room.png', className: 'cinematic-living-frame', position: 'object-[50%_50%]' },
-  { src: '/hero-cinematic/sports-expo-red.png', className: 'cinematic-expo-frame', position: 'object-[50%_50%]' },
-  { src: '/hero-cinematic/youtube-pays-portrait-a.png', className: 'cinematic-youtube-a-frame', position: 'object-[50%_42%]' },
-  { src: '/hero-cinematic/youtube-pays-portrait-b.png', className: 'cinematic-youtube-b-frame', position: 'object-[50%_42%]' },
-  { src: '/hero-cinematic/righteousness-wall.png', className: 'cinematic-wall-frame', position: 'object-[28%_50%] sm:object-center' },
-]
-const postHeroExampleTitles = ['ArcTemp HVAC', 'CubChatter', 'Certifia']
-const gradientButtonClass = 'primary-gradient primary-glow cta-pulse-glow inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-base font-extrabold text-white transition duration-200 hover:scale-[1.03] hover:brightness-110'
-const isConceptPortfolioItem = (item: PortfolioItem) => item.description.toLowerCase().includes('demo data') || item.website_url.includes('/demo-sites/')
-
-function KineticHeadline() {
-  const words = ['Creating', 'Tomorrow.']
-  return <h1 className="mt-6 max-w-4xl text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl text-balance">
-    <motion.span className="animated-gradient-text block text-5xl font-black uppercase tracking-[0.18em] sm:text-7xl lg:text-8xl" initial={{ opacity: 0, y: 30, scale: .92 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: .65, ease: 'easeOut' }}>YOUR BUSINESS DESERVES MORE</motion.span>
-    <span className="mt-5 block">
-      {words.map((word, index) => <motion.span key={word} className="mr-[0.18em] inline-block" initial={{ opacity: 0, y: 30, scale: .9 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: .2 + index * .1, duration: .55, ease: 'easeOut' }}>{word}</motion.span>)}
-      <motion.span className="inline-block text-gold-500" initial={{ opacity: 0, y: 30, scale: .9 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: .45, duration: .55, ease: 'easeOut' }}>Today.</motion.span>
-    </span>
-  </h1>
-}
-
-function WebsiteExampleCard({ item, onPreview, compact = false }: { item: PortfolioItem; onPreview: (item: PortfolioItem) => void; compact?: boolean }) {
-  return <article className="flavor-card reveal-lift overflow-hidden rounded-[1.25rem] border border-orange-100/80 bg-white shadow-[0_18px_45px_rgba(45,42,50,.08)]">
-    <img src={item.image_url} alt={`${item.title} website example`} className={compact ? 'h-44 w-full object-cover' : 'h-52 w-full object-cover'} />
-    <div className={compact ? 'p-5' : 'p-6'}>
-      <Badge tone="green">Client Website</Badge>
-      <h3 className="mt-4 text-xl font-bold text-navy-950">{item.title}</h3>
-      <p className="mt-2 text-sm font-semibold text-slate-700">{item.industry}</p>
-      <p className="mt-2 text-sm leading-6 text-slate-600">{item.description.replace('DEMO DATA: ', '')}</p>
-      <button type="button" onClick={() => onPreview(item)} className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy-950 px-4 py-2 text-sm font-semibold text-white">Explore Here <ArrowRight size={15} /></button>
-    </div>
-  </article>
-}
+const mailHref = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Free grade + preview')}&body=${encodeURIComponent('Business name:\nWebsite (if any):\nPhone:')}`
 
 export function LandingPage() {
-  const navigate = useNavigate()
-  const [snapshot, setSnapshot] = useState<PlatformSnapshot>(demoData)
-  const [selectedCategory, setSelectedCategory] = useState('View All')
-  const [previewItem, setPreviewItem] = useState<PortfolioItem | null>(null)
-  useEffect(() => { getPlatformSnapshot().then(setSnapshot).catch(() => setSnapshot(demoData)) }, [])
+  const rootRef = useRef<HTMLDivElement>(null)
+  const [showSticky, setShowSticky] = useState(false)
+
   useEffect(() => {
-    if (!previewItem) return
-    const originalOverflow = document.body.style.overflow
-    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') setPreviewItem(null) }
-    document.body.style.overflow = 'hidden'
-    window.addEventListener('keydown', closeOnEscape)
-    return () => {
-      document.body.style.overflow = originalOverflow
-      window.removeEventListener('keydown', closeOnEscape)
+    const root = rootRef.current
+    if (!root) return
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('x-in'); io.unobserve(e.target) }
+    }), { threshold: 0.12 })
+    root.querySelectorAll('.x-reveal').forEach((el, i) => { (el as HTMLElement).style.transitionDelay = `${(i % 3) * 60}ms`; io.observe(el) })
+    const onScroll = () => {
+      const hero = document.getElementById('grade')
+      if (hero) setShowSticky(hero.getBoundingClientRect().bottom < 0)
     }
-  }, [previewItem])
-  const realPortfolio = snapshot.portfolio.filter((item) => !isConceptPortfolioItem(item))
-  const visiblePortfolio = selectedCategory === 'View All' ? realPortfolio : realPortfolio.filter((item) => item.industry.toLowerCase() === selectedCategory.toLowerCase())
-  const approvedTestimonials = snapshot.testimonials.filter((item) => item.approved && !item.quote.toLowerCase().includes('demo testimonial'))
-  const getPortfolioUrl = (fallbackUrl: string) => fallbackUrl && fallbackUrl !== '#' ? fallbackUrl : '/#examples'
-  const scrollToAgenticPreview = () => document.getElementById('agentic-onboarding')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  const openGeneratedPreview = (site: { businessName: string; websiteUrl?: string }) => {
-    const params = new URLSearchParams({ businessName: site.businessName })
-    if (site.websiteUrl) params.set('websiteUrl', site.websiteUrl)
-    navigate(`/preview?${params.toString()}`)
-  }
-  const postHeroExamples = postHeroExampleTitles.map((title) => realPortfolio.find((item) => item.title === title) ?? demoData.portfolio.find((item) => item.title === title)).filter((item): item is PortfolioItem => Boolean(item))
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => { io.disconnect(); window.removeEventListener('scroll', onScroll) }
+  }, [])
 
-  return <PageShell tone="dark"><SiteHeader />
-    <section className="relative isolate overflow-hidden bg-navy-950 text-white">
-      {heroSequence.map((frame) => <img key={frame.src} src={frame.src} alt="" aria-hidden="true" className={`cinematic-frame ${frame.className} ${frame.position} absolute inset-0 -z-30 h-full w-full object-cover opacity-0`} />)}
-      <div className="absolute inset-0 -z-20 bg-gradient-to-br from-navy-950/62 via-navy-950/28 to-violet-500/18" />
-      <div className="navy-shell animated-gradient-mesh absolute inset-0 -z-20 opacity-20 mix-blend-overlay" />
-      <div className="cinematic-rain absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
-      <div className="cinematic-lightning absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
-      <div className="cinematic-light-streak absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
-      <div className="cinematic-lens-flare absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
-      <div className="cinematic-white-flash absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
-      <div className="cinematic-black-flash absolute inset-0 -z-10 opacity-0" aria-hidden="true" />
-      <div className="border-b border-white/10 bg-navy-950/25 px-4 py-3 text-center text-sm text-white backdrop-blur-md"><span className="font-semibold">Limited weekly build capacity.</span> <span className="text-gold-500">Applications are reviewed in the order they are completed and approved.</span></div>
-      <div className="mx-auto flex min-h-[840px] max-w-7xl items-end px-4 pb-14 pt-28 sm:min-h-[780px] sm:items-center sm:px-6 sm:py-20 lg:min-h-[820px] lg:px-8 lg:py-28">
-        <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 16.8, duration: .9, ease: 'easeOut' }} className="max-w-4xl rounded-[2rem] border border-white/15 bg-navy-950/28 p-5 shadow-2xl shadow-navy-950/25 backdrop-blur-[2px] sm:p-8 lg:p-10">
-          <Badge tone="gold">Business Launch Initiative</Badge>
-          <KineticHeadline />
-          <p className="mt-6 max-w-2xl text-xl leading-8 text-slate-200">Paste your current website URL and generate an upgrade preview first. If it looks like the right direction, continue to the application and launch review.</p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row"><button type="button" onClick={scrollToAgenticPreview} className={gradientButtonClass}>Generate My Upgrade Preview <ArrowRight size={18} /></button><Link to="/apply" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20">Start Application <ArrowRight size={16} /></Link></div>
-          <p className="mt-5 max-w-2xl text-sm leading-6 text-slate-300">Website design and initial build included for approved applicants. The Business Launch Membership is required for launch at $34/month and includes managed hosting, SSL, backups, security monitoring, client portal access, technical maintenance, and platform updates.</p>
-          <p className="mt-6 text-sm font-semibold text-gold-500">Professional Website. No Upfront Design Fee.</p>
-          <p className="mt-2 text-sm text-slate-300">Built to help your business get discovered, earn trust, and grow.</p>
-        </motion.div>
-      </div>
-    </section>
+  return <div className="adx" ref={rootRef}>
+    <header className="x-header">
+      <nav className="x-nav x-glass" aria-label="Main">
+        <a href="#grade" className="x-brand"><span className="x-logo" />Adynex Systems</a>
+        <div className="x-nav-links"><a href="#grade">Get your grade</a><a href="#ads">Ads</a><a href="#ai">AI Front Desk</a><a href="#pricing">Pricing</a><a href="#work">Our work</a><a href="#products">Products</a></div>
+        <a href="#grade" className="x-btn x-btn-primary">Get my grade</a>
+      </nav>
+    </header>
 
-    <div className="cinematic-divider" aria-hidden="true" />
-    <section className="flavor-section bg-cloud-50 px-4 pb-12 pt-8 text-navy-950 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <div className="grid gap-5 md:grid-cols-3">{postHeroExamples.map((item) => <WebsiteExampleCard key={item.id} item={item} onPreview={setPreviewItem} compact />)}</div>
-        <div className="mt-9 text-center">
-          <p className="mb-4 text-lg font-semibold text-navy-900">No design skills needed. Paste your URL, see the preview, then apply when you are ready.</p>
-          <button type="button" onClick={scrollToAgenticPreview} className={gradientButtonClass}>Get My Website Preview <ArrowRight size={18} /></button>
+    <section className="x-hero" id="grade">
+      <div className="x-aurora" />
+      <div className="x-wrap x-hero-grid">
+        <div>
+          <span className="x-pill x-glass"><b>Free</b> Takes about 30 seconds</span>
+          <h1>What grade does your business get <em>online?</em></h1>
+          <p className="x-sub">Enter your business name or website. We scan your site, Google listing, reviews, search visibility and social media, grade it, and show you what your upgrade would look like.</p>
+          <FootprintGrader />
+          <div className="x-trust"><span>Website</span><span>Google</span><span>Reviews</span><span>SEO</span><span>Social</span></div>
         </div>
       </div>
     </section>
 
-    <div className="flavor-section bg-white px-4 py-5 text-navy-950"><div className="mx-auto grid max-w-7xl gap-3 text-sm font-semibold sm:grid-cols-5">{trustItems.map(([item, Icon]) => <div key={item} className="flavor-card reveal-lift flex items-center justify-center gap-2 rounded-full bg-cloud-100 px-4 py-3 text-center"><Icon size={16} className="text-royal-700" />{item}</div>)}</div></div>
-
-    <Section eyebrow="Agentic Onboarding" title="See Your Website Direction in Seconds" className="flavor-section bg-cloud-50">
-      <div id="agentic-onboarding" className="scroll-mt-28" />
-      <div className="grid gap-8">
-        <div className="grid gap-3 md:grid-cols-3">
-          {conversionSteps.map(([title, body]) => <div key={title} className="flavor-card reveal-lift rounded-3xl border border-orange-100 bg-white p-5 shadow-sm">
-            <p className="text-sm font-black uppercase tracking-[0.18em] text-amber-700">{title}</p>
-            <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>
-          </div>)}
+    <section className="x-block x-tight" id="ads">
+      <div className="x-wrap">
+        <div className="x-head x-reveal">
+          <div><div className="x-eyebrow">Cinematic ads</div><h2 className="x-title" style={{ marginTop: 12 }}>Ads people <em>stop</em> for.</h2></div>
+          <p className="x-sub">Movie-quality commercials for local businesses, made in days, not months, and priced for Main Street. Tap an industry.</p>
         </div>
-        <AgenticHeroInput onGenerated={openGeneratedPreview} />
-        <div className="flavor-card reveal-lift rounded-[2rem] border border-dashed border-orange-200 bg-white p-8 text-center shadow-sm">
-          <p className="text-sm font-black uppercase tracking-[0.18em] text-amber-700">What happens next</p>
-          <h3 className="mt-3 text-2xl font-black text-navy-950">Your preview opens before the application.</h3>
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-600">After the agents finish, you go directly to a generated preview page. No payment is required to view it. The application comes after the preview.</p>
-          <div className="mt-5"><Link to="/apply" className="inline-flex items-center justify-center rounded-full border border-slate-200 px-5 py-3 text-sm font-bold text-navy-950">Skip to Application</Link></div>
+        <div className="x-reveal"><AdShowcase /></div>
+        <div className="x-row-ctas x-reveal">
+          <a href={offers.cinematic_ad.checkout} className="x-btn x-btn-primary">Get your ad · ${offers.cinematic_ad.setup}</a>
+          <a href={offers.ad_studio.checkout} className="x-btn x-btn-ghost">Ad Studio · ${offers.ad_studio.monthly}/mo, first month free</a>
         </div>
       </div>
-    </Section>
+    </section>
 
-    <Section eyebrow="Process" title="How It Works" className="flavor-section bg-cloud-50" >
-      <div id="how-it-works" className="glow-process-line relative grid gap-5 md:grid-cols-4 md:before:absolute md:before:left-[12%] md:before:right-[12%] md:before:top-10 md:before:h-px md:before:bg-blue-100">{process.map(([title, body], i) => <div key={title} className="relative"><FeatureCard title={`Step ${i + 1}: ${title}`} body={body} icon={<span className="font-bold">{i + 1}</span>} /></div>)}</div>
-    </Section>
-
-    <Section eyebrow="Included Scope" title="What Is Included" className="flavor-section bg-white">
-      <div id="what-is-included" className="scroll-mt-28" />
-      <div id="included" className="scroll-mt-28" />
-      <div className="flavor-card reveal-lift mb-8 rounded-[1.5rem] border border-orange-100 bg-cloud-50 p-6 shadow-sm">
-        <h3 className="text-2xl font-bold text-navy-950">Here&apos;s Exactly What You Get — <span className="animated-gradient-text">Free</span></h3>
-        <p className="mt-3 max-w-4xl text-lg font-medium leading-8 text-slate-700">Your website design and build are 100% free. The Business Launch Membership is required for launch at $34/month because every live website needs hosting, SSL, backups, security, and technical maintenance; custom features and premium integrations are optional upgrades later.</p>
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{included.map(([item, detail]) => <details key={item} className="flavor-card reveal-lift group rounded-2xl border bg-cloud-50 p-4 text-sm shadow-sm open:bg-white"><summary className="flex cursor-pointer list-none items-start gap-3 font-semibold text-navy-950"><Check className="mt-0.5 shrink-0 text-emerald-500" size={18} />{item}<Info className="ml-auto shrink-0 text-slate-400 transition group-open:text-royal-700" size={16} /></summary><p className="mt-3 pl-8 leading-6 text-slate-600">{detail}</p></details>)}</div>
-      <div className="flavor-card reveal-lift mt-8 rounded-[1.5rem] bg-navy-950 p-6 leading-7 text-white shadow-xl"><p>The website design and initial standard build are included for approved businesses. The Business Launch Membership is required for launch at $34/month and includes managed hosting, security, backups, client portal access, technical maintenance, SSL, and platform updates. Domain registration, premium integrations, custom functionality, additional revisions, and advanced marketing services may require separate payment.</p><div className="mt-6"><Link to="/apply" className={gradientButtonClass}>Apply for My Free Website <ArrowRight size={18} /></Link><p className="mt-3 text-sm font-medium text-slate-300">Takes 2 minutes. No credit card, no obligation.</p></div></div>
-    </Section>
-
-    <Section eyebrow="Free Business Growth Assessment" title="Every Application Gets a Growth Score" className="flavor-section bg-cloud-50">
-      <div className="grid gap-6 lg:grid-cols-[.9fr_1.1fr]">
-        <div className="flavor-card reveal-lift rounded-3xl bg-navy-950 p-7 text-white shadow-xl">
-          <Badge tone="gold">Adynex Business Growth Report</Badge>
-          <h3 className="mt-5 text-3xl font-black">We review more than your website.</h3>
-          <p className="mt-4 leading-7 text-slate-300">Our team reviews your application and identifies opportunities to help your business grow online: website readiness, Google Business, SEO, lead capture, booking, reputation, automation, and suggested launch path.</p>
-          <p className="mt-5 rounded-2xl bg-white/10 p-4 text-sm leading-6 text-slate-200">Instead of selling hosting, the assessment shows where your business is losing trust, leads, and follow-up opportunities.</p>
+    <section className="x-block x-tight" id="ai">
+      <div className="x-wrap">
+        <div className="x-head x-reveal">
+          <div><div className="x-eyebrow">AI Front Desk</div><h2 className="x-title" style={{ marginTop: 12 }}>Your first <em>AI employees.</em></h2></div>
+          <p className="x-sub">We run our own company with a team of AI agents. Now we set up the same thing for you: they answer, book, follow up and collect reviews while you work. You get a report on your phone every week.</p>
         </div>
-        <div className="flavor-card reveal-lift rounded-3xl border bg-white p-7 shadow-sm">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="text-sm font-bold uppercase tracking-[0.22em] text-royal-700">Sample Score</p>
-              <h3 className="mt-2 text-2xl font-black text-navy-950">ABC HVAC</h3>
+        <div className="x-agents">
+          {[
+            ['Missed call', 'Texts the caller back in seconds so they don\'t call your competitor.'],
+            ['Receptionist', 'Answers questions and books appointments 24/7, in your voice.'],
+            ['Reviews', 'Asks happy customers for a Google review at the perfect moment.'],
+            ['Follow-up', 'Replies to every new lead instantly and keeps following up.'],
+          ].map(([t, b]) => <div key={t} className="x-agent x-glass x-reveal"><span className="x-agent-dot" /><b>{t}</b><p>{b}</p></div>)}
+          <div className="x-agent x-agent-buy x-glass x-reveal">
+            <b>{offers.ai_front_desk.name}</b>
+            <div className="x-amt" style={{ fontSize: 40 }}>${offers.ai_front_desk.setup}<small> + ${offers.ai_front_desk.monthly}/mo</small></div>
+            <p>Running in 7 days. First month free.</p>
+            <a href={offers.ai_front_desk.checkout} className="x-btn x-btn-primary">Hire your AI front desk</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section className="x-block x-tight" id="pricing">
+      <div className="x-wrap">
+        <div className="x-head x-reveal">
+          <div><div className="x-eyebrow">Pricing</div><h2 className="x-title" style={{ marginTop: 12 }}>Simple. <em>Unbeatable.</em></h2></div>
+          <p className="x-sub">Pay once to start. Monthly plans start after your first free month. Cancel the monthly anytime.</p>
+        </div>
+        <a href={offers.all_in_growth.checkout} className="x-allin x-glass x-reveal">
+          <div><span className="x-tag">Best value</span><h3>{offers.all_in_growth.name}</h3><p>{offers.all_in_growth.items.slice(0, 4).join(' · ')}</p></div>
+          <div className="x-allin-price"><div className="x-amt">${offers.all_in_growth.setup}<small> + ${offers.all_in_growth.monthly}/mo</small></div><span>{offers.all_in_growth.when}</span></div>
+        </a>
+        <div className="x-mini-grid">
+          {(['google_fix', 'website_makeover', 'ai_front_desk', 'cinematic_ad', 'ad_studio', 'kiokitchen'] as const).map((k) => offers[k]).map((o) => <a key={o.key} href={o.checkout} className="x-mini x-glass x-reveal">
+            <b>{o.name}</b><span>{o.result}</span><em>{priceLabel(o)}</em>
+          </a>)}
+        </div>
+      </div>
+    </section>
+
+    <section className="x-block x-tight" id="work">
+      <div className="x-wrap">
+        <div className="x-head x-reveal">
+          <div><div className="x-eyebrow">Our work</div><h2 className="x-title" style={{ marginTop: 12 }}>Before. <em>After.</em></h2></div>
+          <p className="x-sub">Real upgrades we've built for local businesses. Tap one to see the full preview.</p>
+        </div>
+        <div className="x-ba-grid">
+          {beforeAfterWork.map((w) => <a key={w.title} href={w.href} className="x-ba-card x-glass x-reveal">
+            <div className="x-ba-pair">
+              <figure><img src={w.before} alt={`${w.title} before`} loading="lazy" /><figcaption>Before</figcaption></figure>
+              <figure><img src={w.after} alt={`${w.title} after`} loading="lazy" /><figcaption className="x-after-cap">After</figcaption></figure>
             </div>
-            <div className="text-right">
-              <p className="text-sm text-slate-500">Overall Score</p>
-              <p className="text-4xl font-black text-navy-950">68/100</p>
-            </div>
-          </div>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            {['Website: Missing', 'SEO: 22%', 'Reviews: 68%', 'Speed: 0%', 'Automation: 5%', 'Booking: Missing'].map((item) => <div key={item} className="rounded-2xl bg-cloud-50 p-4 text-sm font-semibold text-navy-950">{item}</div>)}
-          </div>
-          <div className="mt-6 rounded-2xl bg-emerald-50 p-5">
-            <h4 className="font-bold text-navy-950">AI Recommendation</h4>
-            <p className="mt-2 text-sm leading-6 text-slate-700">We recommend the Scale plan because this business would benefit from appointment scheduling, CRM integration, AI chatbot support, and automated customer follow-up.</p>
-            <p className="mt-3 text-sm font-bold text-emerald-700">Estimated monthly lead opportunity: +15-40</p>
-          </div>
+            <div className="x-ba-meta"><span className="x-tag">{w.kind}</span><h3>{w.title}</h3><p>{w.place} · {w.note}</p></div>
+          </a>)}
+        </div>
+        <div className="x-sites">
+          {siteWork.map((s) => <a key={s.title} href={s.url} target="_blank" rel="noreferrer" className="x-site x-glass x-reveal">
+            <img src={screenshotOf(s.url)} alt={`${s.title} website`} loading="lazy" />
+            <div><span className="x-tag">{s.kind}</span><h3>{s.title}</h3><p>{s.industry} · {s.note}</p></div>
+          </a>)}
         </div>
       </div>
-    </Section>
+    </section>
 
-    <Section eyebrow="Qualification" title="Who This Program Is Designed For" className="flavor-section bg-cloud-50"><div className="grid gap-8 lg:grid-cols-2"><div className="flavor-card reveal-lift rounded-3xl bg-white p-7 shadow-sm"><h3 className="text-xl font-bold text-navy-950">A Strong Fit For</h3><ul className="mt-5 grid gap-3 text-sm text-slate-700">{qualifies.map((item) => <li key={item} className="flex gap-3"><Check className="shrink-0 text-emerald-500" size={18} />{item}</li>)}</ul></div><div className="flavor-card reveal-lift rounded-3xl bg-navy-950 p-7 text-white"><h3 className="text-xl font-bold">This May Not Be the Right Fit If</h3><ul className="mt-5 grid gap-3 text-sm text-slate-300">{notRightFit.map((item) => <li key={item} className="flex gap-3"><Info className="shrink-0 text-gold-500" size={18} />{item}</li>)}</ul><p className="mt-6 text-gold-500">Premium services and custom software are available when the standard website scope is not enough.</p></div></div></Section>
-
-    <Section eyebrow="Website Examples" title="Real Website Examples by Industry" className="flavor-section bg-white"><div id="examples" className="mb-6 flex flex-wrap gap-2">{categories.map((cat) => <button key={cat} onClick={() => setSelectedCategory(cat)} className={`rounded-full px-3 py-2 text-xs font-semibold transition hover:-translate-y-0.5 hover:shadow-lg ${selectedCategory === cat ? 'bg-navy-950 text-white' : 'bg-blue-50 text-royal-700'}`}>{cat}</button>)}</div><div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{visiblePortfolio.map((item) => <article key={item.id} className="flavor-card reveal-lift overflow-hidden rounded-3xl border bg-white shadow-sm"><img src={item.image_url} alt={`${item.title} website example`} className="h-52 w-full object-cover transition duration-300 hover:scale-105" /><div className="p-6"><Badge tone="green">Client Website</Badge><h3 className="mt-4 text-xl font-bold text-navy-950">{item.title}</h3><p className="mt-2 text-sm font-semibold text-slate-700">{item.industry}</p><p className="mt-2 text-sm leading-6 text-slate-600">{item.description.replace('DEMO DATA: ', '')}</p><button type="button" onClick={() => setPreviewItem(item)} className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy-950 px-4 py-2 text-sm font-semibold text-white">Explore Here <ArrowRight size={15} /></button></div></article>)}{visiblePortfolio.length === 0 && <div className="flavor-card reveal-lift rounded-3xl border border-dashed bg-cloud-50 p-8 text-slate-600 lg:col-span-3">More website examples for this category can be added as new approved examples become available.</div>}</div></Section>
-
-    <Section eyebrow="Launch Paths" title="Choose Your Business Launch Path" className="flavor-section bg-cloud-50"><div id="packages" className="grid gap-5 lg:grid-cols-4">{offers.map((offer) => <div key={offer.title} className="flavor-card reveal-lift flex rounded-3xl border bg-white p-6 shadow-sm"><div className="flex w-full flex-col"><Badge tone={offer.title === 'Enterprise' ? 'gold' : offer.title === 'Scale' ? 'green' : 'blue'}>{offer.label}</Badge><h3 className="mt-4 text-2xl font-black uppercase tracking-wide text-navy-950">{offer.title}</h3><p className="mt-3 text-3xl font-black text-navy-950">{offer.price}</p><p className="mt-3 text-sm leading-6 text-slate-600">{offer.description}</p><ul className="mt-5 grid gap-3 text-sm text-slate-700">{offer.features.map((item) => <li key={item} className="flex gap-2"><Check className="mt-0.5 shrink-0 text-emerald-500" size={16} />{item}</li>)}</ul><Link to={offer.to} className="mt-auto inline-flex rounded-full bg-navy-950 px-4 py-3 text-center text-sm font-semibold text-white">{offer.cta}</Link></div></div>)}</div><p className="flavor-card reveal-lift mt-8 rounded-3xl border border-slate-200 bg-white p-5 text-sm leading-6 text-slate-700">Every application includes a free Business Growth Assessment. Our team reviews your readiness, digital presence, lead capture gaps, and automation opportunities before recommending the best launch path.</p></Section>
-
-    <Section eyebrow="Business Launch Platform" title="More Than a Website" className="flavor-section bg-white"><div id="growth-services" className="grid gap-8 lg:grid-cols-[.8fr_1.2fr]"><div className="flavor-card reveal-lift rounded-3xl bg-navy-950 p-8 text-white"><Laptop className="mb-5 text-gold-500" size={42} /><p className="text-lg leading-8 text-slate-200">Your website is the foundation. As your business grows, the Business Launch Initiative can help you add the tools needed to attract leads, manage customers, automate communication, accept appointments, and operate more efficiently.</p><Link to="/software-consultation" className="mt-7 inline-flex rounded-full bg-white px-5 py-3 text-sm font-bold text-navy-950">Explore Growth Services</Link></div><div className="grid gap-4 sm:grid-cols-2">{platformFeatures.map(([title, body]) => <div key={title} className="flavor-card reveal-lift rounded-3xl border bg-cloud-50 p-5"><Wrench className="mb-4 text-royal-700" size={22} /><h3 className="font-bold text-navy-950">{title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{body}</p></div>)}</div></div></Section>
-
-    <Section eyebrow="Program Status" title="Applications Are Currently Open" className="flavor-section" dark><div className="grid gap-5 md:grid-cols-3"><div className="flavor-card reveal-lift rounded-3xl border border-white/10 bg-white/5 p-6"><ClipboardCheck className="mb-4 text-gold-500" /><h3 className="text-xl font-bold text-white">Applications currently open</h3><p className="mt-2 text-sm leading-6 text-slate-300">Applicants can submit business information for review.</p></div><div className="flavor-card reveal-lift rounded-3xl border border-white/10 bg-white/5 p-6"><Search className="mb-4 text-gold-500" /><h3 className="text-xl font-bold text-white">Applications reviewed for fit</h3><p className="mt-2 text-sm leading-6 text-slate-300">Eligibility, readiness, capacity, and scope are reviewed before approval.</p></div><div className="flavor-card reveal-lift rounded-3xl border border-white/10 bg-white/5 p-6"><ShieldCheck className="mb-4 text-gold-500" /><h3 className="text-xl font-bold text-white">Limited weekly production capacity</h3><p className="mt-2 text-sm leading-6 text-slate-300">Approved projects are scheduled based on onboarding readiness and available production capacity.</p></div></div></Section>
-
-    <Section eyebrow="Client Stories" title="Social Proof" className="flavor-section bg-white">{approvedTestimonials.length ? <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{approvedTestimonials.map((item) => <div key={item.id} className="flavor-card reveal-lift rounded-3xl border bg-white p-6 shadow-sm"><img src={item.image_url} alt={`${item.client_name} testimonial`} className="mb-5 h-24 w-full rounded-2xl object-cover" /><p className="text-sm leading-6 text-slate-700">“{item.quote}”</p><p className="mt-4 font-bold text-navy-950">{item.client_name}</p><p className="text-sm text-slate-500">{item.business_name} · {item.industry}</p>{item.website_url && <a href={item.website_url} className="mt-4 inline-flex text-sm font-semibold text-royal-700">View Website</a>}</div>)}</div> : <div className="flavor-card reveal-lift rounded-3xl border border-dashed bg-cloud-50 p-10 text-center"><Globe2 className="mx-auto mb-4 text-royal-700" size={36} /><h3 className="text-2xl font-bold text-navy-950">Client stories will appear here as participating businesses launch.</h3><p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-600">This section is ready for approved testimonials, project types, client photos or logos, and website links once real launch stories are available.</p></div>}</Section>
-
-    <Section eyebrow="FAQ" title="Frequently Asked Questions" className="flavor-section bg-cloud-50"><div id="faq" className="grid gap-4 lg:grid-cols-2">{faq.map(([q, a]) => <details key={q} className="flavor-card reveal-lift rounded-2xl border bg-white p-5"><summary className="cursor-pointer font-bold text-navy-950">{q}</summary><p className="mt-3 text-sm leading-6 text-slate-600">{a}</p></details>)}</div></Section>
-
-    <div className="cinematic-divider" aria-hidden="true" />
-    <section className="flavor-section navy-shell px-4 py-20 text-center text-white"><Globe2 className="mx-auto mb-5 text-gold-500" size={42} /><h2 className="shimmer-heading mx-auto max-w-3xl text-4xl font-bold tracking-tight">Ready to See Your Launch Path?</h2><p className="mx-auto mt-7 max-w-2xl text-slate-300">Generate a preview first, then complete the application so our team can review your business information, readiness, and best launch option.</p><div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row"><button type="button" onClick={scrollToAgenticPreview} className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-black text-navy-950">Generate Preview</button><CTAButton to="/apply" variant="secondary">Start My Application</CTAButton></div></section>
-    {previewItem && <div className="fixed inset-0 z-[100] bg-navy-950/82 p-3 backdrop-blur-md sm:p-5" role="dialog" aria-modal="true" aria-label={`${previewItem.title} website preview`}>
-      <div className="mx-auto flex h-full max-w-7xl flex-col overflow-hidden rounded-[1.75rem] border border-white/15 bg-cloud-50 shadow-2xl shadow-navy-950/50">
-        <div className="flex flex-col gap-3 border-b border-orange-100 bg-white/95 p-4 text-navy-950 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-royal-700">On-site preview</p>
-            <h3 className="text-xl font-black">{previewItem.title}</h3>
-            <p className="text-sm text-slate-600">Explore this client website without leaving Business Launch Initiative.</p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <button type="button" onClick={() => setPreviewItem(null)} className="inline-flex items-center gap-2 rounded-full bg-navy-950 px-4 py-2 text-sm font-bold text-white">Close <X size={15} /></button>
-          </div>
+    <section className="x-block x-tight" id="products">
+      <div className="x-wrap">
+        <div className="x-head x-reveal">
+          <div><div className="x-eyebrow">Products</div><h2 className="x-title" style={{ marginTop: 12 }}>Software we've <em>built.</em></h2></div>
+          <p className="x-sub">Beyond websites, we design and ship full products: SaaS platforms, learning apps and AI tools.</p>
         </div>
-        <div className="relative min-h-0 flex-1 bg-navy-950">
-          <iframe title={`${previewItem.title} live website preview`} src={getPortfolioUrl(previewItem.website_url)} className="h-full w-full bg-white" loading="lazy" sandbox="allow-forms allow-popups allow-same-origin allow-scripts" />
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-navy-950/18 to-transparent" />
+        <div className="x-grid3">
+          {products.map((p) => <a key={p.name} href={p.url} target="_blank" rel="noreferrer" className="x-card x-glass x-reveal x-product"><h3>{p.name} ↗</h3><p>{p.what}</p></a>)}
         </div>
-        <p className="border-t border-orange-100 bg-white px-4 py-3 text-xs leading-5 text-slate-500">Preview opens inside Business Launch Initiative so visitors can explore examples without leaving this platform.</p>
       </div>
-    </div>}
-    <Footer />
-  </PageShell>
+    </section>
+
+    <section className="x-final" id="contact">
+      <div className="x-aurora" style={{ inset: 0 }} />
+      <div className="x-wrap" style={{ position: 'relative' }}>
+        <div className="x-eyebrow x-reveal">Free · No obligation</div>
+        <h2 className="x-reveal">Find out your <em>grade.</em></h2>
+        <p className="x-sub x-reveal">See exactly where you're losing customers online, and what fixing it looks like.</p>
+        <div className="x-reveal x-contact"><a href="#grade" className="x-btn x-btn-primary">Get my grade →</a><a href={mailHref} className="x-btn x-btn-ghost">Email James</a></div>
+      </div>
+    </section>
+
+    <footer className="x-footer">
+      <div className="x-wrap">
+        <span>© {new Date().getFullYear()} Adynex Systems · Northwest Indiana &amp; Chicagoland</span>
+        <nav aria-label="Legal"><Link to="/terms">Terms</Link><Link to="/privacy">Privacy</Link><Link to="/refund-cancellation">Refunds</Link><Link to="/accessibility">Accessibility</Link><Link to="/contact">Contact</Link></nav>
+      </div>
+    </footer>
+
+    <div className={`x-sticky${showSticky ? ' x-show' : ''}`}><a href="#grade" className="x-btn x-btn-primary">Get my grade →</a></div>
+  </div>
 }

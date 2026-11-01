@@ -74,7 +74,6 @@ export function AgenticHeroInput({ onGenerated }: { onGenerated: (context: Gener
         </div>
         <button type="button" onClick={runAgents} disabled={!businessName.trim() || isGenerating} className="primary-gradient primary-glow inline-flex items-center justify-center gap-2 rounded-full px-6 py-4 text-sm font-black text-white transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60">{isGenerating ? 'Building...' : 'Generate Preview'} <ArrowRight size={16} /></button>
       </div>
-      <p className="mt-3 text-xs leading-5 text-slate-500">Google Places can be enabled with `GOOGLE_PLACES_API_KEY`. Without it, the agents use a clean fallback preview.</p>
       {error && <p className="mt-4 rounded-2xl bg-red-50 p-3 text-sm font-semibold text-red-700">{error}</p>}
     </div>
 
