@@ -5,6 +5,7 @@ import { gradeFootprint } from '../../lib/assessment/gradeFootprint'
 import type { FootprintGrade, LetterGrade } from '../../lib/assessment/gradeFootprint'
 import type { GeneratedSiteContext } from '../../types/generatedSite'
 import { UpgradeSlider } from './UpgradeSlider'
+import { offers, priceLabel, recommendFor } from '../../data/offers'
 
 export const CONTACT_EMAIL = 'james@adynexsystems.com'
 
@@ -12,11 +13,6 @@ const scanSteps = ['Loading your website', 'Checking your Google listing and rev
 
 const letterColor: Record<LetterGrade, string> = { A: 'var(--mint)', B: 'var(--cyan)', C: '#F5C542', D: '#FF8A3D', F: 'var(--danger)' }
 
-const plans = [
-  { key: 'google', name: 'Google Fix', amt: '$297', small: 'one time', when: 'Live in 48 hours', items: ['Google Business Profile cleanup: hours, photos, categories, links', 'Mobile one-page menu or services page', 'Call + directions buttons'] },
-  { key: 'makeover', name: 'Website Makeover', amt: '$497', small: '+ $99/mo', when: 'Founding rate (regularly $750) · live in 7 days', items: ['Everything in Google Fix', 'Full custom mobile website in your brand', 'Online ordering or booking', 'Hosting, security and unlimited small updates'] },
-  { key: 'systems', name: 'Business Systems', amt: 'From $497', small: 'setup', when: 'Quoted after your free check', items: ['Missed-call text back', 'Automatic review requests', 'Booking reminders & lead follow-up', 'AI receptionist'] },
-] as const
 
 function previewRequestHref(site: GeneratedSiteContext, grade?: FootprintGrade) {
   const lines = [
@@ -53,22 +49,33 @@ function GradeReport({ grade }: { grade: FootprintGrade }) {
   </div>
 }
 
-function Offers({ site, grade }: { site: GeneratedSiteContext; grade: FootprintGrade }) {
-  const recommended = grade.biggestProblem && ['google', 'reviews'].includes(grade.biggestProblem.key) && grade.categories[0].earned >= 20 ? 'google' : 'makeover'
+function Offers({ grade }: { grade: FootprintGrade }) {
+  const { primary, extras } = recommendFor(grade)
+  const others = Object.values(offers).filter((o) => o.key !== primary.key && !extras.some((e) => e.key === o.key))
   return <div className="x-offers">
     <div className="x-head">
-      <div><div className="x-eyebrow">Fix it</div><h2 className="x-title" style={{ marginTop: 12 }}>Turn your {grade.letter} into an <em>A.</em></h2></div>
-      <p className="x-sub">Your full preview is free. You only pay after you see it and approve it. No long contracts.</p>
+      <div><div className="x-eyebrow">Your fix</div><h2 className="x-title" style={{ marginTop: 12 }}>Turn your {grade.letter} into an <em>A.</em></h2></div>
+      <p className="x-sub">Picked from your scan. Pay once to start, cancel the monthly anytime, and your first month of monthly service is free.</p>
     </div>
-    <div className="x-grid3">
-      {plans.map((p) => <div key={p.key} className={`x-price x-glass${p.key === recommended ? ' x-hot' : ''}`}>
-        <span className="x-tag">{p.key === recommended ? 'Recommended for you' : p.when}</span>
-        <h3>{p.name}</h3>
-        <div className="x-amt" style={p.amt.length > 5 ? { fontSize: 40 } : undefined}>{p.amt} <small>{p.small}</small></div>
-        <div className="x-when">{p.when}</div>
-        <ul>{p.items.map((i) => <li key={i}>{i}</li>)}</ul>
-        <a href={previewRequestHref(site, grade)} className={`x-btn ${p.key === recommended ? 'x-btn-primary' : 'x-btn-ghost'}`}>Start with a free preview</a>
-      </div>)}
+    <div className="x-pick x-glass">
+      <div>
+        <span className="x-tag">Recommended for you</span>
+        <h3>{primary.name}</h3>
+        <p className="x-pick-result">{primary.result}</p>
+        <ul>{primary.items.map((i) => <li key={i}>{i}</li>)}</ul>
+      </div>
+      <div className="x-pick-buy">
+        <div className="x-amt">{primary.setup ? `$${primary.setup}` : `$${primary.monthly}`}{primary.setup && primary.monthly ? <small> + ${primary.monthly}/mo</small> : !primary.setup ? <small>/mo</small> : <small> one time</small>}</div>
+        <div className="x-when">{primary.when}</div>
+        <a href={primary.checkout} className="x-btn x-btn-primary">Fix it now →</a>
+        <span className="x-fine">Secure checkout by Stripe</span>
+      </div>
+    </div>
+    {extras.length > 0 && <p className="x-also">{primary.key === 'all_in_growth' ? 'Includes everything your scan flagged: ' : 'Also flagged in your scan: '}{extras.map((e) => e.name).join(', ')}.</p>}
+    <div className="x-mini-grid">
+      {[...extras.filter(() => primary.key !== 'all_in_growth'), ...others].map((o) => <a key={o.key} href={o.checkout} className="x-mini x-glass">
+        <b>{o.name}</b><span>{o.result}</span><em>{priceLabel(o)}</em>
+      </a>)}
     </div>
   </div>
 }
@@ -129,7 +136,7 @@ export function FootprintGrader() {
           </div>
           <UpgradeSlider site={site} grade={grade} />
         </div>
-        <Offers site={site} grade={grade} />
+        <Offers grade={grade} />
       </>}
     </div>
   </>
